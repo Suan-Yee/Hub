@@ -30,7 +30,7 @@ public class Skill {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    @ManyToMany(mappedBy = "skill")
+    @ManyToMany(mappedBy = "skills")
     private List<User> users;
 
     @PrePersist
