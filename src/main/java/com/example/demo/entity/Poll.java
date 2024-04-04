@@ -12,20 +12,25 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "`like`")
-public class Like {
+@Table(name = "poll")
+public class Poll {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private long id;
+    @Column(name = "name",nullable = false)
+    private String name;
+    @Column(name = "description")
+    private String description;
     @CreatedDate
-    @Column(name = "date", nullable = false)
-    private LocalDateTime date;
+    @Column(name = "created_at",nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+    @Column(name = "expired_date", nullable = false)
+    private LocalDateTime expiredDate;
 
-    @ManyToOne
-    @JoinColumn(name = "post_id")
-    private Post post;
+    @OneToOne(mappedBy = "poll", cascade = CascadeType.ALL, orphanRemoval = true)
+    private PollOption pollOption;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

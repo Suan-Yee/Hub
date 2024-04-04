@@ -12,20 +12,22 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "`like`")
-public class Like {
+@Table(name = "group_message")
+public class GroupMessage {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private long id;
+    @Column(name = "text")
+    private String text;
     @CreatedDate
-    @Column(name = "date", nullable = false)
-    private LocalDateTime date;
+    @Column(name = "created_at",nullable = false,updatable = false)
+    private LocalDateTime createdAt;
 
-    @ManyToOne
-    @JoinColumn(name = "post_id")
-    private Post post;
+    @OneToOne
+    @JoinColumn(name = "group_id")
+    private Group group;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

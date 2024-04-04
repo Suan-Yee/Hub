@@ -14,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "group")
+@Table(name = "`group`")
 public class Group {
 
     @Id
@@ -37,6 +37,9 @@ public class Group {
     @UpdateTimestamp
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    @OneToOne(mappedBy = "group", cascade = CascadeType.ALL, orphanRemoval = true)
+    private GroupMessage groupMessage;
 
     @OneToMany(mappedBy = "group")
     private List<Post> posts;

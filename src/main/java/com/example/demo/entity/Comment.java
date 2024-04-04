@@ -8,21 +8,18 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
-@Table(name = "`post`")
-public class Post {
+@Table(name = "comment")
+public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private long id;
-    @Column(name = "status")
-    private boolean status;
     @CreatedDate
     @Column(name = "created_at",nullable = false,updatable = false)
     private LocalDateTime createdAt;
@@ -30,28 +27,13 @@ public class Post {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    @OneToOne(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Content content;
-
-    @OneToOne(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
-    private UserMention userMention;
-
-    @OneToMany(mappedBy = "post")
-    private List<Like> likes;
-
-    @OneToMany(mappedBy = "post")
-    private List<Comment> comments;
-
-    @OneToMany(mappedBy = "post")
-    private List<BookMark> bookMarks;
-
-    @ManyToOne
-    @JoinColumn(name = "group_id")
-    private Group group;
-
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "post_id")
+    private Post post;
 
     @PrePersist
     public void beforePersist(){

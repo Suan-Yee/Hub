@@ -25,6 +25,10 @@ public class Content {
     @JoinColumn(name = "post_id")
     private Post post;
 
+    @OneToOne
+    @JoinColumn(name = "announcement_id")
+    private Announcement announcement;
+
     @OneToMany(mappedBy = "content")
     private List<Video> videos;
 

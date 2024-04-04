@@ -12,22 +12,29 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "`like`")
-public class Like {
+@Table(name = "user_mention")
+public class UserMention {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private long id;
     @CreatedDate
-    @Column(name = "date", nullable = false)
-    private LocalDateTime date;
+    @Column(name = "created_at",nullable = false,updatable = false)
+    private LocalDateTime createdAt;
 
-    @ManyToOne
+    @OneToOne(mappedBy = "user_mention", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Notification notification;
+
+    @OneToOne
     @JoinColumn(name = "post_id")
     private Post post;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "mentioned_user_id")
+    private User mentionedUser;
 }

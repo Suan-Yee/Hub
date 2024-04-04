@@ -53,6 +53,18 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Like> likes;
 
+    @OneToMany(mappedBy = "user")
+    private List<Comment> comments;
+
+    @OneToMany(mappedBy = "user")
+    private List<GroupMessage> groupMessages;
+
+    @OneToMany(mappedBy = "user")
+    private List<UserMention> userMentions;
+
+    @OneToMany(mappedBy = "user")
+    private List<BookMark> bookMarks;
+
     @PrePersist
     public void beforePersist(){
         this.updatedAt = LocalDateTime.now();
