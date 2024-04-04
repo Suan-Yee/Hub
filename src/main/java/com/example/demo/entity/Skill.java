@@ -30,6 +30,9 @@ public class Skill {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    @ManyToMany(mappedBy = "skill")
+    private List<User> users;
+
     @PrePersist
     public void beforePersist(){
         this.updatedAt = LocalDateTime.now();

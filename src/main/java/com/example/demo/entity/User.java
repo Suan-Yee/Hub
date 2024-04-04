@@ -65,6 +65,10 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<BookMark> bookMarks;
 
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "skill_has_user",joinColumns = {@JoinColumn(name = "user_id")},inverseJoinColumns = {@JoinColumn(name = "skill_id")})
+    private List<Skill> skills;
+
     @PrePersist
     public void beforePersist(){
         this.updatedAt = LocalDateTime.now();
