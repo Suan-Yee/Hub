@@ -7,11 +7,13 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter @Setter
 @AllArgsConstructor @NoArgsConstructor
 @Builder @ToString
 @Entity
+@Table(name = "user")
 public class User {
 
     @Id
@@ -41,6 +43,15 @@ public class User {
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private OTP otp;
+
+    @OneToMany(mappedBy = "user")
+    private List<Post> posts;
+
+    @OneToMany(mappedBy = "user")
+    private List<UserHasGroup> userHasGroups;
+
+    @OneToMany(mappedBy = "user")
+    private List<Like> likes;
 
     @PrePersist
     public void beforePersist(){
