@@ -37,7 +37,7 @@ public class LoginController {
                 a.getAuthority().equals(Role.USER.name()) ||
                         a.getAuthority().equals(Role.ADMIN.name()))) {
             log.info("User role {}", user.getRole().name());
-            return "redirect:/welcome";
+            return "redirect:/dashboard";
         } else {
             return "login";
         }

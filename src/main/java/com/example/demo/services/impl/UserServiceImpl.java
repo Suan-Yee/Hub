@@ -2,15 +2,20 @@ package com.example.demo.services.impl;
 
 import com.example.demo.entity.AppUser;
 import com.example.demo.entity.User;
+import com.example.demo.exception.ApiException;
 import com.example.demo.repository.UserRepository;
+import com.example.demo.services.ExcelUploadService;
 import com.example.demo.services.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -19,6 +24,8 @@ import java.util.List;
 public class UserServiceImpl implements UserService, UserDetailsService {
 
     private final UserRepository userRepository;
+    private final ExcelUploadService excelUploadService;
+    private final BCryptPasswordEncoder encoder;
 
     @Override
     public User save(User user) {
@@ -49,6 +56,19 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public User findByEmail(String email) {
         return userRepository.findByEmail(email).orElse(null);
+    }
+
+    @Override
+    public void saveUserFromExcel(MultipartFile file) {
+        if(excelUploadService.isExcelValid(file)){
+            try{
+                List<User> userList = excelUploadService.getUserData(file.getInputStream());
+                userList.forEach(user -> user.setPassword(encoder.encode("Dat@123.com")));
+                userRepository.saveAll(userList);
+            }catch (IOException e){
+                throw new ApiException(e.getMessage());
+            }
+        }
     }
 
     @Override
