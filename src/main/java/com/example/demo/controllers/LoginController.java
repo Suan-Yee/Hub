@@ -37,9 +37,9 @@ public class LoginController {
                 a.getAuthority().equals(Role.USER.name()) ||
                         a.getAuthority().equals(Role.ADMIN.name()))) {
             log.info("User role {}", user.getRole().name());
-            return "redirect:/welcome";
+            return "redirect:/index";
         } else {
-            return "login";
+            return "/login";
         }
     }
     @Transactional
@@ -101,5 +101,41 @@ public class LoginController {
             model.addAttribute("error","Password does not match");
             return "/resetPassword";
         }
+    }
+    @GetMapping("/index")
+    public String adminView(){
+        return "index.html";
+    }
+    @GetMapping("/list")
+    public String userlist(){
+        return "user-listing.html";
+    }
+    @GetMapping("/profile")
+    public String userProfile(){
+        return "admin_profile.html";
+    }
+    @GetMapping("/home")
+    public String homePage(){
+        return "home.html";
+    }
+//    @GetMapping("/loginForm")
+//    public String loginPage(){
+//        return "login.html";
+//    }
+    @GetMapping("/otp")
+    public String otpForm(){
+        return "otpForm.html";
+    }
+    @GetMapping("/status")
+    public String updateStatus(){
+        return "update_status.html";
+    }
+    @GetMapping("/data")
+    public String dataTable(){
+        return "table_data.html";
+    }
+    @GetMapping("/chart")
+    public String chart(){
+        return "chart.html";
     }
 }
