@@ -11,7 +11,6 @@
 }
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 1.2rem;
     line-height: 1.6;
 }
 
@@ -344,7 +343,7 @@ ul {
 
 .content-icons i {
     color: rgb(101, 119, 134);
-    font-size: 1rem;
+    font-size: 0.8rem;
     cursor: pointer;
 
 }
@@ -442,6 +441,12 @@ ul {
     padding: 0.5rem;
     border-radius: 50%
 }
+/*.header-nav .nav-icon{*/
+/*    font-size: 30px;*/
+/*    color:rgba(29,161,242,1.00);*/
+/*    margin-right: 25px;*/
+/*    position: relative;*/
+/*}*/
 .header i:hover {
     background: rgba(29, 161, 242, 0.1);
     padding: 0.5rem;
