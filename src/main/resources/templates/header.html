@@ -4,6 +4,21 @@
     <meta charset="UTF-8">
     <title>DIR ACE Technology</title>
 </head>
+<style>
+    .hidden{
+        display: none;
+    }
+    .visually-hidden {
+        position: absolute !important;
+        clip: rect(1px, 1px, 1px, 1px); /* Hide the button off-screen /
+        overflow: hidden;
+        white-space: nowrap; / Keep content from wrapping */
+        width: 1px;
+        height: 1px;
+        border: 0;
+        padding: 0;
+    }
+</style>
 <body>
 <header id="header" class="header fixed-top d-flex align-items-center">
 
@@ -21,15 +36,15 @@
 
         <ul class="d-flex align-items-center">
 
-            <li>
-            <form id="uploadForm" method="post" enctype="multipart/form-data">
-                <label for="excelFile" class="btn-download">
-                    <i class='bx bxs-cloud-download'></i>
-                    <span id="fileLabel" class="text">Input Excel File</span>
-                </label>
-                <input type="file" id="excelFile" name="file" accept=".xls,.xlsx" multiple style="display: none;">
-                <button type="submit" class="btn btn-primary">Submit</button>
-            </form>
+            <li class="nav-item dropdown ">
+                <form id="uploadForm" method="post" enctype="multipart/form-data">
+                    <label for="excelFile" class="btn-download">
+                        <i class='bx bxs-cloud-download nav-icon'></i>
+                        <!--<span id="fileLabel" class="text">Input Excel File</span>-->
+                    </label>
+                    <input type="file" id="excelFile" name="file" accept=".xls,.xlsx" multiple class="hidden">
+                    <button type="submit" id="submitButton" class="btn btn-primary visually-hidden">Submit</button>
+                </form>
             </li>
 
             <li class="nav-item d-block d-lg-none">
@@ -187,6 +202,14 @@
 </header><!-- End Header -->
 </body>
 <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const excelFileInput = document.getElementById('excelFile');
+        const submitButton = document.getElementById('submitButton');
+
+        excelFileInput.addEventListener('change', function() {
+            submitButton.click(); // Simulate click event on the hidden submit button
+        });
+    });
     const uploadForm = document.getElementById("uploadForm");
     const excelFileInput = document.getElementById("excelFile");
 
