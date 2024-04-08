@@ -56,20 +56,30 @@ public class ExcelUploadServiceImpl implements ExcelUploadService {
                 while (cellIterator.hasNext()){
                     Cell cell = cellIterator.next();
                     switch (cellIndex){
-                        case 0 -> {}
-                        case 1 -> user.setDivision(cell.getStringCellValue());
-                        case 2 -> user.setStaffId(cell.getStringCellValue());
-                        case 3 -> user.setName(cell.getStringCellValue());
-                        case 4 -> {
+                        case 0 : break;
+                        case 1 :
+                            user.setDivision(cell.getStringCellValue());
+                            break;
+                        case 2 :
+                            user.setStaffId(cell.getStringCellValue());
+                            break;
+                        case 3 :
+                            user.setName(cell.getStringCellValue());
+                            break;
+                        case 4 : {
                             if(cell.getCellType() == CellType.NUMERIC){
                                 user.setDoor_log_number(String.valueOf((int) cell.getNumericCellValue()));
                             }else{
                                 user.setDoor_log_number(cell.getStringCellValue());
                             }
                         }
-                        case 5 -> user.setDepartment(cell.getStringCellValue());
-                        case 6 -> user.setTeam(cell.getStringCellValue());
-                        case 7 -> user.setEmail(cell.getStringCellValue());
+                        break;
+                        case 5 : user.setDepartment(cell.getStringCellValue());
+                            break;
+                        case 6 : user.setTeam(cell.getStringCellValue());
+                            break;
+                        case 7 : user.setEmail(cell.getStringCellValue());
+                            break;
                     }
                     cellIndex ++ ;
                 }
