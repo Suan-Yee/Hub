@@ -16,7 +16,6 @@
     <!-- Google Fonts -->
     <link href="https://fonts.gstatic.com" rel="preconnect">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
-
     <!-- Vendor CSS Files -->
     <link th:href="@{/static/assets/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
     <link th:href="@{/static/assets/vendor/bootstrap-icons/bootstrap-icons.css}" rel="stylesheet">
@@ -28,7 +27,8 @@
 
     <!-- Template Main CSS File -->
     <link th:href="@{/static/assets/css/style.css}" rel="stylesheet">
-
+    <!-- FontAswesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <!-- =======================================================
     * Template Name: NiceAdmin
     * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
@@ -39,15 +39,36 @@
 </head>
 
 <body>
-
 <!-- ======= Header ======= -->
 <div th:include="header"></div>
 
 <!-- ======= Sidebar ======= -->
 <div th:include="sidebar"></div>
-
 <main id="main" class="main">
+    <!-- Modal -->
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">You have to change Default-Password.</h1>
+                    <!--<i class="fa-regular fa-pen-to-square"></i>-->
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3 row">
+                        <label for="inputPassword" class="col-sm-2 col-form-label">Password</label>
+                        <div class="col-sm-10">
+                            <small id="passwordErrorMessage" style="color:red"></small>
+                            <input type="password" class="form-control" id="inputPassword">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="changePasswordBtn" class="btn btn-primary" onclick="changeDefaultPassword()">Change</button>
+                </div>
+            </div>
+        </div>
 
+    </div>
     <div class="pagetitle">
         <h1>Dashboard</h1>
         <nav>
@@ -58,389 +79,137 @@
         </nav>
     </div><!-- End Page Title -->
 
-<!--    <section class="section dashboard">-->
-<!--        <div class="row">-->
+    <section class="section dashboard">
+        <div class="row">
 
-<!--            &lt;!&ndash; Left side columns &ndash;&gt;-->
-<!--            <div class="col-lg-8">-->
-<!--                <div class="row">-->
+            <!-- Left side columns -->
+            <div class="col-lg-8">
+                <div class="row">
 
 
-<!--                    <div class="col-xxl-4 col-xl-12">-->
+                    <div class="col-xxl-4 col-xl-12">
 
-<!--                        <div class="card info-card customers-card">-->
+                        <div class="card info-card customers-card">
 
-<!--                            <div class="filter">-->
-<!--                                <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>-->
-<!--                                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">-->
-<!--                                    <li class="dropdown-header text-start">-->
-<!--                                        <h6>Filter</h6>-->
-<!--                                    </li>-->
+                            <div class="filter">
+                                <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                                    <li class="dropdown-header text-start">
+                                        <h6>Filter</h6>
+                                    </li>
 
-<!--                                    <li><a class="dropdown-item" href="#">Today</a></li>-->
-<!--                                    <li><a class="dropdown-item" href="#">This Month</a></li>-->
-<!--                                    <li><a class="dropdown-item" href="#">This Year</a></li>-->
-<!--                                </ul>-->
-<!--                            </div>-->
+                                    <li><a class="dropdown-item" href="#">Today</a></li>
+                                    <li><a class="dropdown-item" href="#">This Month</a></li>
+                                    <li><a class="dropdown-item" href="#">This Year</a></li>
+                                </ul>
+                            </div>
 
-<!--                            <div class="card-body">-->
-<!--                                <h5 class="card-title">Customers <span>| This Year</span></h5>-->
+                            <div class="card-body">
+                                <h5 class="card-title">Customers <span>| This Year</span></h5>
 
-<!--                                <div class="d-flex align-items-center">-->
-<!--                                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">-->
-<!--                                        <i class="bi bi-people"></i>-->
-<!--                                    </div>-->
-<!--                                    <div class="ps-3">-->
-<!--                                        <h6>1244</h6>-->
-<!--                                        <span class="text-danger small pt-1 fw-bold">12%</span> <span class="text-muted small pt-2 ps-1">decrease</span>-->
+                                <div class="d-flex align-items-center">
+                                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                        <i class="bi bi-people"></i>
+                                    </div>
+                                    <div class="ps-3">
+                                        <h6>1244</h6>
+                                        <span class="text-danger small pt-1 fw-bold">12%</span> <span class="text-muted small pt-2 ps-1">decrease</span>
 
-<!--                                    </div>-->
-<!--                                </div>-->
+                                    </div>
+                                </div>
 
-<!--                            </div>-->
-<!--                        </div>-->
-
-<!--                    </div>-->
-
-<!--                    <div class="col-12">-->
-<!--                        <div class="card">-->
-
-<!--                            <div class="filter">-->
-<!--                                <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>-->
-<!--                                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">-->
-<!--                                    <li class="dropdown-header text-start">-->
-<!--                                        <h6>Filter</h6>-->
-<!--                                    </li>-->
-
-<!--                                    <li><a class="dropdown-item" href="#">Today</a></li>-->
-<!--                                    <li><a class="dropdown-item" href="#">This Month</a></li>-->
-<!--                                    <li><a class="dropdown-item" href="#">This Year</a></li>-->
-<!--                                </ul>-->
-<!--                            </div>-->
-
-<!--                            <div class="card-body">-->
-<!--                                <h5 class="card-title">Reports <span>/Today</span></h5>-->
-
-<!--                                &lt;!&ndash; Line Chart &ndash;&gt;-->
-<!--                                <div id="reportsChart"></div>-->
-
-<!--                                <script>-->
-<!--                                    document.addEventListener("DOMContentLoaded", () => {-->
-<!--                                        new ApexCharts(document.querySelector("#reportsChart"), {-->
-<!--                                            series: [{-->
-<!--                                                name: 'Sales',-->
-<!--                                                data: [31, 40, 28, 51, 42, 82, 56],-->
-<!--                                            }, {-->
-<!--                                                name: 'Revenue',-->
-<!--                                                data: [11, 32, 45, 32, 34, 52, 41]-->
-<!--                                            }, {-->
-<!--                                                name: 'Customers',-->
-<!--                                                data: [15, 11, 32, 18, 9, 24, 11]-->
-<!--                                            }],-->
-<!--                                            chart: {-->
-<!--                                                height: 350,-->
-<!--                                                type: 'area',-->
-<!--                                                toolbar: {-->
-<!--                                                    show: false-->
-<!--                                                },-->
-<!--                                            },-->
-<!--                                            markers: {-->
-<!--                                                size: 4-->
-<!--                                            },-->
-<!--                                            colors: ['#4154f1', '#2eca6a', '#ff771d'],-->
-<!--                                            fill: {-->
-<!--                                                type: "gradient",-->
-<!--                                                gradient: {-->
-<!--                                                    shadeIntensity: 1,-->
-<!--                                                    opacityFrom: 0.3,-->
-<!--                                                    opacityTo: 0.4,-->
-<!--                                                    stops: [0, 90, 100]-->
-<!--                                                }-->
-<!--                                            },-->
-<!--                                            dataLabels: {-->
-<!--                                                enabled: false-->
-<!--                                            },-->
-<!--                                            stroke: {-->
-<!--                                                curve: 'smooth',-->
-<!--                                                width: 2-->
-<!--                                            },-->
-<!--                                            xaxis: {-->
-<!--                                                type: 'datetime',-->
-<!--                                                categories: ["2018-09-19T00:00:00.000Z", "2018-09-19T01:30:00.000Z", "2018-09-19T02:30:00.000Z", "2018-09-19T03:30:00.000Z", "2018-09-19T04:30:00.000Z", "2018-09-19T05:30:00.000Z", "2018-09-19T06:30:00.000Z"]-->
-<!--                                            },-->
-<!--                                            tooltip: {-->
-<!--                                                x: {-->
-<!--                                                    format: 'dd/MM/yy HH:mm'-->
-<!--                                                },-->
-<!--                                            }-->
-<!--                                        }).render();-->
-<!--                                    });-->
-<!--                                </script>-->
-<!--                                &lt;!&ndash; End Line Chart &ndash;&gt;-->
-
-<!--                            </div>-->
-
-<!--                        </div>-->
-<!--                    </div>-->
-
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </section>-->
-    <div class="post-tweet">
-        <form action="">
-            <div class="form-group-1">
-                <img th:src="@{/static/assets/img/profile-img.jpg}" alt="profile-pics">
-                <input type="text" placeholder="What's happening?">
-            </div>
-            <div class="form-group-2">
-                <div class="post-icons">
-                    <i class="far fa-image"></i>
-                    <i class="far fa-file-image"></i>
-                    <i class="fas fa-video"></i>
-                    <i class="far fa-smile"></i>
-                    <i class="far fa-calendar-check"></i>
-                </div>
-                <button class="btn" type="submit">Post</button>
-            </div>
-        </form>
-
-    </div>
-    <!-- User Content -->
-    <div class="tweets">
-        <div class="user-pics"><img th:src="@{/static/assets/img/user3.jpg}" alt="user3"></div>
-        <div class="user-content-box">
-            <div class="user-names">
-                <hi class="full-name">Olivia Brent</hi>
-                <p class="user-name">@iamolivia</p>
-                <p class="time"> . 58mins</p>
-            </div>
-
-            <div class="user-content">
-                <p>We've gotta send kids back to school so one day they can be doctors and scientists, and everyone can ignore them.</p>
-            </div>
-
-            <div class="content-icons">
-                <i class="far fa-comment blue"> 109</i>
-                <!--                                    <i class="fas fa-share green">215</i>-->
-                <i class="far fa-heart red">1.6k</i>
-                <i class="fas fa-chevron-up blue"></i>
-            </div>
-
-        </div>
-    </div>
-    <div class="tweets">
-        <div class="user-pics"><img th:src="@{/static/assets/img/user2.jpg}" alt="user2"></div>
-        <div class="user-content-box">
-            <div class="user-names">
-                <hi class="full-name">Carole Chavez</hi>
-                <p class="user-name">@carolechavez</p>
-                <p class="time"> . 1hr</p>
-            </div>
-
-            <div class="user-content">
-                <p>If the whole world was blind, how many people would you impress?
-                    <a href="#">#100daysofcode</a> <a href="#">#javascript</a> <a href="#">#womenwhocode</a></p>
-            </div>
-
-            <div class="content-icons">
-                <i class="far fa-comment blue"> 2k</i>
-                <!--                                    <i class="fas fa-share green">215</i>-->
-                <i class="far fa-heart red"> 10k</i>
-                <i class="fas fa-chevron-up blue"></i>
-            </div>
-
-        </div>
-    </div>
-
-    <div class="tweets">
-        <div class="user-pics"><img th:src="@{/static/assets/img/user1.jpg}" alt="user1"></div>
-        <div class="user-content-box">
-            <div class="user-names">
-                <hi class="full-name">Eric Alvarez</hi>
-                <p class="user-name">@eric_alvarez</p>
-                <p class="time"> . 2hrs</p>
-            </div>
-
-            <div class="user-content">
-                <p>Eat. Code, Sleep. repeat! <a href="#">#CodeNewbie</a> <a href="#">#100DaysOfCode</a></p>
-                <img th:src="@{/static/assets/img/content1.jpg}" alt="content1">
-            </div>
-
-            <div class="content-icons">
-                <i class="far fa-comment blue"> 273</i>
-                <!--                                    <i class="fas fa-share green">215</i>-->
-                <i class="far fa-heart red"> 3k</i>
-                <i class="fas fa-chevron-up blue"></i>
-            </div>
-
-        </div>
-    </div>
-
-    <div class="tweets">
-        <div class="user-pics"><img th:src="@{/static/assets/img/user4.jpg}" alt="user4"></div>
-        <div class="user-content-box">
-            <div class="user-names">
-                <hi class="full-name">Harry Wilson</hi>
-                <p class="user-name">@Harrywilson</p>
-                <p class="time"> . 4hrs</p>
-            </div>
-
-            <div class="user-content">
-                <p>There's no clear correlation between your background and what you are going to achieve in life..</p>
-            </div>
-
-            <div class="content-icons">
-                <i class="far fa-comment blue"> 4k</i>
-                <!--                                    <i class="fas fa-share green">215</i>-->
-                <i class="far fa-heart red">13k</i>
-                <i class="fas fa-chevron-up blue"></i>
-            </div>
-
-        </div>
-    </div>
-
-    <section class="follow-users-box">
-
-        <div class="follow-header">
-            <h1 class="main-text">Who to follow</h1>
-            <i class="fas fa-chevron-down"></i>
-        </div>
-
-        <div class="follow-user">
-            <div class="related-followers">
-                <p class="sub-text"><i class="fas fa-user"></i> Ellie Jamie and 20 others follow</p>
-            </div>
-
-            <div class="user-profile">
-                <div class="user-pics"><img th:src="@{/static/assets/img/user6.jpg}" alt="user6">
-                </div>
-
-                <div class="user-profile-content">
-                    <div class="title-container">
-                        <div class="user-names">
-                            <div class="full-name"><h1 class="main-text">Linda Shelton #BlackLivesMatter</h1></div>
-                            <div class="user-name"><p class="sub-text">@Linda_shelton</p></div>
+                            </div>
                         </div>
 
-                        <div class="follow-btn"><a href="#">follow</a></div>
-
-                    </div>
-                    <div class="bio-container">
-                        <p><a href="#">♯WordPress/Php</a> Geek Smiling face with sunglasses <a href="#">♯JavascriptDeveloper</a> Slightly smiling face <a href="#">♯ToolsCreator</a> <a href="#">♯http://webscreenshot.now.sh</a> Always ready to help with code Handshake</p>
                     </div>
 
-                </div>
+                    <div class="col-12">
+                        <div class="card">
 
-            </div>
+                            <div class="filter">
+                                <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                                    <li class="dropdown-header text-start">
+                                        <h6>Filter</h6>
+                                    </li>
 
-        </div>
+                                    <li><a class="dropdown-item" href="#">Today</a></li>
+                                    <li><a class="dropdown-item" href="#">This Month</a></li>
+                                    <li><a class="dropdown-item" href="#">This Year</a></li>
+                                </ul>
+                            </div>
 
-        <div class="follow-user">
-            <div class="related-followers">
-                <p class="sub-text"><i class="fas fa-user"></i> JavaScript Ninja and 200 others follow</p>
-            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Reports <span>/Today</span></h5>
 
-            <div class="user-profile">
-                <div class="user-pics"><img th:src="@{/static/assets/img/user7.jpg}" alt="user7">
-                </div>
+                                <!-- Line Chart -->
+                                <div id="reportsChart"></div>
 
-                <div class="user-profile-content">
-                    <div class="title-container">
-                        <div class="user-names">
-                            <div class="full-name"><h1 class="main-text">Gavin Johnson #JavaScript</h1></div>
-                            <div class="user-name"><p class="sub-text">@Gavinjohnson</p></div>
+                                <script>
+                                    document.addEventListener("DOMContentLoaded", () => {
+                                        new ApexCharts(document.querySelector("#reportsChart"), {
+                                            series: [{
+                                                name: 'Sales',
+                                                data: [31, 40, 28, 51, 42, 82, 56],
+                                            }, {
+                                                name: 'Revenue',
+                                                data: [11, 32, 45, 32, 34, 52, 41]
+                                            }, {
+                                                name: 'Customers',
+                                                data: [15, 11, 32, 18, 9, 24, 11]
+                                            }],
+                                            chart: {
+                                                height: 350,
+                                                type: 'area',
+                                                toolbar: {
+                                                    show: false
+                                                },
+                                            },
+                                            markers: {
+                                                size: 4
+                                            },
+                                            colors: ['#4154f1', '#2eca6a', '#ff771d'],
+                                            fill: {
+                                                type: "gradient",
+                                                gradient: {
+                                                    shadeIntensity: 1,
+                                                    opacityFrom: 0.3,
+                                                    opacityTo: 0.4,
+                                                    stops: [0, 90, 100]
+                                                }
+                                            },
+                                            dataLabels: {
+                                                enabled: false
+                                            },
+                                            stroke: {
+                                                curve: 'smooth',
+                                                width: 2
+                                            },
+                                            xaxis: {
+                                                type: 'datetime',
+                                                categories: ["2018-09-19T00:00:00.000Z", "2018-09-19T01:30:00.000Z", "2018-09-19T02:30:00.000Z", "2018-09-19T03:30:00.000Z", "2018-09-19T04:30:00.000Z", "2018-09-19T05:30:00.000Z", "2018-09-19T06:30:00.000Z"]
+                                            },
+                                            tooltip: {
+                                                x: {
+                                                    format: 'dd/MM/yy HH:mm'
+                                                },
+                                            }
+                                        }).render();
+                                    });
+                                </script>
+                                <!-- End Line Chart -->
+
+                            </div>
+
                         </div>
-
-                        <div class="follow-btn"><a href="#">follow</a></div>
-
-                    </div>
-                    <div class="bio-container">
-                        <a href="#">♯JavascriptDeveloper</a> Avocado | Fire Speaker | Fire Teacher | Youtube - <a href="#">http://bit.ly/jqqyt</a> |<a href="#"> @twilio</a> Champion | Motto: <a href="#">#LearnBuildTeach</a></p>
                     </div>
 
                 </div>
-
             </div>
-
         </div>
-
-        <div class="follow-user">
-            <div class="related-followers">
-                <p class="sub-text"><i class="fas fa-user"></i> The Code Boy and 50 others follow</p>
-            </div>
-
-            <div class="user-profile">
-                <div class="user-pics"><img th:src="@{/static/assets/img/user8.jpg}" alt="user8">
-                </div>
-
-                <div class="user-profile-content">
-                    <div class="title-container">
-                        <div class="user-names">
-                            <div class="full-name"><h1 class="main-text">William D Gallucci</h1></div>
-                            <div class="user-name"><p class="sub-text">@Iamwilliamd_shelton</p></div>
-                        </div>
-
-                        <div class="follow-btn"><a href="#">follow</a></div>
-
-                    </div>
-                    <div class="bio-container">
-                        <p>software engineer at
-                            <a href="#">@soonastudios</a>
-                            . career switcher. vue + rails. tweeting about tech, books, startups, and big ideas. writing @ <a href="#">http://jamestucker.dev.</a></p>
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <div class="follow-footer">
-            <a href="#">Show more</a>
-        </div>
-
     </section>
-
-    <div class="tweets">
-        <div class="user-pics"><img th:src="@{/static/assets/img/user5.jpg}" alt="user5"></div>
-        <div class="user-content-box">
-            <div class="user-names">
-                <hi class="full-name">Nora Chao</hi>
-                <p class="user-name">@chaonora</p>
-                <p class="time"> . 6hrs</p>
-            </div>
-
-            <div class="user-content">
-                <p>Time to settle down and play my favourite game IN THE WORLD Earth globe europe-africa</p>
-
-                <p>  Haven’t played for about a month, too busy coding.
-                    So tired this evening though.
-                    Poker tournament with husband later..</p>
-                <img th:src="@{/static/assets/img/content5.jpg}" alt="content5">
-            </div>
-
-            <div class="content-icons">
-                <i class="far fa-comment blue"> 78</i>
-                <!--                                    <i class="fas fa-share green">215</i>-->
-                <i class="far fa-heart red"> 934</i>
-                <i class="fas fa-chevron-up blue"></i>
-            </div>
-
-        </div>
-    </div>
-
-    <div class="pagnation">
-        <a href="#">Load more</a>
-    </div>
-
-    </div>
-
-
-
 </main>
 <div th:include="footer"></div>
-
 </body>
 <!-- ======= Footer ======= -->
 <!-- End Footer -->
@@ -459,7 +228,6 @@
 
 <!-- Template Main JS File -->
 <script th:src="@{/static/assets/js/main.js}"></script>
-
-</body>
+<script th:src="@{/static/assets/js/changeDefaultPassword.js}"></script>
 
 </html>

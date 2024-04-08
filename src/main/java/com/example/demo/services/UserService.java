@@ -1,6 +1,8 @@
 package com.example.demo.services;
 
 import com.example.demo.entity.User;
+import com.example.demo.form.ChangeDefaultPassword;
+import com.example.demo.form.ChangePasswordInput;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -15,4 +17,9 @@ public interface UserService {
     User findByEmail(String email);
     void saveUserFromExcel(MultipartFile file);
     void updateUsers(MultipartFile file);
+    Boolean checkCurrentPassword(String currentPassword);
+    ChangePasswordInput changePassword(String currentPassword, String newPassword);
+    Boolean isDefaultPassword();
+    ChangeDefaultPassword changeDefaultPassword(String newPassword);
+    String getUserImageName();
 }

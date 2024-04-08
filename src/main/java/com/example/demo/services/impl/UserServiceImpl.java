@@ -4,15 +4,19 @@ import com.example.demo.entity.AppUser;
 import com.example.demo.entity.User;
 import com.example.demo.enumeration.Role;
 import com.example.demo.exception.ApiException;
+import com.example.demo.form.ChangeDefaultPassword;
+import com.example.demo.form.ChangePasswordInput;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.services.ExcelUploadService;
 import com.example.demo.services.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -58,6 +62,69 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public User findByEmail(String email) {
         return userRepository.findByEmail(email).orElse(null);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String staffId) throws UsernameNotFoundException {
+        User user = userRepository.findByStaffId(staffId).orElse(null);
+        log.info("User info from load {}",user);
+        return new AppUser(user);
+    }
+
+    @Override
+    public Boolean checkCurrentPassword(String currentPassword){
+        String staffId = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userRepository.findByStaffId(staffId).orElse(null);
+        if (user!=null){
+            log.info("User Password: {}",user.getPassword());
+            return encoder.matches(currentPassword,user.getPassword());
+        }
+        else return false;
+    }
+    @Override
+    public ChangePasswordInput changePassword(String currentPassword, String newPassword){
+        String staffId = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userRepository.findByStaffId(staffId).orElse(null);
+        if(user!=null){
+            if(encoder.matches(currentPassword,user.getPassword())){
+                user.setPassword(encoder.encode(newPassword));
+                userRepository.save(user);
+            }
+            return new ChangePasswordInput();
+        }
+        return new ChangePasswordInput();
+    }
+    @Override
+    public Boolean isDefaultPassword(){
+        String staffId = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userRepository.findByStaffId(staffId).orElse(null);
+        if(user!=null){
+            if(encoder.matches("dat123",user.getPassword())){
+                return true;
+            }
+        }
+        return false;
+
+    }
+    @Override
+    public ChangeDefaultPassword changeDefaultPassword(String newPassword){
+        String staffId = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userRepository.findByStaffId(staffId).orElse(null);
+        log.info("StaffId : {}",user.getName());
+        if(user!=null){
+            user.setPassword(encoder.encode(newPassword));
+            userRepository.save(user);
+        }
+        return new ChangeDefaultPassword();
+    }
+    @Override
+    public String getUserImageName(){
+        String staffId = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userRepository.findByStaffId(staffId).orElse(null);
+        if(user.getPhoto()!=null){
+            return user.getPhoto();
+        }
+        else return null;
     }
 
     @Override
@@ -118,13 +185,5 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                 log.error(e.getMessage());
             }
         }
-    }
-
-
-    @Override
-    public UserDetails loadUserByUsername(String staffId) throws UsernameNotFoundException {
-        User user = userRepository.findByStaffId(staffId).orElse(null);
-        log.info("User info from load {}",user);
-        return new AppUser(user);
     }
 }
