@@ -18,7 +18,7 @@ public class Like {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private long id;
+    private Long id;
     @CreatedDate
     @Column(name = "date", nullable = false)
     private LocalDateTime date;

@@ -1,19 +1,27 @@
 package com.example.demo.entity;
 
 import com.example.demo.enumeration.Role;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_DEFAULT;
+
 @Getter @Setter
 @AllArgsConstructor @NoArgsConstructor
-@Builder @ToString
+@Builder 
 @Entity
 @Table(name = "user")
+@EntityListeners(AuditingEntityListener.class)
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class User {
 
     @Id
@@ -31,6 +39,8 @@ public class User {
     private String photo;
     private String interest;
     private String biography;
+    private boolean status;
+
     @CreatedDate
     @Column(name = "created_at",nullable = false,updatable = false)
     private LocalDateTime createdAt;
@@ -44,10 +54,11 @@ public class User {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private OTP otp;
 
+    @JsonBackReference
     @OneToMany(mappedBy = "user")
     private List<Post> posts;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UserHasGroup> userHasGroups;
 
     @OneToMany(mappedBy = "user")
@@ -65,8 +76,8 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<BookMark> bookMarks;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(name = "skill_has_user",joinColumns = {@JoinColumn(name = "user_id")},inverseJoinColumns = {@JoinColumn(name = "skill_id")})
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "skill_has_user", joinColumns = {@JoinColumn(name = "user_id")}, inverseJoinColumns = {@JoinColumn(name = "skill_id")})
     private List<Skill> skills;
 
     @PrePersist

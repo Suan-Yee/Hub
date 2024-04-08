@@ -2,6 +2,7 @@ package com.example.demo.services.impl;
 
 import com.example.demo.entity.AppUser;
 import com.example.demo.entity.User;
+import com.example.demo.enumeration.Role;
 import com.example.demo.exception.ApiException;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.services.ExcelUploadService;
@@ -13,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -70,6 +72,54 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             }
         }
     }
+
+    @Override
+    public void updateUsers(MultipartFile file) {
+        if (excelUploadService.isExcelValid(file)) {
+            try {
+                List<User> usersFromDB = userRepository.findAll();
+                List<User> usersFromExcel = excelUploadService.getUserData(file.getInputStream());
+
+                for (User userFromDB : usersFromDB) {
+                    boolean found = false;
+                    for (User userFromExcel : usersFromExcel) {
+                        if (userFromDB.getStaffId().equals(userFromExcel.getStaffId())) {
+                            userFromDB.setName(userFromExcel.getName());
+                            userFromDB.setDoor_log_number(userFromExcel.getDoor_log_number());
+                            userFromDB.setDivision(userFromExcel.getDivision());
+                            userFromDB.setTeam(userFromExcel.getTeam());
+                            userFromDB.setDepartment(userFromExcel.getDepartment());
+                            userRepository.save(userFromDB);
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (!found) {
+                        userFromDB.setStatus(false);
+                        userRepository.save(userFromDB);
+                    }
+                }
+                for (User userFromExcel : usersFromExcel) {
+                    boolean found = false;
+                    for (User userFromDB : usersFromDB) {
+                        if (userFromDB.getStaffId().equals(userFromExcel.getStaffId())) {
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (!found) {
+                        userFromExcel.setPassword(encoder.encode("dat123"));
+                        userFromExcel.setRole(Role.USER);
+                        userFromExcel.setStatus(true);
+                        userRepository.save(userFromExcel);
+                    }
+                }
+            } catch (IOException e) {
+                log.error(e.getMessage());
+            }
+        }
+    }
+
 
     @Override
     public UserDetails loadUserByUsername(String staffId) throws UsernameNotFoundException {

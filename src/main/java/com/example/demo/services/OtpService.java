@@ -2,6 +2,7 @@ package com.example.demo.services;
 
 import com.example.demo.entity.OTP;
 import com.example.demo.entity.User;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface OtpService {
 
@@ -10,4 +11,5 @@ public interface OtpService {
     OTP findByUserId(Long userId);
     boolean isValidCode(Long userId);
     void deleteByUserId(Long userId);
+
 }

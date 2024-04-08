@@ -28,6 +28,7 @@ public class LoginController {
     private final OtpService otpService;
     private final BCryptPasswordEncoder encoder;
 
+
     @GetMapping("/")
     public String showWelcomePage(HttpSession httpSession) {
         var auth = SecurityContextHolder.getContext().getAuthentication();
@@ -37,7 +38,7 @@ public class LoginController {
                 a.getAuthority().equals(Role.USER.name()) ||
                         a.getAuthority().equals(Role.ADMIN.name()))) {
             log.info("User role {}", user.getRole().name());
-            return "redirect:/dashboard";
+            return "redirect:/index";
         } else {
             return "login";
         }

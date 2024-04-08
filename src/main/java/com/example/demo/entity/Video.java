@@ -1,5 +1,7 @@
 package com.example.demo.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,6 +21,7 @@ public class Video {
     @Column(name = "name")
     private String name;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "content_id")
     private Content content;

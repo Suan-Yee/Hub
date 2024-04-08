@@ -1,28 +1,25 @@
 package com.example.demo.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
-@Table(name = "file")
-public class File {
+@Data
+@AllArgsConstructor @NoArgsConstructor
+public class Topic {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private long id;
-    @Column(name = "name")
+    private Long id;
     private String name;
 
     @JsonBackReference
-    @ManyToOne
-    @JoinColumn(name = "content_id")
-    private Content content;
+    @OneToOne(mappedBy = "topic", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Post post;
+
+
+
 }

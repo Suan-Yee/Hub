@@ -1,15 +1,19 @@
 package com.example.demo.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name = "image")
+@SuperBuilder
 public class Image {
 
     @Id
@@ -20,6 +24,7 @@ public class Image {
     private String name;
 
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "content_id")
     private Content content;
 }
