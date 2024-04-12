@@ -441,6 +441,12 @@ ul {
     padding: 0.5rem;
     border-radius: 50%
 }
+/*.header-nav .nav-icon{*/
+/*    font-size: 30px;*/
+/*    color:rgba(29,161,242,1.00);*/
+/*    margin-right: 25px;*/
+/*    position: relative;*/
+/*}*/
 .header i:hover {
     background: rgba(29, 161, 242, 0.1);
     padding: 0.5rem;
