@@ -29,4 +29,7 @@ public interface PostRepository extends JpaRepository<Post,Long>, JpaSpecificati
     @Query("SELECT p FROM Post p WHERE p.createdAt >= :startDate AND p.createdAt < :endDate")
     List<Post> findByDate(@Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate);
 
+    @Query("SELECT COUNT(p) FROM Post p WHERE p.topic.name = :topicName")
+    Long countByTopic(@Param("topicName")String topicName);
+
 }

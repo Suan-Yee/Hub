@@ -28,7 +28,9 @@
 
     <!-- Template Main CSS File -->
     <link th:href="@{/static/assets/css/style.css}" rel="stylesheet">
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <!-- =======================================================
     * Template Name: NiceAdmin
     * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
@@ -37,7 +39,195 @@
     * License: https://bootstrapmade.com/license/
     ======================================================== -->
 </head>
+<style>
+    body{margin-top:20px;
+        background:#f7f8fa
+    }
 
+    .avatar-xxl {
+        height: 7rem;
+        width: 7rem;
+    }
+
+    .card {
+        margin-bottom: 20px;
+        -webkit-box-shadow: 0 2px 3px #eaedf2;
+        box-shadow: 0 2px 3px #eaedf2;
+    }
+
+    .pb-0 {
+        padding-bottom: 0!important;
+    }
+
+    .font-size-16 {
+        font-size: 16px!important;
+    }
+    .avatar-title {
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+        background-color: #038edc;
+        color: #fff;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        font-weight: 500;
+        height: 100%;
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
+        justify-content: center;
+        width: 100%;
+    }
+
+    .bg-soft-primary {
+        background-color: rgba(3,142,220,.15)!important;
+    }
+    .rounded-circle {
+        border-radius: 50%!important;
+    }
+
+    .nav-tabs-custom .nav-item .nav-link.active {
+        color: #038edc;
+    }
+    .nav-tabs-custom .nav-item .nav-link {
+        border: none;
+    }
+    .nav-tabs-custom .nav-item .nav-link.active {
+        color: #038edc;
+    }
+
+    .avatar-group {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+        padding-left: 12px;
+    }
+
+    .border-end {
+        border-right: 1px solid #eff0f2 !important;
+    }
+
+    .d-inline-block {
+        display: inline-block!important;
+    }
+
+    .badge-soft-danger {
+        color: #f34e4e;
+        background-color: rgba(243,78,78,.1);
+    }
+
+    .badge-soft-warning {
+        color: #f7cc53;
+        background-color: rgba(247,204,83,.1);
+    }
+
+    .badge-soft-success {
+        color: #51d28c;
+        background-color: rgba(81,210,140,.1);
+    }
+
+    .avatar-group .avatar-group-item {
+        margin-left: -14px;
+        border: 2px solid #fff;
+        border-radius: 50%;
+        -webkit-transition: all .2s;
+        transition: all .2s;
+    }
+
+    .avatar-sm {
+        height: 2rem;
+        width: 2rem;
+    }
+
+    .nav-tabs-custom .nav-item {
+        position: relative;
+        color: #343a40;
+    }
+
+    .nav-tabs-custom .nav-item .nav-link.active:after {
+        -webkit-transform: scale(1);
+        transform: scale(1);
+    }
+
+    .nav-tabs-custom .nav-item .nav-link::after {
+        content: "";
+        background: #038edc;
+        height: 2px;
+        position: absolute;
+        width: 100%;
+        left: 0;
+        bottom: -2px;
+        -webkit-transition: all 250ms ease 0s;
+        transition: all 250ms ease 0s;
+        -webkit-transform: scale(0);
+        transform: scale(0);
+    }
+
+    .badge-soft-secondary {
+        color: #74788d;
+        background-color: rgba(116,120,141,.1);
+    }
+
+    .badge-soft-secondary {
+        color: #74788d;
+    }
+
+    .work-activity {
+        position: relative;
+        color: #74788d;
+        padding-left: 5.5rem
+    }
+
+    .work-activity::before {
+        content: "";
+        position: absolute;
+        height: 100%;
+        top: 0;
+        left: 66px;
+        border-left: 1px solid rgba(3,142,220,.25)
+    }
+
+    .work-activity .work-item {
+        position: relative;
+        border-bottom: 2px dashed #eff0f2;
+        margin-bottom: 14px
+    }
+
+    .work-activity .work-item:last-of-type {
+        padding-bottom: 0;
+        margin-bottom: 0;
+        border: none
+    }
+
+    .work-activity .work-item::after,.work-activity .work-item::before {
+        position: absolute;
+        display: block
+    }
+
+    .work-activity .work-item::before {
+        content: attr(data-date);
+        left: -157px;
+        top: -3px;
+        text-align: right;
+        font-weight: 500;
+        color: #74788d;
+        font-size: 12px;
+        min-width: 120px
+    }
+
+    .work-activity .work-item::after {
+        content: "";
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        left: -26px;
+        top: 3px;
+        background-color: #fff;
+        border: 2px solid #038edc
+    }
+</style>
 <body>
 
 <!-- ======= Header ======= -->
@@ -48,7 +238,7 @@
 
 <main id="main" class="main">
 
-   <!-- End Page Title -->
+    <!-- End Page Title -->
 
     <section class="section dashboard">
         <div class="row">
@@ -56,11 +246,6 @@
             <!-- Left side columns -->
             <div class="col-lg-8">
                 <div class="row">
-
-
-
-
-
 
                 </div>
             </div>
@@ -72,7 +257,7 @@
         <h1>Profile</h1>
         <nav>
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                <li class="breadcrumb-item"><a th:href="@{/index}">Home</a></li>
                 <li class="breadcrumb-item">Admin</li>
                 <li class="breadcrumb-item active">Profile</li>
             </ol>
@@ -85,15 +270,21 @@
 
                 <div class="card">
                     <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
-
-                        <img th:src="@{/static/assets/img/profile-img.jpg}" alt="Profile" class="rounded-circle">
-                        <h2>Kevin Anderson</h2>
-                        <h3>Web Designer</h3>
-                        <div class="social-links mt-2">
-                            <a href="#" class="twitter"><i class="bi bi-twitter"></i></a>
-                            <a href="#" class="facebook"><i class="bi bi-facebook"></i></a>
-                            <a href="#" class="instagram"><i class="bi bi-instagram"></i></a>
-                            <a href="#" class="linkedin"><i class="bi bi-linkedin"></i></a>
+                        <div class="profile-image-container">
+                            <img alt="profile-image" class="userProfile" >
+                        </div>
+                        <h2 th:text="${User.name}"></h2>
+                        <h3 th:text="${User.department}"></h3>
+                        <div class="pt-2">
+                            <h4 class="card-title mb-3">My Skill</h4>
+                            <div class="d-flex gap-3 flex-wrap">
+                                <span class="badge badge-soft-secondary p-2">HTML</span>
+                                <span class="badge badge-soft-secondary p-2">Bootstrap</span>
+                                <span class="badge badge-soft-secondary p-2">Scss</span>
+                                <span class="badge badge-soft-secondary p-2">Javascript</span>
+                                <span class="badge badge-soft-secondary p-2">React</span>
+                                <span class="badge badge-soft-secondary p-2">Angular</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -127,45 +318,30 @@
                         <div class="tab-content pt-2">
 
                             <div class="tab-pane fade show active profile-overview" id="profile-overview">
-                                <h5 class="card-title">About</h5>
-                                <p class="small fst-italic">Sunt est soluta temporibus accusantium neque nam maiores cumque temporibus. Tempora libero non est unde veniam est qui dolor. Ut sunt iure rerum quae quisquam autem eveniet perspiciatis odit. Fuga sequi sed ea saepe at unde.</p>
+                                <h5 class="card-title">Bio</h5>
+                                <p class="small fst-italic" th:text="${User.biography}"></p>
 
                                 <h5 class="card-title">Profile Details</h5>
 
                                 <div class="row">
-                                    <div class="col-lg-3 col-md-4 label ">Full Name</div>
-                                    <div class="col-lg-9 col-md-8">Kevin Anderson</div>
+                                    <div class="col-lg-3 col-md-4 label ">Name</div>
+                                    <div class="col-lg-9 col-md-8" th:text="${User.name}"></div>
                                 </div>
-
                                 <div class="row">
-                                    <div class="col-lg-3 col-md-4 label">Company</div>
-                                    <div class="col-lg-9 col-md-8">DIR ACE Technology</div>
+                                    <div class="col-lg-3 col-md-4 label">Staff ID</div>
+                                    <div class="col-lg-9 col-md-8" th:text="${User.staffId}"></div>
                                 </div>
-
                                 <div class="row">
-                                    <div class="col-lg-3 col-md-4 label">Job</div>
-                                    <div class="col-lg-9 col-md-8">Web Developer</div>
+                                    <div class="col-lg-3 col-md-4 label">Division</div>
+                                    <div class="col-lg-9 col-md-8" th:text="${User.division}"></div>
                                 </div>
-
                                 <div class="row">
-                                    <div class="col-lg-3 col-md-4 label">Country</div>
-                                    <div class="col-lg-9 col-md-8">Burmese</div>
+                                    <div class="col-lg-3 col-md-4 label">Department</div>
+                                    <div class="col-lg-9 col-md-8" th:text="${User.department}"></div>
                                 </div>
-
                                 <div class="row">
-                                    <div class="col-lg-3 col-md-4 label">Address</div>
-                                    <div class="col-lg-9 col-md-8">MRCT Park, Myanmar</div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-lg-3 col-md-4 label">Phone</div>
-                                    <div class="col-lg-9 col-md-8">(+959) 256623210</div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-lg-3 col-md-4 label">Email</div>
-                                    <div class="col-lg-9 col-md-8">thzaw260@diracetechnology.com
-                                    </div>
+                                    <div class="col-lg-3 col-md-4 label">Team</div>
+                                    <div class="col-lg-9 col-md-8" th:text="${User.team}"></div>
                                 </div>
 
                             </div>
@@ -175,102 +351,37 @@
                                 <!-- Profile Edit Form -->
                                 <form>
                                     <div class="row mb-3">
-                                        <label for="profileImage" class="col-md-4 col-lg-3 col-form-label">Profile Image</label>
+                                        <label for="image" class="col-md-4 col-lg-3 col-form-label">Profile Image</label>
                                         <div class="col-md-8 col-lg-9">
-                                            <img src="assets/img/profile-img.jpg" alt="Profile">
+                                            <div class="profile-image-container">
+                                                <img id="image" class="userProfile " alt="Profile">
+                                            </div>
+                                            <input id="photoInput" type="file" accept=".jpeg,.png,.jpg" class="custom-file-label" hidden="hidden">
                                             <div class="pt-2">
-                                                <a href="#" class="btn btn-primary btn-sm" title="Upload new profile image"><i class="bi bi-upload"></i></a>
-                                                <a href="#" class="btn btn-danger btn-sm" title="Remove my profile image"><i class="bi bi-trash"></i></a>
+                                                <a href="#" class="btn btn-primary btn-sm" title="Upload new profile image"><i id="selectedPhoto" class="bi bi-upload"></i></a>
+                                                <button type="button" onclick="removeImage()" class="btn btn-danger btn-sm" title="Remove your profile image" id="imageTrash"><i class="bi bi-trash"></i></button>
                                             </div>
                                         </div>
                                     </div>
 
-                                    <div class="row mb-3">
+                                    <!--<div class="row mb-3">
                                         <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Full Name</label>
                                         <div class="col-md-8 col-lg-9">
                                             <input name="fullName" type="text" class="form-control" id="fullName" value="Kevin Anderson">
                                         </div>
-                                    </div>
+                                    </div>-->
 
                                     <div class="row mb-3">
-                                        <label for="about" class="col-md-4 col-lg-3 col-form-label">About</label>
+                                        <label for="bio" class="col-md-4 col-lg-3 col-form-label">Bio</label>
                                         <div class="col-md-8 col-lg-9">
-                                            <textarea name="about" class="form-control" id="about" style="height: 100px">Sunt est soluta temporibus accusantium neque nam maiores cumque temporibus. Tempora libero non est unde veniam est qui dolor. Ut sunt iure rerum quae quisquam autem eveniet perspiciatis odit. Fuga sequi sed ea saepe at unde.</textarea>
+                                            <textarea name="about" class="form-control" id="bio" style="height: 100px" th:text="${User.biography}"></textarea>
                                         </div>
                                     </div>
 
-                                    <div class="row mb-3">
-                                        <label for="company" class="col-md-4 col-lg-3 col-form-label">Company</label>
-                                        <div class="col-md-8 col-lg-9">
-                                            <input name="company" type="text" class="form-control" id="company" value="DIR ACE Technology">
-                                        </div>
-                                    </div>
 
-                                    <div class="row mb-3">
-                                        <label for="Job" class="col-md-4 col-lg-3 col-form-label">Job</label>
-                                        <div class="col-md-8 col-lg-9">
-                                            <input name="job" type="text" class="form-control" id="Job" value="Web Developer">
-                                        </div>
-                                    </div>
-
-                                    <div class="row mb-3">
-                                        <label for="Country" class="col-md-4 col-lg-3 col-form-label">Country</label>
-                                        <div class="col-md-8 col-lg-9">
-                                            <input name="country" type="text" class="form-control" id="Country" value="Burmese">
-                                        </div>
-                                    </div>
-
-                                    <div class="row mb-3">
-                                        <label for="Address" class="col-md-4 col-lg-3 col-form-label">Address</label>
-                                        <div class="col-md-8 col-lg-9">
-                                            <input name="address" type="text" class="form-control" id="Address" value="MRCT Park, Myanmar">
-                                        </div>
-                                    </div>
-
-                                    <div class="row mb-3">
-                                        <label for="Phone" class="col-md-4 col-lg-3 col-form-label">Phone</label>
-                                        <div class="col-md-8 col-lg-9">
-                                            <input name="phone" type="text" class="form-control" id="Phone" value="(+959) 256623210">
-                                        </div>
-                                    </div>
-
-                                    <div class="row mb-3">
-                                        <label for="Email" class="col-md-4 col-lg-3 col-form-label">Email</label>
-                                        <div class="col-md-8 col-lg-9">
-                                            <input name="email" type="email" class="form-control" id="Email" value="thzaw260@diracetechnology.com">
-                                        </div>
-                                    </div>
-
-                                    <div class="row mb-3">
-                                        <label for="Twitter" class="col-md-4 col-lg-3 col-form-label">Twitter Profile</label>
-                                        <div class="col-md-8 col-lg-9">
-                                            <input name="twitter" type="text" class="form-control" id="Twitter" value="https://twitter.com/#">
-                                        </div>
-                                    </div>
-
-                                    <div class="row mb-3">
-                                        <label for="Facebook" class="col-md-4 col-lg-3 col-form-label">Facebook Profile</label>
-                                        <div class="col-md-8 col-lg-9">
-                                            <input name="facebook" type="text" class="form-control" id="Facebook" value="https://facebook.com/#">
-                                        </div>
-                                    </div>
-
-                                    <div class="row mb-3">
-                                        <label for="Instagram" class="col-md-4 col-lg-3 col-form-label">Instagram Profile</label>
-                                        <div class="col-md-8 col-lg-9">
-                                            <input name="instagram" type="text" class="form-control" id="Instagram" value="https://instagram.com/#">
-                                        </div>
-                                    </div>
-
-                                    <div class="row mb-3">
-                                        <label for="Linkedin" class="col-md-4 col-lg-3 col-form-label">Linkedin Profile</label>
-                                        <div class="col-md-8 col-lg-9">
-                                            <input name="linkedin" type="text" class="form-control" id="Linkedin" value="https://linkedin.com/#">
-                                        </div>
-                                    </div>
 
                                     <div class="text-center">
-                                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                                        <button class="btn btn-primary">Save Changes</button>
                                     </div>
                                 </form><!-- End Profile Edit Form -->
 
@@ -320,11 +431,12 @@
 
                             <div class="tab-pane fade pt-3" id="profile-change-password">
                                 <!-- Change Password Form -->
-                                <form>
+                                <form id="changePasswordInput">
 
                                     <div class="row mb-3">
                                         <label for="currentPassword" class="col-md-4 col-lg-3 col-form-label">Current Password</label>
                                         <div class="col-md-8 col-lg-9">
+                                            <small id="currentPasswordErrorMessage" style="color: red"></small>
                                             <input name="password" type="password" class="form-control" id="currentPassword">
                                         </div>
                                     </div>
@@ -332,19 +444,21 @@
                                     <div class="row mb-3">
                                         <label for="newPassword" class="col-md-4 col-lg-3 col-form-label">New Password</label>
                                         <div class="col-md-8 col-lg-9">
+                                            <small id="newPasswordErrorMessage" style="color: red"></small>
                                             <input name="newpassword" type="password" class="form-control" id="newPassword">
                                         </div>
                                     </div>
 
                                     <div class="row mb-3">
-                                        <label for="renewPassword" class="col-md-4 col-lg-3 col-form-label">Re-enter New Password</label>
+                                        <label for="comfirmPassword" class="col-md-4 col-lg-3 col-form-label">Comfirm Password</label>
                                         <div class="col-md-8 col-lg-9">
-                                            <input name="renewpassword" type="password" class="form-control" id="renewPassword">
+                                            <small id="comfirmPasswordErrorMessage" style="color: red"></small>
+                                            <input type="password" class="form-control" id="comfirmPassword">
                                         </div>
                                     </div>
 
                                     <div class="text-center">
-                                        <button type="submit" class="btn btn-primary">Change Password</button>
+                                        <button type="button" id="changePasswordBtn" class="btn btn-primary" onclick="changePassword()">Change Password</button>
                                     </div>
                                 </form><!-- End Change Password Form -->
 
@@ -364,6 +478,25 @@
 
 
 </body>
+<style>
+    .profile-image-container {
+        width: 100px; /* Adjust this value as needed */
+        height: 100px; /* Adjust this value as needed */
+        overflow: hidden;
+        border-radius: 50%; /* Ensures the image is circular */
+        border: 2px solid #fff;
+        box-shadow: 0 0 5px rgba(0,0,0,0.2);
+    }
+
+    .profile-image {
+        width: 100%; /* Ensures the image fills the container */
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        border-radius: 50%;
+    }
+
+</style>
 <!-- ======= Footer ======= -->
 <!-- End Footer -->
 
@@ -381,6 +514,116 @@
 <!-- Template Main JS File -->
 <script th:src="@{/static/assets/js/main.js}"></script>
 
+<script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<script th:src="@{/static/assets/js/changePassword.js}"></script>
+<script th:src="@{/static/assets/js/successfulmessage.js}"></script>
+<script>
+    const image = document.getElementById('image');
+    const selectedPhoto = document.getElementById('selectedPhoto');
+    const photoInput = document.getElementById('photoInput');
+    const userProfiles = document.querySelectorAll('.userProfile');
+    const imageTrash = document.getElementById('imageTrash');
+
+    /*to display the image
+    * if user don't has image.display default image*/
+    const url = 'user/getImageFromProfile'
+    fetch(url,{
+        method:'GET',
+        headers:{'Content-type':'application/json'}
+    })
+        .then(response=>{
+            if(!response.ok){
+                throw new Error('Network response is not ok');
+            }
+            return response.text();
+        }).then(data=>{
+
+        if(!data){
+            imageTrash.disabled  = true;
+            userProfiles.forEach(i=>{
+                i.src = 'http://res.cloudinary.com/dwdplsd2c/image/upload/v1712047327/fllinoozg9hh1ghk5mef.png';
+            })
+        }
+        else{
+            imageTrash.disabled  = false;
+            userProfiles.forEach(i=>{
+                i.src = data;
+            })
+        }
+    }) .catch(error=>{
+        console.error("Error Occurred :"+error);
+    })
+    /*to edit user image*/
+    selectedPhoto.addEventListener('click',function (event) {
+        console.log("Click Event Occurs to select Photo")
+        photoInput.click();
+    });
+    photoInput.addEventListener('change',function () {
+        const file = this.files[0];
+        if(file){
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                userProfiles.forEach(i=>{
+                    i.src = e.target.result;
+                })
+                saveImage(file);
+            };
+            reader.readAsDataURL(file);
+
+        }else{
+            image.src = "";
+            userProfiles.forEach(i=>{
+                i.src = 'http://res.cloudinary.com/dwdplsd2c/image/upload/v1712047327/fllinoozg9hh1ghk5mef.png';
+            })
+        }
+    });
+    //To Save Image
+    saveImage= (file)=>{
+        console.log(file);
+        const url = 'user/save-new-image';
+        const formData = new FormData();
+        formData.append('file',file);
+        fetch(url,{
+            method:'POST',
+            body:formData
+        })
+            .then(response=>{
+                if(!response.ok){
+                    throw new Error('Network response was not ok');
+                }
+                return response;
+            })
+            .then(data=>{
+                location.reload();
+            })
+            .catch(error=>{
+                console.error("Error Occurs : "+error);
+            })
+    }
+
+    const removeImage =()=>{
+        const url = 'user/remove-profile-image';
+        console.log("Removing Image");
+        fetch(url,{
+            method:'POST',
+            headers:{'Content-type':'application/json'},
+        })
+            .then(response=>{
+                if(!response.ok){
+                    throw new Error('Network Error Occurs');
+                }
+            })
+            .then(data=>{
+                location.reload();
+            })
+            .catch(error=>{
+                console.error("Error Occurs : "+error);
+            })
+
+    }
+</script>
+
 </body>
+
 
 </html>

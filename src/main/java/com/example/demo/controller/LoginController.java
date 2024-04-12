@@ -1,4 +1,4 @@
-package com.example.demo.controllers;
+package com.example.demo.controller;
 
 import com.example.demo.entity.OTP;
 import com.example.demo.entity.User;
@@ -6,11 +6,13 @@ import com.example.demo.enumeration.Role;
 import com.example.demo.form.ResetPasswordForm;
 import com.example.demo.services.EmailService;
 import com.example.demo.services.OtpService;
+import com.example.demo.services.PostService;
 import com.example.demo.services.UserService;
 import com.example.demo.utils.OTPGenerator;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -27,17 +29,35 @@ public class LoginController {
     private final EmailService emailService;
     private final OtpService otpService;
     private final BCryptPasswordEncoder encoder;
+    private final PostService postService;
 
-
+    @GetMapping("/login")
+    public String loginPage() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null && auth.isAuthenticated() && !auth.getName().equals("anonymousUser")) {
+            return "redirect:/index";
+        }
+        return "login";
+    }
+    @GetMapping("/demo")
+    public String list(Model model, @RequestParam(defaultValue = "1") int page) {
+        int totalPages = 30; // Simulate 30 total pages
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("pageUrlPostfix", "");
+        return "page";
+    }
     @GetMapping("/")
     public String showWelcomePage(HttpSession httpSession) {
         var auth = SecurityContextHolder.getContext().getAuthentication();
         User user = userService.findByStaffId(auth.getName());
         log.info("User name {}", auth.getName());
-        if (auth != null && auth.getAuthorities().stream().anyMatch(a ->
+        log.info("User have role {}",user.getRole().name());
+        httpSession.setAttribute("role",user.getRole().name());
+        httpSession.setAttribute("userId",user.getId());
+        if (auth.getAuthorities().stream().anyMatch(a ->
                 a.getAuthority().equals(Role.USER.name()) ||
                         a.getAuthority().equals(Role.ADMIN.name()))) {
-            log.info("User role {}", user.getRole().name());
             return "redirect:/index";
         } else {
             return "login";

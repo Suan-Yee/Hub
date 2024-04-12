@@ -1,19 +1,20 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      >
 <head>
     <title>DIR ACE Technology</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <link rel="stylesheet" th:href="@{/static/assets/css/login.css}" type="text/css">
-
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
-    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <!--<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>-->
 
 <!--    <link href="/assets/img/download.png" rel="icon">-->
 <!--    <link href="/assets/img/download.png" rel="apple-touch-icon">-->
-    <link th:href="@{/static/assets/img/download.png}" rel="icon">
-    <link th:href="@{/static/assets/img/download.png}" rel="apple-touch-icon">
+<!--    <link th:href="@{/static/assets/img/download.png}" rel="icon">-->
+<!--    <link th:href="@{/static/assets/img/download.png}" rel="apple-touch-icon">-->
 
 <body>
 <div class="container" id="container">
@@ -30,10 +31,12 @@
 <!--                <a href="#" class="icon"><i class="fa-brands fa-linkedin-in"></i></a>-->
 <!--            </div>-->
 <!--            <span>or use your email password</span>-->
+            <small id="staffIdErrorMessage" style="color: red"></small>
             <input type="text" placeholder="Staff-ID" id="staffId" name="staffId">
-            <input type="password" placeholder="Password" name="password">
+            <small id="passwordErrorMessage" style="color: red"></small>
+            <input type="password" placeholder="Password" id="password" name="password">
             <a th:href="@{/forgetPassword}">→ Forget Your Password? ←</a>
-            <button type="submit">Sign In</button>
+            <button id="submitBtn" type="submit">Sign In</button>
         </form>
     </div>
     <div class="toggle-container">
@@ -51,9 +54,9 @@
         </div>
     </div>
 </div>
-
-<script th:src="@{/static/js/script.js}"></script>
 <script>
+    localStorage.removeItem('remainingTime');
+    $('#submitBtn').prop('disabled',true);
     $(document).ready(function (){
         $('#staffId').focus();
         const staffIdFormat = '^\\d{2}-\\d{5}$';
@@ -63,24 +66,33 @@
                 $('#staffIdErrorMessage').text('Staff-ID cannot be blank!!!');
                 $('#password').prop('disabled',true);
                 $('#staffId').removeClass('is-valid').addClass('is-invalid');
-                $('#submitBtn').prop('disabled',true);
             }
             else if(!$('#staffId').val().match(staffIdFormat)){
                 $('#staffIdErrorMessage').text('Invalid Staff-ID format!!!');
                 $('#password').prop('disabled',true);
                 $('#staffId').removeClass('is-valid').addClass('is-invalid');
-                $('#submitBtn').prop('disabled',true);
             }
             else{
                 $('#staffIdErrorMessage').text('');
                 $('#staffId').removeClass('is-invalid').addClass('is-valid');
                 $('#password').prop('disabled',false);
-                $('#submitBtn').prop('disabled',false);
                 $('#password').focus();
+            }
+        })
 
+        $('#password').on('input',function () {
+            $('#passwordErrorMessage').text('');
+            if($('#password').val()===''){
+                $('#passwordErrorMessage').text('Password cannot be blank');
+            }
+            else{
+                $('#passwordErrorMessage').text('');
+                $('#submitBtn').prop('disabled',false);
             }
         })
     })
+
 </script>
+
 </body>
 </html>

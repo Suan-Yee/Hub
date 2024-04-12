@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>DIR ACE Technology</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link th:href="@{/static/assets/img/download.png}" rel="icon">
+  <link th:href="@{/assets/img/download.png}" rel="apple-touch-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.gstatic.com" rel="preconnect">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link th:href="@{/static/assets/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+  <link th:href="@{/static/assets/vendor/bootstrap-icons/bootstrap-icons.css}" rel="stylesheet">
+  <link th:href="@{/static/assets/vendor/boxicons/css/boxicons.min.css}" rel="stylesheet">
+  <link th:href="@{/static/assets/vendor/quill/quill.snow.css}" rel="stylesheet">
+  <link th:href="@{/static/assets/vendor/quill/quill.bubble.css}" rel="stylesheet">
+  <link th:href="@{/static/assets/vendor/remixicon/remixicon.css}" rel="stylesheet">
+  <link th:href="@{/static/assets/vendor/simple-datatables/style.css}" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link th:href="@{/static/assets/css/style.css}" rel="stylesheet">
+</head>
+<body>
+<!-- ======= Header ======= -->
+<div th:include="header"></div>
+<!-- ======= Sidebar ======= -->
+<div th:include="sidebar"></div>
+
+<main id="main" class="main">
+  <!-- End Page Title -->
+  <section class="section dashboard">
+    <div class="row">
+      <!-- Left side columns -->
+      <div class="col-lg-8">
+        <div class="row">
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <div class="pagetitle">
+    <h1>Profile</h1>
+    <nav>
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+        <li class="breadcrumb-item">Admin</li>
+        <li class="breadcrumb-item active">Profile</li>
+      </ol>
+    </nav>
+  </div><!-- End Page Title -->
+
+  <section class="section profile">
+    <div class="row">
+      <div class="col-xl-4">
+
+        <div class="card">
+          <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
+            <div th:if="${list.photo ==null}">
+            <img src="http://res.cloudinary.com/dwdplsd2c/image/upload/v1712047327/fllinoozg9hh1ghk5mef.png" alt="Profile" class="rounded-circle">
+            </div>
+            <div th:if="${list.photo !=null}">
+              <img th:src="${list.photo}" alt="Profile" class="rounded-circle">
+            </div>
+
+            <h2 th:text="${list.name}"></h2>
+            <h3 th:text="${list.department}"></h3>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="col-xl-8">
+
+        <div class="card">
+          <div class="card-body pt-3">
+            <!-- Bordered Tabs -->
+            <ul class="nav nav-tabs nav-tabs-bordered">
+
+              <li class="nav-item">
+                <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile-overview">Overview</button>
+              </li>
+            </ul>
+            <div class="tab-content pt-2" >
+              <div class="tab-pane fade show active profile-overview" id="profile-overview">
+                <h5 class="card-title">Biography</h5>
+                <p class="small fst-italic" th:text="${list.biography}"></p>
+
+                <h5 class="card-title">Profile Details</h5>
+
+                <div class="row">
+                  <div class="col-lg-3 col-md-4 label ">Full Name</div>
+                  <div class="col-lg-9 col-md-8" th:text="${list.name}"></div>
+                </div>
+
+                <div class="row">
+                  <div class="col-lg-3 col-md-4 label">Email</div>
+                  <div class="col-lg-9 col-md-8" th:text="${list.email}">
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-lg-3 col-md-4 label">Department</div>
+                  <div class="col-lg-9 col-md-8" th:text="${list.department}"></div>
+                </div>
+
+                <div class="row">
+                  <div class="col-lg-3 col-md-4 label">Devision</div>
+                  <div class="col-lg-9 col-md-8" th:text="${list.division}"></div>
+                </div>
+
+                <div class="row">
+                  <div class="col-lg-3 col-md-4 label">Team</div>
+                  <div class="col-lg-9 col-md-8" th:text="${list.team}"></div>
+                </div>
+
+                <div class="row">
+                  <div class="col-lg-3 col-md-4 label">Interest</div>
+                  <div class="col-lg-9 col-md-8" th:text="${list.interest}"></div>
+                </div>
+              </div>
+            </div><!-- End Bordered Tabs -->
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+</main>
+<div th:include="footer"></div>
+</body>
+<!-- ======= Footer ======= -->
+<!-- End Footer -->
+
+<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+<!-- Vendor JS Files -->
+<script th:src="@{/static/assets/vendor/apexcharts/apexcharts.min.js}"></script>
+<script th:src="@{/static/assets/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/static/assets/vendor/chart.js/chart.umd.js}"></script>
+<script th:src="@{/static/assets/vendor/echarts/echarts.min.js}"></script>
+<script th:src="@{/static/assets/vendor/quill/quill.min.js}"></script>
+<script th:src="@{/static/assets/vendor/simple-datatables/simple-datatables.js}"></script>
+<script th:src="@{static/assets/vendor/tinymce/tinymce.min.js}"></script>
+<script th:src="@{/static/assets/vendor/php-email-form/validate.js}"></script>
+<!-- Template Main JS File -->
+<script th:src="@{/static/assets/js/main.js}"></script>
+</html>

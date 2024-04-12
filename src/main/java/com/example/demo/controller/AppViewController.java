@@ -1,4 +1,4 @@
-package com.example.demo.controllers;
+package com.example.demo.controller;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -17,11 +17,11 @@ public class AppViewController implements WebMvcConfigurer {
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/login").setViewName("login");
         registry.addViewController("/logout").setViewName("/login");
         registry.addViewController("/index").setViewName("index");
         registry.addViewController("/forgetPassword").setViewName("/forgetPassword");
         registry.addViewController("/access-denied").setViewName("/exception/accessDenied");
-        registry.addViewController("/profile").setViewName("/admin_profile");
+       /* registry.addViewController("/profile").setViewName("/admin_profile");*/
+        registry.addViewController("/userList").setViewName("/userList");
     }
 }

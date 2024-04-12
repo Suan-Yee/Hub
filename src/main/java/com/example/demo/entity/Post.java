@@ -1,9 +1,9 @@
 package com.example.demo.entity;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedDate;
@@ -12,7 +12,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Data
+@Getter @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -35,30 +35,38 @@ public class Post {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    @JsonManagedReference
     @OneToOne
     @JoinColumn(name = "content_id")
     private Content content;
 
+    @JsonIgnore
     @OneToOne(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private UserMention userMention;
 
-    @OneToOne()
+    @OneToOne
+    @JsonManagedReference
     @JoinColumn(name = "topic_id")
     private Topic topic;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "post")
     private List<Like> likes;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "post")
     private List<Comment> comments;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "post")
     private List<BookMark> bookMarks;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "group_id")
     private Group group;
 
+    @JsonManagedReference
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;

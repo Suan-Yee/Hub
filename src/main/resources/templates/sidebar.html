@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link th:href="@{/static/assets/css/post.css}" rel="stylesheet">
+    <link th:href="@{/static/assets/css/all.css}" rel="stylesheet">
 </head>
-<link th:href="@{/static/assets/css/post.css}" rel="stylesheet">
-<link th:href="@{/static/assets/css/all.css}" rel="stylesheet">
 <body>
 <aside id="sidebar" class="sidebar">
 
     <ul class="sidebar-nav" id="sidebar-nav">
         <li class="nav-items current-page">
-            <a class="nav-link collapsed" th:href="@{/post}">
+            <a class="nav-link collapsed" th:href="@{/index}">
                 <i class="fas fa-home"></i>
                 <span>Home</span>
             </a>
@@ -64,9 +64,9 @@
         </li><!-- End Register Page Nav -->
 
         <li class="nav-item">
-            <a class="nav-link collapsed" th:href="@{/login}">
+            <a class="nav-link collapsed" th:href="@{/logout}">
                 <i class="bi bi-box-arrow-in-right"></i>
-                <span>Login</span>
+                <span>Logout</span>
             </a>
         </li><!-- End Login Page Nav -->
 

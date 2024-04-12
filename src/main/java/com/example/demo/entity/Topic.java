@@ -2,12 +2,10 @@ package com.example.demo.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
-@Data
+@Getter @Setter
 @AllArgsConstructor @NoArgsConstructor
 public class Topic {
 
@@ -16,10 +14,7 @@ public class Topic {
     private Long id;
     private String name;
 
+    @OneToOne
     @JsonBackReference
-    @OneToOne(mappedBy = "topic", cascade = CascadeType.ALL, orphanRemoval = true)
     private Post post;
-
-
-
 }

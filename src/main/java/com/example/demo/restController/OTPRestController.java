@@ -1,5 +1,6 @@
-package com.example.demo.controllers;
+package com.example.demo.restController;
 
+import com.example.demo.entity.OTP;
 import com.example.demo.form.UserIdAndOTPViewObject;
 import com.example.demo.services.OtpService;
 import lombok.RequiredArgsConstructor;
@@ -17,17 +18,14 @@ public class OTPRestController{
     private final OtpService otpService;
     @PostMapping("/verify-OTPCode")
     public ResponseEntity<Boolean> verifyOTPCode(@RequestBody UserIdAndOTPViewObject UserIdAndOTPViewObject){
-       /* log.info("OTP CODE");
         OTP otpCode = otpService.findByUserId(UserIdAndOTPViewObject.getUserId());
         String dbCode = otpCode.getOtpCode();
 
         if(UserIdAndOTPViewObject.getOtpCode().equals(dbCode)){
-            if(!otpService.isValidCode(UserIdAndOTPViewObject.getUserId())){
+            if(otpService.isValidCode(UserIdAndOTPViewObject.getUserId())){
                 return ResponseEntity.ok(true);
             }
-        }*/
-        log.info("UserId : " + UserIdAndOTPViewObject.getUserId());
-        log.info("OTP Code : " + UserIdAndOTPViewObject.getOtpCode());
+        }
         return ResponseEntity.ok(false);
     }
 }

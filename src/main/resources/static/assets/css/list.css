@@ -2,6 +2,34 @@ body{margin-top:20px;}
 
 
 /* USER LIST TABLE */
+.active {
+    display: inline-block;
+    border-radius: 2px;
+    background-color: hsl(163, 72%, 93%);
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+    font-size: 0.75rem;
+    font-weight: bold;
+    color: hsl(163, 100%, 44%);
+    text-transform: uppercase;
+    letter-spacing: 0.05rem;
+}
+.inactive {
+    display: inline-block;
+    border-radius: 2px;
+    background-color: rgba(255, 0, 0, 0.1);
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+    font-size: 0.75rem;
+    font-weight: bold;
+    color: red;
+    text-transform: uppercase;
+    letter-spacing: 0.05rem;
+}
 .user-list tbody td > img {
     position: relative;
     max-width: 50px;

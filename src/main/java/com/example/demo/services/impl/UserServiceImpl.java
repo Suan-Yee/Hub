@@ -1,6 +1,7 @@
 package com.example.demo.services.impl;
 
 import com.example.demo.entity.AppUser;
+import com.example.demo.entity.Post;
 import com.example.demo.entity.User;
 import com.example.demo.enumeration.Role;
 import com.example.demo.exception.ApiException;
@@ -9,8 +10,16 @@ import com.example.demo.form.ChangePasswordInput;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.services.ExcelUploadService;
 import com.example.demo.services.UserService;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -22,6 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -125,6 +135,30 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             return user.getPhoto();
         }
         else return null;
+    }
+
+    @Override
+    public Page<User> findAllUser(int pageNo, int pageSize){
+        Pageable pageable= PageRequest.of(pageNo-1,pageSize);
+        return userRepository.findAll(pageable);
+    }
+    @Override
+    public Page<User> searchUsers(String query, int pageNo, int pageSize) {
+        Specification<User> spec = (Root<User> root, CriteriaQuery<?> search, CriteriaBuilder builder) -> {
+            if (query == null || query.isEmpty()) {
+                return builder.conjunction();
+            }
+            List<Predicate> predicates = new ArrayList<>();
+            if (query.contains("@")) {
+                predicates.add(builder.like(root.get("email"), "%" + query + "%"));
+            } else {
+                predicates.add(builder.like(root.get("name"), "%" + query + "%"));
+                predicates.add(builder.like(root.get("staffId"), "%" + query + "%"));
+            }
+            return builder.or(predicates.toArray(new Predicate[0]));
+        };
+        Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
+        return userRepository.findAll(spec, pageable);
     }
 
     @Override

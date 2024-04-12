@@ -1,19 +1,19 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
-@Data
+@Getter @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "comment")
+@EntityListeners(AuditingEntityListener.class)
 public class Comment {
 
     @Id
@@ -23,6 +23,7 @@ public class Comment {
     @CreatedDate
     @Column(name = "created_at",nullable = false,updatable = false)
     private LocalDateTime createdAt;
+
     @UpdateTimestamp
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
@@ -35,8 +36,6 @@ public class Comment {
     @JoinColumn(name = "post_id")
     private Post post;
 
-    @PrePersist
-    public void beforePersist(){
-        this.updatedAt = LocalDateTime.now();
-    }
+    private String text;
+
 }

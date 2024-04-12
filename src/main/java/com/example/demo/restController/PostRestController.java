@@ -1,5 +1,6 @@
-package com.example.demo.controllers;
+package com.example.demo.restController;
 
+import com.example.demo.dto.PostDto;
 import com.example.demo.entity.Post;
 import com.example.demo.services.PostService;
 import lombok.RequiredArgsConstructor;
@@ -13,11 +14,11 @@ import java.util.List;
 @RestController
 @RequestMapping("/post")
 @RequiredArgsConstructor @Slf4j
-public class PostController {
+public class PostRestController {
 
     private final PostService postService;
 
-    @GetMapping
+    @GetMapping()
     public ResponseEntity<List<Post>> findAllPosts(){
         List<Post> posts = postService.findAllPosts();
 
@@ -27,6 +28,7 @@ public class PostController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
     @GetMapping("/user/{name}")
     public ResponseEntity<List<Post>> findByUserName(@PathVariable("name")String userName) {
         List<Post> posts = postService.findByUserName(userName);
@@ -58,10 +60,11 @@ public class PostController {
        }
    }
     @GetMapping("/all")
-    public ResponseEntity<List<Post>> findPosts(@RequestParam(name="topicName",required = false) String topicName,
-                                @RequestParam(name="userName",required = false) String userName) {
-       List<Post> posts = postService.findBySpecification(topicName,userName);
-
+    public ResponseEntity<List<PostDto>> findPosts(@RequestParam(name="topicName",required = false) String topicName,
+                                                   @RequestParam(name="search",required = false) String searchResult) {
+       List<PostDto> posts = postService.findBySpecification(topicName,searchResult);
+       log.info("ALl Posts {}",posts);
        return new ResponseEntity<>(posts,HttpStatus.OK);
     }
+
 }
