@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+
 <html xmlns:c="http://java.sun.com/jsp/jstl/core">
 <head>
     <meta charset="utf-8">
@@ -29,6 +30,7 @@
     <!-- Template Main CSS File -->
     <link th:href="@{/static/assets/css/style.css}" rel="stylesheet">
     <link th:href="@{/static/assets/css/list.css}" rel="stylesheet">
+    <link th:href="@{/static/assets/css/badge.css}" rel="stylesheet">
 </head>
 
 <body>
@@ -139,7 +141,7 @@
                             </tbody>
                         </table>
                     </div>
-                    <<div th:if="${totalPages > 1}" style="margin-top: 10px;">
+                    <div th:if="${totalPages > 1}" style="margin-top: 10px;">
                     <nav>
                         <ul class="pagination justify-content-center flex-wrap" th:with="pageUrlPrefix='/list/'">
                             <li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">

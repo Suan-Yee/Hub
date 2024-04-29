@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.entity.User;
+import com.example.demo.services.SkillService;
 import com.example.demo.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -18,11 +20,15 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+    private final SkillService skillService;
 
     @GetMapping("/profile")
-    public String userProfile(ModelMap model){
+    public String userProfile(ModelMap model, Principal principal){
         String staffId = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userService.findByStaffId(staffId);
+        Long userId = userService.findByStaffId(principal.getName()).getId();
+        List<String> skill= skillService.findSkillByUserId(userId);
+        model.addAttribute("skill",skill);
         model.addAttribute("User",user);
         return "admin_profile";
     }
@@ -53,6 +59,8 @@ public class UserController {
     @GetMapping("/userprofile/{id}")
     public  String userProfileDetails(@PathVariable("id") Long userId, ModelMap m){
         User user =userService.findById(userId);
+        List<String> skill= skillService.findSkillByUserId(userId);
+        m.addAttribute("skill",skill);
         m.addAttribute("list",user);
         return "userprofiledetail";
     }

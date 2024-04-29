@@ -46,5 +46,25 @@ public class FileUploadServiceImpl implements FileUploadService {
         cloudinary.uploader().destroy(publicId,null);
         return true;
     }
+    @Override
+    public String videoFileUpload(MultipartFile multipartFile) throws IOException {
+        return cloudinary.uploader().uploadLarge(multipartFile.getBytes(),
+                        Map.of("public_id", UUID.randomUUID().toString(), "resource_type", "video"))
+                .get("url").toString();
+    }
+
+    @Override
+    public String imageFileUpload(MultipartFile multipartFile) throws IOException {
+        return cloudinary.uploader().upload(multipartFile.getBytes(),
+                        Map.of("public_id", UUID.randomUUID().toString()))
+                .get("url").toString();
+    }
+
+    @Override
+    public String fileUpload(MultipartFile multipartFile) throws IOException {
+        return cloudinary.uploader().upload(multipartFile.getBytes(),
+                        Map.of("public_id", UUID.randomUUID().toString()))
+                .get("url").toString();
+    }
 
 }

@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -15,6 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name = "skill")
+@EntityListeners(AuditingEntityListener.class)
 public class Skill {
 
     @Id
@@ -26,15 +28,10 @@ public class Skill {
     @CreatedDate
     @Column(name = "created_at",nullable = false,updatable = false)
     private LocalDateTime createdAt;
-    @UpdateTimestamp
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
+
 
     @ManyToMany(mappedBy = "skills")
     private List<User> users;
 
-    @PrePersist
-    public void beforePersist(){
-        this.updatedAt = LocalDateTime.now();
-    }
+
 }

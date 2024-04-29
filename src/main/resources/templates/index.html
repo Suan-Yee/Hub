@@ -7,11 +7,7 @@
     <meta content="" name="description">
     <meta content="" name="keywords">
 
-    <link href="https://fonts.gstatic.com" rel="preconnect">
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
     <link th:href="@{/static/assets/img/download.png}" rel="icon">
-    <link th:href="@{/assets/img/download.png}" rel="apple-touch-icon">
-
     <link href="https://fonts.gstatic.com" rel="preconnect">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
 
@@ -27,71 +23,26 @@
     <link th:href="@{/static/assets/css/style.css}" rel="stylesheet">
     <link th:href="@{/static/assets/css/post.css}" rel="stylesheet">
     <link th:href="@{/static/assets/css/all.css}" rel="stylesheet">
+    <link th:href="@{/static/assets/css/skill.css}" rel="stylesheet">
+    <link th:href="@{/static/assets/css/skeleton.css}" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sockjs-client/dist/sockjs.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/stompjs/lib/stomp.min.js"></script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f0f0f0;
-        }
-        .chat-container {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 10px;
-        }
-        .message {
-            max-width: 60%;
-            margin-bottom: 10px;
-            padding: 10px;
-            border-radius: 20px;
-        }
-        .from-me {
-            align-self: flex-end;
-            background-color: #f44336;
-            color: white;
-        }
-        .from-them {
-            align-self: flex-start;
-            background-color: #ffffff;
-            border: 1px solid #ddd;
-        }
-        .input-container {
-            display: flex;
-            padding: 10px;
-            background-color: #fff;
-        }
-        .input-field {
-            flex-grow: 1;
-            border: 1px solid #ddd;
-            border-radius: 20px;
-            padding: 10px;
-            margin-right: 10px;
-        }
-        .send-button {
-            background-color: #f44336;
-            color: white;
-            border: none;
-            border-radius: 20px;
-            padding: 10px 20px;
-        }
-        #commentDialog{
-            width: 400px;
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-        }
-    </style>
+    <!-- File Upload Model Box -->
+    <link th:href="@{/static/assets/css/fileUploadModelBox.css}" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.slim.js" integrity="sha512-docBEeq28CCaXCXN7cINkyQs0pRszdQsVBFWUd+pLNlEk3LDlSDDtN7i1H+nTB8tshJPQHS0yu0GW9YGFd/CRg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>    -->
+<!--    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>-->
 </head>
 <body>
-
 
 <div th:include="header"></div>
 
 <!-- ======= Sidebar ======= -->
 <div th:include="sidebar"></div>
-
 
 <main id="main" class="main">
 
@@ -122,6 +73,7 @@
             </div>
         </div>
     </div>
+
     <!-- Modal1 -->
     <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -152,23 +104,29 @@
             </div>
         </div>
     </div>
+
+    <!-- skill add-->
     <div class="modal fade" id="staticBackdrop2" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="staticBackdropLabel2">Choose Your Professions.</h1>
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel2">Enter Your Professions</h1>
                 </div>
                 <div class="modal-body">
-
+                    <div class="skill-input-container">
+                        <input type="text" id="skill-input" name="skill" placeholder="Enter skill">
+                    </div>
+                    <div id="skills-container"></div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary">Change</button>
+                    <button type="button" id="skillAddBtn" class="btn btn-primary">Add</button>
                 </div>
             </div>
         </div>
     </div>
-
+    <!-- skill add-->
     <!--End modal-->
+
     <section class="section dashboard">
         <div class="row">
 
@@ -177,67 +135,125 @@
                     <h1>Home</h1>
                     <i class="fas fa-magic"></i>
                 </div>
-
+                <!--Upload Post Create-->
                 <div class="post-tweet">
-                    <form action="">
+                    <form id="post-form" th:action="@{/post/create}" method="post" enctype="multipart/form-data">
                         <div class="form-group-1">
                             <img th:src="@{/static/assets/img/profile-img.jpg}" alt="profile-pics">
-                            <input type="text" placeholder="What's happening?">
+                            <input type="text" placeholder="What's happening?" name="text">
                         </div>
                         <div class="form-group-2">
                             <div class="post-icons">
-                                <i class="far fa-image"></i>
-                                <i class="far fa-file-image"></i>
-                                <i class="fas fa-video"></i>
+                                <label for="image-upload" class="file-icon">
+                                    <i class="far fa-image"></i>
+                                    <input id="image-upload" type="file" name="images" multiple style="display: none;">
+                                </label>
+                                <label for="file-upload" class="file-icon">
+                                    <i class="far fa-file-image"></i>
+                                    <input id="file-upload" type="file" name="files" multiple style="display: none;">
+                                </label>
+                                <label for="video-upload" class="file-icon">
+                                    <i class="fas fa-video"></i>
+                                    <input id="video-upload" type="file" name="videos" multiple style="display: none;">
+                                    <!--<button id="video" type="button" style="display: none;" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal"></button>-->
+                                </label>
                                 <i class="far fa-smile"></i>
                                 <i class="far fa-calendar-check"></i>
                             </div>
                             <button class="btn" type="submit">Post</button>
                         </div>
+                        <p id="video-error" style="color: red; display: none;">Your video is larger than 100MB</p>
                     </form>
-
                 </div>
+                <!--End Upload Post-->
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                            </div>
+                            <div class="body">
+                                <div class="wrapper">
+                                    <header>Video Uploader</header>
+                                    <form id="video-form" th:action="@{/post/create}" method="post" enctype="multipart/form-data">
+                                        <input id="video" class="file-input" type="file" name="video" hidden>
+                                        <i class="fas fa-cloud-upload-alt"></i>
+                                        <p>Browse File to Upload</p>
+                                    </form>
+                                    <section class="progress-area"></section>
+                                    <section class="uploaded-area"></section>
+                                </div>
+                                <script src="/static/assets/js/fileUploadModelBox.js"></script>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>-->
+                                <button type="button" class="btn btn-primary">Save changes</button>-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
 
                 <!-- User Content Posts -->
-                <div class="tweets-container">
+                <div class="tweets-container "><!-- Content will be set dynamically --></div>
+                <!-- User Content Posts End -->
 
+                <!-- Toast Message -->
+                <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+                    <div id="liveToast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div class="toast-header" style="background-color: black; color: whitesmoke">
+                            <strong class="me-auto">Notification</strong>
+                            <button  type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+                        </div>
+                        <div class="toast-body">
+                            <!-- Content will be set dynamically -->
+                        </div>
+                    </div>
                 </div>
+                <!-- Toast Message End -->
 
             </div>
 
-            <dialog id="commentDialog">
-                <div>
-                <div class="chat-container" id="chat-container">
-                </div>
-                <div class="input-container">
-                    <input type="text" id="messageInput" class="input-field" placeholder="Type a message here">
-                    <button onclick="sendMessage()" class="send-button">Send</button>
-                </div>
-                    <button id="closeDialogBtn">Close</button>
-                </div>
-            </dialog>
+            <!-- Comment dialong  -->
 
+            <!--End dialog-->
 
-            <div class="right-flex-container flex-item">
-                <div class="search-box">
+            <!-- Search -->
+            <div class="right-flex-container flex-item" style="height: 100%";>
+
+                <form class="search-box" id="search-box">
                     <i class="fas fa-search"></i>
-                    <input type="text" placeholder="Search Twitter">
-                </div>
+                    <input type="text" id="searchInput" name="searchResult" placeholder="Search Post">
+                </form>
 
+                <!--Trends Topic-->
                 <div class="trends">
                     <ul id="trends-topic">
-
                         <li class="nav-list">Topics</li>
                     </ul>
                 </div>
+                <!--End Topic-->
             </div>
+            <!--End Search-->
+
+
+            <!--Loading-->
+            <div id="loadingSpinner" style="display: none;">
+                <div class="spinner"></div>
+            </div>
+
+
+
         </div>
     </section>
 </main>
 <div th:include="footer"></div>
 </body>
 <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
-<script th:src="@{/static/assets/js/postDisplay.js}"></script>
+<!--<script th:src="@{/static/assets/js/postDisplay.js}"></script>-->
+<script th:src="@{/static/assets/js/videoplayer.js}"></script>
+<script type="module" src="../static/assets/js/postDisplay.js" defer></script>
+<script th:src="@{/static/assets/js/successfulmessage.js}"></script>
 <!-- Vendor JS Files -->
 <script th:src="@{/static/assets/vendor/apexcharts/apexcharts.min.js}"></script>
 <script th:src="@{/static/assets/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
@@ -249,8 +265,8 @@
 <script th:src="@{/static/assets/vendor/php-email-form/validate.js}"></script>
 
 <!-- Template Main JS File -->
-<script th:src="@{/static/assets/js/main.js}"></script>
 <script th:src="@{/static/assets/js/changeDefaultPassword.js}"></script>
+<script th:src="@{/static/assets/js/skill.js}"></script>
 
 
 </html>

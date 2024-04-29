@@ -14,8 +14,9 @@ public class ContentServiceImpl implements ContentService {
     private final ContentRepository contentRepository;
 
     @Override
-    public Content createContent() {
+    public Content createContent(String text) {
         Content newContent=new Content();
+        newContent.setText(text);
         return contentRepository.save(newContent);
     }
 

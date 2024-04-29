@@ -12,6 +12,7 @@
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     line-height: 1.6;
+    over-flow: hidden;
 }
 
 a {
@@ -271,6 +272,7 @@ ul {
     height: 50px;
     border-radius: 50%;
     margin: 0.5rem 1rem;
+    object-fit: cover;
 }
 .tweets {
     display: flex;
@@ -281,6 +283,96 @@ ul {
     line-height: 1.75rem;
     padding-top: 0.5rem;
     border-bottom: 1px solid rgb(230, 236, 240);
+}
+.customContainer{
+    background-color: #FAFAFA;
+    width: 50vw;
+    height: auto;
+    margin-left: 135px;
+}
+
+.tweets:last-child{
+    border-bottom: none;
+}
+.tweet img {
+    display: block;
+    width: 100%;
+}
+.tweet .user-pics img {
+    display: block;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin: 0.5rem 1rem;
+    object-fit: cover;
+}
+.tweet{
+    display: flex;
+    flex-flow: row;
+    justify-content: center;
+    font-size: 15px;
+    width: 100%;
+    line-height: 1.75rem;
+    padding-top: 0.5rem;
+}
+.button{
+    width: 145px;
+    height: 35px;
+    border-radius: 20px;
+    padding: 2px;
+    background-color: #F5F5F5;
+    border: 0.5px solid;
+    font-size: 14px;
+}
+.image-container {
+    padding-bottom: 56.25%; /* 16:9 ratio */
+    background-size: cover;
+    background-position: center center;
+    position: relative;
+    width: 100%;
+}
+
+.image-container img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.imagett {
+    height: 152.76px;
+    object-fit: cover;
+}
+.imagett-full-height {
+    height: 100%;
+    object-fit: cover;
+}
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.enlarged-image {
+    max-width: 90%;
+    max-height: 90%;
+    object-fit: contain;
+}
+
+/* Style to hide scrollbar when overlay is shown */
+.fixed-height-image {
+    height: 200px; /* or any other fixed height you prefer */
+    object-fit: cover; /* This will ensure the image covers the area */
+    width: 100%; /* This makes the image responsive within the column */
+    border-radius: 0.25rem; /* Optional: if you want rounded corners like the girl's image */
 }
 .tweets:hover {
     background: rgb(245, 248, 250);
@@ -307,6 +399,119 @@ ul {
     flex-flow: column nowrap;
     color: rgb(20, 23, 26);
 }
+.user-content .container{
+    width: 100%;
+    padding :0;
+    background-color: black;
+    position: relative;
+    border-radius: 15px;
+}
+.user-content .container video{
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 10px;
+}
+.playButton{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    z-index: 1;
+    cursor: pointer;
+    background: transparent;
+    border: none;
+    opacity: 1;
+    transition: opacity 0.3s ease-in-out;
+}
+.playButton i{
+    font-size: 70px;
+    padding: 10px;
+}
+.loading-container{
+    position: absolute;
+    top:50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    z-index: 1;
+}
+.loading-container .loading{
+    font-size: 20px;
+    background-color: rgba(0,0,0,0.5);
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+}
+.controls {
+    position: absolute;
+    bottom: 0px;
+    left: 0;
+    right: 0;
+    height: 40px;
+    background-color: rgba(
+            0,
+            0,
+            0,
+            0.7
+    );
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+.controls button {
+    background-color: transparent;
+    border: none;
+    color: #fff;
+    font-size: 20px;
+    cursor: pointer;
+    outline: none;
+}
+.left {
+    position: relative;
+    top: 1%;
+    width: 70px;
+    display: flex;
+    justify-content: space-between;
+}
+.video-timer {
+    position: relative;
+    top: 5.2px;
+    right: 6px;
+    display: flex;
+    flex-direction: row;
+    color: #efefef;
+    margin-left: 15px;
+    font-size: 12px;
+}
+#separator {
+    margin: 0 5px;
+    font-size: 16px;
+    font-family: "Open sans";
+}
+.right {
+    position: relative;
+    padding: 10px;
+    top: 1.5px;
+}
+
+.fa-volume-up,
+.fa-solid {
+    font-size: small;
+    padding: 5px;
+    color: rgb(255, 255, 255);
+}
+button,
+input {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 20px;
+}
 
 .user-content-box .user-names {
     display: flex;
@@ -318,6 +523,35 @@ ul {
     font-weight: 700;
     color: rgb(20, 23, 26);
 }
+.volume-container {
+    display: flex;
+    align-items: center;
+}
+
+#volume {
+    position: relative;
+    left: 5px;
+    width: 50px;
+    height: 3px;
+}
+#mute {
+    cursor: pointer;
+}
+
+.playback-line {
+    position: relative;
+    top: 2.7px;
+    height: 4px;
+    background-color: #ddd;
+    width: 40%;
+    cursor: pointer;
+}
+.progress-bar {
+    height: 100%;
+    width: 0;
+    background-color: #0078d4;
+    transition: width 0.1s linear;
+}
 .user-names .user-name {
     padding-right: 10px;
     font-size: 1.05rem;
@@ -326,6 +560,7 @@ ul {
 }
 .time {
     color: rgb(101, 119, 134);
+    font-size: 1rem;
 }
 .user-names i {
     padding-top: 0.6rem;
@@ -345,11 +580,10 @@ ul {
     color: rgb(101, 119, 134);
     font-size: 0.8rem;
     cursor: pointer;
-
 }
-.content-icons i:last-child {
-    font-size: 14px;
-}
+/*.content-icons i:last-child {*/
+/*    font-size: 14px;*/
+/*}*/
 
 .content-icons .blue:hover {
     color: rgba(29, 161,242,1.00);
@@ -623,4 +857,131 @@ ul {
 .pagnation a:hover {
     background: #198ed6;
 }
+.comment-section {
+    margin: auto;
+    background: #fff;
+    padding: 15px;
+    /* border: 1px solid #ddd;
+    border-radius: 4px; */
+}
+.comment {
+    border-bottom: 1px solid #eee;
+    padding: 10px 0;
+    position: relative;
+}
+.comment:last-child {
+    border-bottom: none;
+}
+.user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 10px;
+    vertical-align: top;
 
+}
+img{
+    object-fit: cover;
+}
+.comment-content {
+    display: inline-block;
+    vertical-align: top;
+    max-width: calc(100% - 60px);
+    padding: 10px;
+    border-radius: 10px;
+    background-color: #EFEBE9;
+}
+.comment-author {
+    font-size: 1rem;
+    margin-bottom: 5px;
+    margin-right: 10px;
+}
+.comment-author:hover{
+    color: #FF8A65;
+}
+.comment-text {
+    margin-top: 3px;
+    margin-bottom: 3px;
+    color: #4C75A3;
+}
+.comment-text:hover{
+    color: #333;
+}
+.comment-metadata {
+    font-size: 0.8em;
+    color: #757575;
+    margin-top: 1px;
+}
+.comment-interactions {
+    font-size: 0.9em;
+    color: #333;
+    margin-top: 5px;
+}
+.comment-interactions span {
+    margin-right: 15px;
+    cursor: pointer;
+}
+.user-display{
+    display: flex;
+    justify-content: flex-start;
+
+}
+.comment .comment {
+    position: relative;
+    margin-left: 20px;
+    margin-top: 10px;
+    background-color: #fff;
+}
+
+.comment .comment:before {
+    content: '';
+    position: absolute;
+    left: -20px;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background-color: #B0BEC5;
+}
+.ytd-comment-simplebox-renderer {
+    cursor: text;
+    padding-bottom: 4px;
+    border-bottom: 1px solid #dadce0; /* You can replace this with the actual color you need */
+    flex: 1;
+    flex-basis: 0.000000001px;
+    outline: none;
+}
+.dropdown-toggle::after {
+    display: none;
+}
+.btn-container{
+    display: flex;
+    justify-content: flex-start;
+    border-radius: 13px;
+    margin-left: 50px;
+}
+.btn-container button{
+    height: 30px;
+    border-radius: 10px;
+    width: 60px;
+    text-align: center;
+    padding-bottom: 4px;
+    margin: 5px;
+    background-color: #F3D0D7;
+    font-size: 14px;
+}
+.editInput{
+    cursor:text;
+    outline: none;
+    border-bottom: 1px solid #dadce0;
+    font-size: 1rem;
+}
+.commentBtn {
+    width: 50px;
+    border: none;
+    background-color: #F3D0D7;
+    padding: 5px;
+    border-radius: 10px;
+    text-align: center;
+    cursor: pointer;
+}

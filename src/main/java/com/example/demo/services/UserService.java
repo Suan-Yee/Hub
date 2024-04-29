@@ -6,6 +6,7 @@ import com.example.demo.form.ChangePasswordInput;
 import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.security.Principal;
 import java.util.List;
 
 public interface UserService {
@@ -25,4 +26,5 @@ public interface UserService {
     String getUserImageName();
     Page<User> findAllUser(int pageNo, int pageSize);
     Page<User> searchUsers(String query,int pageNo, int pageSize);
+    User findAuthenticatedUser(Principal principal);
 }

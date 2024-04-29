@@ -23,8 +23,8 @@ public class UserMention {
     @Column(name = "created_at",nullable = false,updatable = false)
     private LocalDateTime createdAt;
 
-    @OneToOne(mappedBy = "user_mention", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Notification notification;
+//    @OneToOne(mappedBy = "user_mention", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private Notification notification;
 
     @OneToOne
     @JoinColumn(name = "post_id")

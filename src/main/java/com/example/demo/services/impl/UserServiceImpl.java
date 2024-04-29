@@ -31,6 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -159,6 +160,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         };
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
         return userRepository.findAll(spec, pageable);
+    }
+
+    @Override
+    public User findAuthenticatedUser(Principal principal) {
+        User currentUser = findByStaffId(principal.getName());
+        User user = findById(currentUser.getId());
+        return user;
     }
 
     @Override

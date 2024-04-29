@@ -30,7 +30,7 @@ public class Announcement {
     @OneToOne(mappedBy = "announcement", cascade = CascadeType.ALL, orphanRemoval = true)
     private Content content;
 
-    @OneToOne(mappedBy = "announcement", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Notification notification;
+//    @OneToOne(mappedBy = "announcement", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private Notification notification;
 
 }

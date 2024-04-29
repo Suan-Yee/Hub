@@ -22,23 +22,23 @@ public class ChatController {
     private final ChatRoomService chatRoomService;
     private final UserRepository userRepository;
 
-    @MessageMapping("/chat/{chatRoomId}")
-    @SendTo("/topic/messages/{chatRoomId}")
-    public ChatMessage sendMessage(@DestinationVariable String chatRoomId,ChatMessage chatMessage){
-
-        ChatRoom chatRoom = chatRoomService.findByChatRoomId(chatRoomId);
-        chatMessage.setChatRoom(chatRoom);
-
-        if (chatMessage.getSenderId() != null) {
-            User sender = userRepository.findById(chatMessage.getSenderId()).orElse(null);
-            chatMessage.setSender(sender);
-        }
-        if (chatMessage.getRecipientId() != null) {
-            User receiver = userRepository.findById(chatMessage.getRecipientId()).orElse(null);
-            chatMessage.setReceiver(receiver);
-        }
-        chatMessage.setTimestamp(LocalDateTime.now());
-        chatMessageRepository.save(chatMessage);
-        return chatMessage;
-    }
+//    @MessageMapping("/chat/{chatRoomId}")
+//    @SendTo("/topic/messages/{chatRoomId}")
+//    public ChatMessage sendMessage(@DestinationVariable String chatRoomId,ChatMessage chatMessage){
+//
+//        ChatRoom chatRoom = chatRoomService.findByChatRoomId(chatRoomId);
+//        chatMessage.setChatRoom(chatRoom);
+//
+//        if (chatMessage.getSenderId() != null) {
+//            User sender = userRepository.findById(chatMessage.getSenderId()).orElse(null);
+//            chatMessage.setSender(sender);
+//        }
+//        if (chatMessage.getRecipientId() != null) {
+//            User receiver = userRepository.findById(chatMessage.getRecipientId()).orElse(null);
+//            chatMessage.setReceiver(receiver);
+//        }
+//        chatMessage.setTimestamp(LocalDateTime.now());
+//        chatMessageRepository.save(chatMessage);
+//        return chatMessage;
+//    }
 }

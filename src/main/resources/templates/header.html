@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>DIR ACE Technology</title>
+    <link th:href="@{/static/assets/css/badge.css}" rel="stylesheet">
 </head>
 <body>
 <header id="header" class="header fixed-top d-flex align-items-center">
@@ -11,7 +12,7 @@
         <a href="index.html" class="logo d-flex align-items-center">
             <!--        <img src="/assets/img/logo.png" alt="">-->
             <a class="navbar-brand brand-logo mr-5" th:href="@{/}"><img
-                    src="../static/assets/img/download.png" alt="logo" style="max-width: 100%;height: 50px; margin-bottom: 5px;"/></a>
+                    th:src="@{/static/assets/img/download.png}" alt="logo" style="max-width: 100%;height: 50px; margin-bottom: 5px;"/></a>
         </a>
         <i class="bi bi-list toggle-sidebar-btn mr-5"></i>
     </div><!-- End Logo -->
@@ -32,220 +33,100 @@
                 </form>
             </li>
 
-        <!--            <li class="nav-item d-block d-lg-none">-->
-<!--                <a class="nav-link nav-icon search-bar-toggle " href="#">-->
-<!--                    <i class="bi bi-search"></i>-->
-<!--                </a>-->
-<!--            </li>&lt;!&ndash; End Search Icon&ndash;&gt;-->
+            <!--            <li class="nav-item d-block d-lg-none">-->
+            <!--                <a class="nav-link nav-icon search-bar-toggle " href="#">-->
+            <!--                    <i class="bi bi-search"></i>-->
+            <!--                </a>-->
+            <!--            </li>&lt;!&ndash; End Search Icon&ndash;&gt;-->
 
             <li class="nav-item dropdown">
 
-                <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
-                    <i class="bi bi-bell"></i>
-                    <span class="badge bg-primary badge-number">4</span>
-                </a><!-- End Notification Icon -->
+                <ul class="d-flex align-items-center">
 
-                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
-
-
-                    <li>
-                        <hr class="dropdown-divider">
-                    </li>
-                    <li class="dropdown-footer">
-                        <a href="#">Show all notifications</a>
-                    </li>
-
-                </ul><!-- End Notification Dropdown Items -->
-
-            </li><!-- End Notification Nav -->
-
-            <li class="nav-item dropdown">
-
-                <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
-                    <i class="bi bi-chat-left-text"></i>
-                    <span class="badge bg-success badge-number">3</span>
-                </a><!-- End Messages Icon -->
-
-                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow messages">
-                    <li class="dropdown-header">
-                        You have 3 new messages
-                        <a href="#"><span class="badge rounded-pill bg-primary p-2 ms-2">View all</span></a>
-                    </li>
-                    <li>
-                        <hr class="dropdown-divider">
-                    </li>
-
-                    <li class="message-item">
-                        <a href="#">
-                            <img src="../static/assets/img/download.png" alt="" class="rounded-circle">
-                            <div>
-                                <h4>Maria Hudson</h4>
-                                <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
-                                <p>4 hrs. ago</p>
-                            </div>
+                    <li class="nav-item d-block d-lg-none">
+                        <a class="nav-link nav-icon search-bar-toggle " href="#">
+                            <i class="bi bi-search"></i>
                         </a>
-                    </li>
-                    <li>
-                        <hr class="dropdown-divider">
-                    </li>
+                    </li><!-- End Search Icon-->
 
-                    <li class="message-item">
-                        <a href="#">
-                            <img src="../static/assets/img/messages-2.jpg" alt="" class="rounded-circle">
-                            <div>
-                                <h4>Anna Nelson</h4>
-                                <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
-                                <p>6 hrs. ago</p>
-                            </div>
-                        </a>
-                    </li>
-                    <li>
-                        <hr class="dropdown-divider">
-                    </li>
+                    <li class="nav-item dropdown">
 
-                    <li class="message-item">
-                        <a href="#">
-                            <img src="../static/assets/img/messages-3.jpg" alt="" class="rounded-circle">
-                            <div>
-                                <h4>David Muldon</h4>
-                                <p>Velit asperiores et ducimus soluta repudiandae labore officia est ut...</p>
-                                <p>8 hrs. ago</p>
-                            </div>
-                        </a>
-                    </li>
-                    <li>
-                        <hr class="dropdown-divider">
-                    </li>
+                        <div id="notify" class="nav-link nav-icon" data-bs-toggle="dropdown">
+                            <i class="bi bi-bell"></i>
+                            <span class="badge bg-primary badge-number" id="count">0</span>
+                        </div><!-- End Notification Icon -->
 
-                    <li class="dropdown-footer">
-                        <a href="#">Show all messages</a>
-                    </li>
+                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications" id="notiContainer" style="width: 300px;">
 
-                </ul><!-- End Messages Dropdown Items -->
+                        </ul><!-- End Notification Dropdown Items -->
 
-            </li><!-- End Messages Nav -->
+                    </li><!-- End Notification Nav -->
 
-            <li class="nav-item dropdown pe-3">
+                    <li class="nav-item dropdown pe-3">
 
-                <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
-                    <img src="../static/assets/img/profile-img.jpg" alt="Profile" class="rounded-circle">
-                    <span class="d-none d-md-block dropdown-toggle ps-2">K. Anderson</span>
-                </a><!-- End Profile Iamge Icon -->
+                        <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
+                            <img th:src="@{/static/assets/img/user1.jpg}" alt="Profile" class="rounded-circle">
+                            <span class="d-none d-md-block dropdown-toggle ps-2">K. Anderson</span>
+                        </a><!-- End Profile Iamge Icon -->
 
-                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
-                    <li class="dropdown-header">
-                        <h6>Kevin Anderson</h6>
-                        <span>Web Designer</span>
-                    </li>
-                    <li>
-                        <hr class="dropdown-divider">
-                    </li>
+                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
+                            <li class="dropdown-header">
+                                <h6>Kevin Anderson</h6>
+                                <span>Web Designer</span>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
 
-                    <li>
-                        <a class="dropdown-item d-flex align-items-center" th:href="@{/profile}">
-                            <i class="bi bi-person"></i>
-                            <span>My Profile</span>
-                        </a>
-                    </li>
-                    <li>
-                        <hr class="dropdown-divider">
-                    </li>
+                            <li>
+                                <a class="dropdown-item d-flex align-items-center" th:href="@{/profile}">
+                                    <i class="bi bi-person"></i>
+                                    <span>My Profile</span>
+                                </a>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
 
-                    <li>
-                        <a class="dropdown-item d-flex align-items-center" href="/userProfile">
-                            <i class="bi bi-gear"></i>
-                            <span>Account Settings</span>
-                        </a>
-                    </li>
-                    <li>
-                        <hr class="dropdown-divider">
-                    </li>
+                            <li>
+                                <a class="dropdown-item d-flex align-items-center" href="/userProfile">
+                                    <i class="bi bi-gear"></i>
+                                    <span>Account Settings</span>
+                                </a>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
 
-                    <li>
-                        <a class="dropdown-item d-flex align-items-center" href="pages-faq.html">
-                            <i class="bi bi-question-circle"></i>
-                            <span>Need Help?</span>
-                        </a>
-                    </li>
-                    <li>
-                        <hr class="dropdown-divider">
-                    </li>
+                            <li>
+                                <a class="dropdown-item d-flex align-items-center" href="pages-faq.html">
+                                    <i class="bi bi-question-circle"></i>
+                                    <span>Need Help?</span>
+                                </a>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
 
-                    <li>
-                        <a class="dropdown-item d-flex align-items-center" href="#">
-                            <i class="bi bi-box-arrow-right"></i>
-                            <span>Sign Out</span>
-                        </a>
-                    </li>
+                            <li>
+                                <a class="dropdown-item d-flex align-items-center" href="#">
+                                    <i class="bi bi-box-arrow-right"></i>
+                                    <span>Sign Out</span>
+                                </a>
+                            </li>
 
-                </ul><!-- End Profile Dropdown Items -->
-            </li><!-- End Profile Nav -->
+                        </ul><!-- End Profile Dropdown Items -->
+                    </li><!-- End Profile Nav -->
 
+                </ul>
+            </li>
         </ul>
-    </nav><!-- End Icons Navigation -->
+    </nav>
 
-</header><!-- End Header -->
+</header>
 </body>
-<script>
-    const uploadForm = document.getElementById("uploadForm");
-    const excelFileInput = document.getElementById("excelFile");
-
-    uploadForm.addEventListener("submit", function(event) {
-        event.preventDefault(); // Prevent default form submission
-
-        const formData = new FormData();
-        const files = excelFileInput.files;
-
-        if (files.length === 0) {
-            alert("Please select a file.");
-            return;
-        }
-
-        formData.append("file", files[0]); // Only upload the first selected file
-
-        fetch("/user/upload", {
-            method: "POST",
-            body: formData
-        })
-            .then(response => {
-                if (response.ok) {
-                    return response.json();
-                } else {
-                    throw new Error("Failed to upload file.");
-                }
-            })
-            .then(data => {
-                console.log(data); // Handle successful response
-                alert("File uploaded successfully.");
-            })
-            .catch(error => {
-                console.error(error); // Handle error
-                alert("Error uploading file.");
-            });
-    });
-    document.addEventListener('DOMContentLoaded', function() {
-        const excelFileInput = document.getElementById('excelFile');
-        const fileLabel = document.getElementById('fileLabel');
-
-        excelFileInput.addEventListener('change', function() {
-            const files = excelFileInput.files;
-            if (files.length > 0) {
-                const fileName = files[0].name;
-                fileLabel.textContent = fileName;
-            } else {
-                fileLabel.textContent = 'Input Excel File';
-            }
-        });
-    });
-    document.addEventListener('DOMContentLoaded', function() {
-        const excelFileInput = document.getElementById('excelFile');
-        const submitButton = document.getElementById('submitButton');
-
-        excelFileInput.addEventListener('change', function() {
-            submitButton.click(); // Simulate click event on the hidden submit button
-        });
-    });
-</script>
+<script th:src="@{/static/assets/js/excelUpload.js}"></script>
+<script th:src="@{/static/assets/js/fetchNoti.js}"></script>
 <style>
     .hidden{
         display: none;
@@ -259,6 +140,20 @@
         height: 1px;
         border: 0;
         padding: 0;
+    }
+    .dropdown-menu {
+        max-height: 300px; /* Set the maximum height according to your preference */
+        overflow-y: auto; /* Add vertical scrollbar when content exceeds max height */
+    }
+    .dis{
+        display: flex;
+        justify-content: space-around;
+    }
+    .img{
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        object-fit: cover;
     }
 </style>
 

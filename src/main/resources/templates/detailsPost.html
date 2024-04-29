@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link th:href="@{/static/assets/img/download.png}" rel="icon">
+  <link href="https://fonts.gstatic.com" rel="preconnect">
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+  <!-- Vendor CSS Files -->
+  <link th:href="@{/static/assets/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+  <link th:href="@{/static/assets/vendor/bootstrap-icons/bootstrap-icons.css}" rel="stylesheet">
+  <link th:href="@{/static/assets/vendor/boxicons/css/boxicons.min.css}" rel="stylesheet">
+  <link th:href="@{/static/assets/vendor/quill/quill.snow.css}" rel="stylesheet">
+  <link th:href="@{/static/assets/vendor/quill/quill.bubble.css}" rel="stylesheet">
+  <link th:href="@{/static/assets/vendor/remixicon/remixicon.css}" rel="stylesheet">
+  <link th:href="@{/static/assets/vendor/simple-datatables/style.css}" rel="stylesheet">
+
+  <link th:href="@{/static/assets/css/style.css}" rel="stylesheet">
+  <link th:href="@{/static/assets/css/post.css}" rel="stylesheet">
+  <link th:href="@{/static/assets/css/all.css}" rel="stylesheet">
+<!--  <link th:href="@{/static/assets/css/comment.css}" rel="stylesheet">-->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <script src="https://cdn.jsdelivr.net/npm/sockjs-client/dist/sockjs.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/stompjs/lib/stomp.min.js"></script>
+  <title>Document</title>
+</head>
+
+<body>
+<div th:include="header"></div>
+
+<div th:include="sidebar"></div>
+
+<main id="main" class="main">
+  <section class="section dashboard">
+
+    <div class="container">
+      <div class="row mb-4">
+        <div class="center-flex-container flex-item">
+          <div class="tweets-container customContainer">
+
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div >
+<!--          <button type="button" id="commentBtn" class="button"><i class="fa-solid fa-plus" style="color: black"></i> Add a comment</button>-->
+          <div class="input-container">
+            <input  type="text" id="messageInput" class="input-field ytd-comment-simplebox-renderer" placeholder="Type a message here">
+            <button id="buttonEvent" class="send-button">Send</button>
+          </div>
+          <div>
+            <small>Sort By:
+              <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Best
+              </button>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#">Best</a></li>
+                <li><a class="dropdown-item" href="#">Top</a></li>
+                <li><a class="dropdown-item" href="#">New</a></li>
+              </ul>
+            </small>
+          </div>
+
+          <div class="comment-section">  </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+</main>
+<div th:include="footer"></div>
+
+<script>
+  console.log(window.location.href)
+</script>
+<!-- Vendor JS Files -->
+<script th:src="@{/static/assets/js/videoplayer.js}"></script>
+<script type="module" th:src="@{/static/assets/js/commentOnPost.js}"></script>
+<script th:src="@{/static/assets/vendor/apexcharts/apexcharts.min.js}"></script>
+<script th:src="@{/static/assets/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/static/assets/vendor/chart.js/chart.umd.js}"></script>
+<script th:src="@{/static/assets/vendor/echarts/echarts.min.js}"></script>
+<script th:src="@{/static/assets/vendor/quill/quill.min.js}"></script>
+<script th:src="@{/static/assets/vendor/simple-datatables/simple-datatables.js}"></script>
+<script th:src="@{static/assets/vendor/tinymce/tinymce.min.js}"></script>
+<script th:src="@{/static/assets/vendor/php-email-form/validate.js}"></script>
+
+
+</body>
+
+</html>

@@ -2,10 +2,12 @@ package com.example.demo.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
@@ -14,6 +16,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Entity
 @Table(name = "bookmark")
+@EntityListeners(AuditingEntityListener.class)
+@Builder
 public class BookMark {
 
     @Id
@@ -24,9 +28,6 @@ public class BookMark {
     @CreatedDate
     @Column(name = "created_at",nullable = false,updatable = false)
     private LocalDateTime createdAt;
-    @UpdateTimestamp
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -36,8 +37,5 @@ public class BookMark {
     @JoinColumn(name = "post_id")
     private Post post;
 
-    @PrePersist
-    public void beforePersist(){
-        this.updatedAt = LocalDateTime.now();
-    }
+    private boolean status;
 }

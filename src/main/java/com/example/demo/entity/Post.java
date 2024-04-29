@@ -49,7 +49,6 @@ public class Post {
     @JoinColumn(name = "topic_id")
     private Topic topic;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "post")
     private List<Like> likes;
 
@@ -57,8 +56,7 @@ public class Post {
     @OneToMany(mappedBy = "post")
     private List<Comment> comments;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post", fetch = FetchType.LAZY)
     private List<BookMark> bookMarks;
 
     @JsonIgnore
@@ -71,8 +69,4 @@ public class Post {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @PrePersist
-    public void beforePersist(){
-        this.updatedAt = LocalDateTime.now();
-    }
 }

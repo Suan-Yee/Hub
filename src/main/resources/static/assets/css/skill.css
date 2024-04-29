@@ -1,0 +1,30 @@
+.skill-input-container {
+    margin-bottom: 10px;
+}
+
+#skill-input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ced4da;
+    border-radius: 20px;
+    box-sizing: border-box;
+}
+
+.skill-box {
+    display: inline-block;
+    background-color: #f0f0f0;
+    padding: 2px 5px; /* Adjust padding for height and width */
+    margin-right: 5px;
+    margin-bottom: 5px;
+    border: 1px solid #828991; /* Add border styling */
+    border-radius: 5px;
+}
+
+.skill {
+    display: inline-block;
+    margin-right: 5px;
+}
+
+.cancel-sign {
+    cursor: pointer;
+}

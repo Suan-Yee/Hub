@@ -1,0 +1,40 @@
+.active {
+    display: inline-block;
+    border-radius: 2px;
+    background-color: hsl(163, 72%, 93%);
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+    font-size: 0.75rem;
+    font-weight: bold;
+    color: hsl(163, 100%, 44%);
+    text-transform: uppercase;
+    letter-spacing: 0.05rem;
+}
+.inactive {
+    display: inline-block;
+    border-radius: 2px;
+    background-color: rgba(255, 0, 0, 0.1);
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+    font-size: 0.75rem;
+    font-weight: bold;
+    color: red;
+    text-transform: uppercase;
+    letter-spacing: 0.05rem;
+}
+.info {
+    display: inline-block;
+    border-radius: 0.25rem; /* Rounded */
+    background-color: rgba(64, 153, 255, 0.1); /* Cyan-500 with 10% opacity */
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+    font-size: 0.875rem; /* text-sm equivalent */
+    font-weight: bold;
+    color: #3b82f6; /* Text-cyan-500 */
+}
