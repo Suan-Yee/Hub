@@ -22,6 +22,9 @@ public class UserDto {
     private String photo;
     private boolean status;
     private Role role;
+    private List<UserHasGroup> userHasGroup;
+
+
 
     public UserDto(User user){
         this.id = user.getId();
@@ -31,6 +34,16 @@ public class UserDto {
         this.department = user.getDepartment();
         this.photo = user.getPhoto();
         this.role = user.getRole();
+        this.userHasGroup = user.getGroups();
 
+    }
+
+    public UserDto(String staffId, String name, String department,  Role role, String photo, Long id) {
+        this.staffId = staffId;
+        this.name = name;
+        this.department = department;
+        this.role = role;
+        this.photo=photo;
+        this.id=id;
     }
 }
