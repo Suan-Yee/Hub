@@ -1,9 +1,10 @@
 package com.example.demo.entity;
 
 import com.example.demo.enumeration.Role;
+import com.example.demo.enumeration.Access;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -11,9 +12,9 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
-
-import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_DEFAULT;
+import java.util.Set;
 
 @Getter @Setter
 @AllArgsConstructor @NoArgsConstructor
@@ -41,6 +42,10 @@ public class User {
     private String biography;
     private boolean status;
 
+private LocalDateTime time;
+    @Enumerated(EnumType.STRING)
+    private Access access;
+
     @CreatedDate
     @Column(name = "created_at",nullable = false,updatable = false)
     private LocalDateTime createdAt;
@@ -51,28 +56,28 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    @JsonIgnore
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private OTP otp;
 
+    @JsonIgnore
     @JsonBackReference
     @OneToMany(mappedBy = "user",fetch = FetchType.EAGER)
     private List<Post> posts;
 
-    @OneToMany(mappedBy = "user",fetch = FetchType.EAGER,cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<UserHasGroup> userHasGroups;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "user",fetch = FetchType.EAGER,cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<UserHasGroup> groups;
+
+    @JsonIgnore
     @OneToMany(mappedBy = "user",fetch = FetchType.EAGER)
     private List<Like> likes;
 
     @OneToMany(mappedBy = "user",fetch = FetchType.EAGER)
     private List<Comment> comments;
 
-    @OneToMany(mappedBy = "user",fetch = FetchType.EAGER)
-    private List<GroupMessage> groupMessages;
-
-    @OneToMany(mappedBy = "user",fetch = FetchType.EAGER)
-    private List<UserMention> userMentions;
-
+    @JsonIgnore
     @OneToMany(mappedBy = "user",fetch = FetchType.EAGER)
     private List<BookMark> bookMarks;
 
@@ -84,5 +89,8 @@ public class User {
     public void beforePersist(){
         this.updatedAt = LocalDateTime.now();
     }
+
+    @OneToMany(mappedBy = "user",cascade = {CascadeType.MERGE,CascadeType.PERSIST},fetch = FetchType.EAGER)
+    private Set<UserRoom> user_chatRooms;
 }
 
