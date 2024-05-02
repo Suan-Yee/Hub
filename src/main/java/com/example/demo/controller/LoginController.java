@@ -1,13 +1,13 @@
 package com.example.demo.controller;
 
+import com.example.demo.entity.Group;
+import com.example.demo.entity.UserHasGroup;
 import com.example.demo.entity.OTP;
 import com.example.demo.entity.User;
 import com.example.demo.enumeration.Role;
 import com.example.demo.form.ResetPasswordForm;
-import com.example.demo.services.EmailService;
-import com.example.demo.services.OtpService;
-import com.example.demo.services.PostService;
-import com.example.demo.services.UserService;
+import com.example.demo.repository.GroupRepository;
+import com.example.demo.services.*;
 import com.example.demo.utils.OTPGenerator;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +20,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Controller
 @RequiredArgsConstructor
 @Slf4j
@@ -30,6 +32,9 @@ public class LoginController {
     private final OtpService otpService;
     private final BCryptPasswordEncoder encoder;
     private final PostService postService;
+    private final GroupService groupService;
+    private final GroupRepository groupRepository;
+
 
     @GetMapping("/login")
     public String loginPage() {
@@ -122,5 +127,26 @@ public class LoginController {
             model.addAttribute("error","Password does not match");
             return "/resetPassword";
         }
+    }
+    @GetMapping("/group")
+    public String group(Model model){
+        List<User> users = groupService.getAll();
+        model.addAttribute("users", users);
+        return "group";
+    }
+    @GetMapping("/viewCommunity")
+    public String views(){
+        return "community-view";
+    }
+    @GetMapping("/user_profile")
+    public String profile(){
+        return "user_profile";
+    }
+    @GetMapping("/group-chat")
+    public String groupChat(Model model){
+        Authentication auth=SecurityContextHolder.getContext().getAuthentication();
+        User user=userService.findByStaffId(auth.getName());
+        model.addAttribute("user",user);
+        return "groupchat";
     }
 }
