@@ -1,6 +1,7 @@
 package com.example.demo.repository;
 
 import com.example.demo.entity.User;
+import com.example.demo.enumeration.Access;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -16,5 +17,7 @@ public interface UserRepository extends JpaRepository<User,Long>, JpaSpecificati
         Optional<User> findEmailByStaffId(String staffId);
         Optional<User> findByEmail(String email);
         Page<User> findAll(Specification<User> spec, Pageable pageable);
+        List<User> findAllByAccess(Access access);
+        List<User> findByStatus(boolean b);
 
 }
