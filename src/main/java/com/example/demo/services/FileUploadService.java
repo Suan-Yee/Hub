@@ -11,4 +11,6 @@ public interface FileUploadService {
     String videoFileUpload(MultipartFile multipartFile) throws IOException;
     String imageFileUpload(MultipartFile multipartFile) throws IOException;
     String fileUpload(MultipartFile multipartFile) throws IOException;
+    String uploadGroupImage(MultipartFile multipartFile) throws IOException;
+    Boolean deleteGroupImage(String imgUrl) throws IOException;
 }

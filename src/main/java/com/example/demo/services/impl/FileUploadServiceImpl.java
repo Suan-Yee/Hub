@@ -67,4 +67,18 @@ public class FileUploadServiceImpl implements FileUploadService {
                 .get("url").toString();
     }
 
+    @Override
+    public String uploadGroupImage(MultipartFile multipartFile) throws IOException {
+        return cloudinary.uploader()
+                .upload(multipartFile.getBytes(), Map.of("public_id", UUID.randomUUID().toString()))
+                .get("url")
+                .toString();
+    }
+
+    @Override
+    public Boolean deleteGroupImage(String imgUrl) throws IOException {
+        String publicId = extractPublicId(imgUrl);
+        cloudinary.uploader().destroy(publicId, null);
+        return true;
+    }
 }
