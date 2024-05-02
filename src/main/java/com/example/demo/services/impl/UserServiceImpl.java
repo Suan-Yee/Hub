@@ -1,8 +1,10 @@
 package com.example.demo.services.impl;
 
+import com.example.demo.dto.UserDto;
 import com.example.demo.entity.AppUser;
 import com.example.demo.entity.Post;
 import com.example.demo.entity.User;
+import com.example.demo.enumeration.Access;
 import com.example.demo.enumeration.Role;
 import com.example.demo.exception.ApiException;
 import com.example.demo.form.ChangeDefaultPassword;
@@ -34,6 +36,7 @@ import java.io.IOException;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -60,9 +63,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public List<User> findAllUser() {
+    public List<UserDto> findAllUser() {
         List<User> userList = userRepository.findAll();
-        return userList;
+        List<UserDto> userDto = userList.stream().map(UserDto::new).collect(Collectors.toList());
+        return userDto;
+
     }
 
     @Override
@@ -227,5 +232,15 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                 log.error(e.getMessage());
             }
         }
+    }
+    @Override
+    public List<User> findByAccess() {
+        return userRepository.findAllByAccess(Access.ONLINE);
+    }
+
+
+    @Override
+    public List<User> findByStatus(boolean b) {
+        return userRepository.findByStatus(b);
     }
 }

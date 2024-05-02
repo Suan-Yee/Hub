@@ -1,5 +1,6 @@
 package com.example.demo.services;
 
+import com.example.demo.dto.UserDto;
 import com.example.demo.entity.User;
 import com.example.demo.form.ChangeDefaultPassword;
 import com.example.demo.form.ChangePasswordInput;
@@ -14,7 +15,7 @@ public interface UserService {
     User save(User user);
     User findById(Long userId);
     User findByStaffId(String staffId);
-    List<User> findAllUser();
+    List<UserDto> findAllUser();
     User findEmailByStaffId(String staffId);
     User findByEmail(String email);
     void saveUserFromExcel(MultipartFile file);
@@ -27,4 +28,8 @@ public interface UserService {
     Page<User> findAllUser(int pageNo, int pageSize);
     Page<User> searchUsers(String query,int pageNo, int pageSize);
     User findAuthenticatedUser(Principal principal);
+    public List<User> findByAccess();
+    public List<User> findByStatus(boolean b);
+
+
 }
