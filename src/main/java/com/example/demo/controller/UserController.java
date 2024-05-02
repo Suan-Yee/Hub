@@ -5,6 +5,7 @@ import com.example.demo.services.SkillService;
 import com.example.demo.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -83,5 +84,8 @@ public class UserController {
         model.addAttribute("query", query);
         return "user-listing";
     }
-
+    @GetMapping("/userList")
+    public ResponseEntity<List<User>> userList(){
+        return ResponseEntity.ok(userService.findByAccess());
+    }
 }

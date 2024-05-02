@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Data
 @AllArgsConstructor
@@ -19,17 +20,21 @@ public class GroupMessage {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
-    @Column(name = "text")
-    private String text;
-    @CreatedDate
-    @Column(name = "created_at",nullable = false,updatable = false)
-    private LocalDateTime createdAt;
+    private String content;
 
-    @OneToOne
+    private Date time;
+    @Transient
+    private Long senderId;
+    private String name;
+    @Transient
+    private Long roomId;
+
+    @ManyToOne
     @JoinColumn(name = "group_id")
-    private Group group;
+    private Group group;;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
 }
