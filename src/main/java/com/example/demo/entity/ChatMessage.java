@@ -1,34 +1,28 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Builder
 public class ChatMessage {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
     private String content;
-    private LocalDateTime timestamp;
-    @ManyToOne
-    private User sender;
-    @ManyToOne
-    private User receiver;
-    @ManyToOne
-    private ChatRoom chatRoom;
-
+    private Date time;
+    private Long recipientId;
+    private String chatId;
     @Transient
     private Long senderId;
-    @Transient
-    private Long recipientId;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User receiver;
 }
