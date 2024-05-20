@@ -1,13 +1,14 @@
+let stompClient = null;
+let id = null;
+let username=null;
+let selectedRoomId = null;
 document.addEventListener('DOMContentLoaded', () => {
 
     const messageForm = document.querySelector('#messageForm');
     const messageInput = document.querySelector('#message');
     const connectingElement = document.querySelector('.connecting');
+    const chatArea = document.querySelector('#chat-messages');
 
-    let stompClient = null;
-    let id = null;
-    let username=null;
-    let selectedRoomId = null;
     const idInput = document.getElementById("id");
     id = idInput.value;
     username=document.getElementById("name").value;
@@ -23,14 +24,49 @@ document.addEventListener('DOMContentLoaded', () => {
     const onConnected = () => {
         stompClient.subscribe(`/user/${selectedRoomId}/queue/messages`, onMessageReceived);
     }
+    const emojiSelectorIcon = document.getElementById('emojiSelectorIcon');
+    const emojiSelector = document.getElementById('emojiSelector');
+    const emojiList=document.getElementById('emojiList');
+    const emojiSearch=document.getElementById('emojiSearch');
+    emojiSelectorIcon.addEventListener('click', () => {
+        emojiSelector.classList.toggle('active');
+        fetch('https://emoji-api.com/emojis?access_key=e40cfdf86d4bada254a679a06cf4ef2bfb9efda9')
+            .then(res => res.json())
+            .then(data => loadEmoji(data))
 
-    async function  findAndDisplayConnectedUsers() {
+        function loadEmoji(data) {
+            console.log(data);
+            data.forEach(emoji => {
+                let li = document.createElement('li');
+                li.classList.add('emoji-photo')
+                li.setAttribute('emoji-name',emoji.slug);
+                li.textContent=emoji.character;
+
+                emojiList.appendChild(li);
+                li.addEventListener('click', () => {
+                    messageInput.value += emoji.character;
+                });
+            });
+        }
+    });
+
+    emojiSearch.addEventListener('keyup',e=>{
+        let value=e.target.value;
+        let emojis=document.querySelectorAll('#emojiList li');
+        emojis.forEach(emoji =>{
+            if(emoji.getAttribute('emoji-name').toLowerCase().includes(value)){
+                emoji.style.display='flex';
+            }else{
+                emoji.style.display='none';
+            }
+        })
+    })
+
+    async function findAndDisplayConnectedUsers() {
         const response = await fetch('/roomList');
         let connectedRooms = await response.json();
-        console.log(connectedRooms)
         const connectedUsersList = document.getElementById('connectedUsers');
         connectedUsersList.innerHTML = '';
-
         connectedRooms.forEach(room => {
             appendUserElement(room, connectedUsersList);
             if (connectedRooms.indexOf(room) < connectedRooms.length - 1) {
@@ -77,14 +113,23 @@ document.addEventListener('DOMContentLoaded', () => {
         if(selectedRoomId){
             connectWebSocket();
         }
-        fetchAndDisplayUserChat();
+        fetchAndDisplayUserChat().then();
+
+        const nbrMsg = clickedUser.querySelector('.nbr-msg');
+        nbrMsg.classList.add('hidden');
+        nbrMsg.textContent = '0';
+
+        if (!selectedRoomId) {
+            messageForm.classList.add('hidden');
+        } else {
+            messageForm.classList.remove('hidden');
+        }
 
     }
+
     function formatTime(time) {
         // Create a new Date object from the time variable
-        console.log("Original Time:", time);
         const date = new Date(time);
-        console.log("Parsed Date:", date);
 
         // Check if the date is valid
         if (isNaN(date.getTime())) {
@@ -116,15 +161,17 @@ document.addEventListener('DOMContentLoaded', () => {
             messageContainer.classList.add('justify-content-end');
             messageContainer.innerHTML = `
             <div class="img_cont_msg">
+
                 <!-- <img src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg" class="rounded-circle user_img_msg"> -->
             </div>
-            <span><b>${name}</b></span>
+            <div>
+           <span style="color: #7986CB; font-size:small";>${name}</span>
             <div class="msg_cotainer_send">
                 <div class="container">
-                
                     ${content}
                     <span class="msg_time_send">${formatTime(currentTime)}</span>
                 </div>
+            </div>
             </div>
         `;
         } else {
@@ -133,12 +180,14 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="img_cont_msg">
                 <!-- <img src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg" class="rounded-circle user_img_msg"> -->
             </div>
-             <span><b>${name}</b></span>
+             <div>
+             <span style="color: #7986CB; font-size:small">${name}</span>
             <div class="msg_cotainer">
                 <div class="container">
                     ${content}
                     <span class="msg_time">${formatTime(currentTime)}</span>
                 </div>
+            </div>
             </div>
         `;
         }
@@ -159,7 +208,7 @@ document.addEventListener('DOMContentLoaded', () => {
         userChat.forEach(chat => {
             displayMessage(chat.senderId, chat.content,chat.time,chat.name);
         });
-        chatArea.scrollTop = chatArea.scrollHeight;
+        // chatArea.scrollTop = chatArea.scrollHeight;
         unreadMessages[selectedRoomId] = 0;
     }
     function onError() {
@@ -169,7 +218,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const arrow = document.getElementById('arrow').addEventListener('click',sendMessage,true)
 
     function sendMessage() {
-        const messageInput = document.getElementById('messageInput');
+        const messageInput = document.getElementById('message');
         const messageContent = messageInput.value.trim();
 
         console.log("Message" + messageContent);
@@ -181,6 +230,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 content: messageInput.value.trim(),
                 time: new Date()
             };
+
             console.log(chatMessage);
             stompClient.send("/app/group-chat", {}, JSON.stringify(chatMessage));
             displayMessage(id, messageInput.value.trim(),new Date(),username);
@@ -218,4 +268,194 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
     messageForm.addEventListener('submit', sendMessage, true);
+
+
+document.getElementById('get-all-member-list').addEventListener('click', async () => {
+    if (!selectedRoomId) {
+        alert('Please choose the room u want to add member');
+        return;
+    }
+    const memberList = await getAllCommunityMember(selectedRoomId);
+    const showUserList = document.getElementById('memberList');
+    showUserList.classList.add('container');
+    document.getElementById('chat-room-id').value = selectedRoomId;
+    showUserList.innerHTML = '';
+
+    const searchBar = document.getElementById('memberSearchForAddChatRoom');
+    if (memberList.length > 0) {
+        searchBar.parentElement.parentElement.style.display = 'block';
+    } else {
+        searchBar.parentElement.parentElement.style.display = 'none';
+    }
+
+    if (memberList.length === 0) {
+        showUserList.innerHTML = 'There is no member to add this chat room';
+        return;
+    }
+    memberList.forEach(user => {
+        if (user.senderId === id) {
+            return;
+        }
+        const getData = document.createElement('div');
+        getData.classList.add('group');
+        // getData.style.border = '1px solid';
+        getData.style.borderRadius = '10px';
+        getData.style.paddingTop = '20px';
+        getData.style.cursor = 'pointer';
+        const checkBoxElement = document.createElement('input');
+        checkBoxElement.type = 'checkbox';
+        checkBoxElement.id = `checkbox-user-${user.id}`;
+        checkBoxElement.value = user.id;
+        checkBoxElement.name = 'selectedIds';
+        const label = document.createElement('label');
+        label.classList.add('add-member-chat-room-search');
+        label.setAttribute('for', `checkbox-user-${user.id}`);
+        label.textContent = user.name;
+        const imgDiv = document.createElement('img');
+        const photo = user.photo || '/static/assets/img/user1.jpg';
+        imgDiv.src = `${photo}`;
+        imgDiv.style.width = '50px';
+        imgDiv.style.height = '50px';
+        imgDiv.style.borderRadius = '50px';
+        imgDiv.style.marginLeft = '300px';
+        imgDiv.style.marginTop = '-35px';
+        getData.appendChild(checkBoxElement);
+        getData.appendChild(label);
+        getData.appendChild(imgDiv);
+        showUserList.appendChild(getData);
+
+        document.getElementById('memberSearchForAddChatRoom').addEventListener('input', function() {
+            const searchValue = this.value.toLowerCase();
+            const allUsers = document.querySelectorAll('#memberList .group');
+
+            allUsers.forEach(userContainer => {
+                const userNameElement = userContainer.querySelector('.add-member-chat-room-search');
+                if (userNameElement) {
+                    const userName = userNameElement.textContent.toLowerCase();
+                    if (userName.includes(searchValue)) {
+                        userContainer.style.display = 'block';
+                    } else {
+                        userContainer.style.display = 'none';
+                    }
+                }
+            });
+        });
+    });
 });
+document.getElementById('member-add-icon').addEventListener('click', async () => {
+    const formData = new FormData(document.getElementById('get-all-user'));
+    const validateData = await fetch(`/add-user-chat-room`, {
+        method: 'POST',
+        body: formData
+    });
+    if (!validateData.ok) {
+        const response = await validateData.json();
+        alert(`${response.message}`);
+    } else {
+        const response1 = await validateData.json();
+        alert(`${response1.message}`);
+        $('#memberAddModal').modal('hide');
+    }
+});
+
+    document.getElementById('kick-room-member').addEventListener('click', async () => {
+        if (!selectedRoomId) {
+            alert('Please choose the room first!!!');
+            return;
+        }
+        const userList = await getAllChatRoomMember(selectedRoomId);
+        const showUserList = document.getElementById('memberListForKick');
+        showUserList.classList.add('container');
+        showUserList.innerHTML = '';
+        document.getElementById('kick-room-id').value = selectedRoomId;
+
+        const searchBar = document.getElementById('memberSearchForKick');
+        if (userList.length > 0) {
+            searchBar.parentElement.parentElement.style.display = 'block';
+        } else {
+            searchBar.parentElement.parentElement.style.display = 'none';
+        }
+
+        if (userList.length === 0) {
+            showUserList.innerHTML = 'There is no member to kick ';
+            return;
+        }
+
+        userList.forEach(user => {
+            if (user.senderId === id) {
+                return;
+            }
+            const getData = document.createElement('div');
+            getData.classList.add('group');
+            // getData.style.border = '1px solid';
+            getData.style.borderRadius = '10px';
+            getData.style.paddingTop = '20px';
+            getData.style.cursor = 'pointer';
+            const checkBoxElement = document.createElement('input');
+            checkBoxElement.type = 'checkbox';
+            checkBoxElement.id = `checkbox-user-${user.id}`;
+            checkBoxElement.value = user.id;
+            checkBoxElement.name = 'selectedIds';
+            const label = document.createElement('label');
+            label.classList.add('kick-member-list-chatRoom');
+            label.setAttribute('for', `checkbox-user-${user.id}`);
+            label.textContent = user.name;
+            const imgDiv = document.createElement('img');
+            const photo = user.photo || '/static/assets/img/user1.jpg';
+            imgDiv.src = `${photo}`;
+            imgDiv.style.width = '50px';
+            imgDiv.style.height = '50px';
+            imgDiv.style.borderRadius = '50px';
+            imgDiv.style.marginLeft = '300px';
+            imgDiv.style.marginTop = '-35px';
+            getData.appendChild(checkBoxElement);
+            getData.appendChild(label);
+            getData.appendChild(imgDiv);
+            showUserList.appendChild(getData);
+
+            document.getElementById('memberSearchForKick').addEventListener('input', function() {
+                const searchValue = this.value.toLowerCase();
+                const allUsers = document.querySelectorAll('#memberListForKick .group');
+
+                allUsers.forEach(userContainer => {
+                    const userNameElement = userContainer.querySelector('.kick-member-list-chatRoom');
+                    if (userNameElement) {
+                        const userName = userNameElement.textContent.toLowerCase();
+                        if (userName.includes(searchValue)) {
+                            userContainer.style.display = 'block';
+                        } else {
+                            userContainer.style.display = 'none';
+                        }
+                    }
+                });
+            });
+
+        });
+    });
+
+    document.getElementById('member-kick-icon').addEventListener('click', async () => {
+        const formData = new FormData(document.getElementById('kick-room-user'));
+        const validateData = await fetch(`/kick-user-chat-room`, {
+            method: 'POST',
+            body: formData
+        });
+        if (!validateData.ok) {
+            const response = await validateData.json();
+            alert(`${response.message}`);
+        }
+        const response1 = await validateData.json();
+        alert(`${response1.message}`);
+        $('#memberKickModal').modal('hide');
+    });
+});
+
+// const getAllCommunityMember = async (id) => {
+//     const getData = await fetch(`/member-list-chatRoom/${id}`);
+//     const response = await getData.json();
+//     return response;
+// };
+const getAllChatRoomMember = async (id) => {
+    const getRoomData = await fetch(`/chat-room-memberList/${id}`);
+    const response = await getRoomData.json();
+    return response;
+}
