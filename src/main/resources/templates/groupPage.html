@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DIR ACE Technology</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
+    <link th:href="@{/static/assets/img/download.png}" rel="icon">
+    <link href="https://fonts.gstatic.com" rel="preconnect">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+    <script src="https://code.iconify.design/iconify-icon/1.0.1/iconify-icon.min.js"></script>
+    <!-- Vendor CSS Files -->
+    <link th:href="@{/static/assets/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/static/assets/vendor/bootstrap-icons/bootstrap-icons.css}" rel="stylesheet">
+    <link th:href="@{/static/assets/vendor/boxicons/css/boxicons.min.css}" rel="stylesheet">
+    <link th:href="@{/static/assets/vendor/quill/quill.snow.css}" rel="stylesheet">
+    <link th:href="@{/static/assets/vendor/quill/quill.bubble.css}" rel="stylesheet">
+    <link th:href="@{/static/assets/vendor/remixicon/remixicon.css}" rel="stylesheet">
+    <link th:href="@{/static/assets/vendor/simple-datatables/style.css}" rel="stylesheet">
+
+
+    <link th:href="@{/static/assets/css/style.css}" rel="stylesheet">
+    <link th:href="@{/static/assets/css/post.css}" rel="stylesheet">
+    <link th:href="@{/static/assets/css/all.css}" rel="stylesheet">
+    <link th:href="@{/static/assets/css/skill.css}" rel="stylesheet">
+    <link th:href="@{/static/assets/css/skeleton.css}" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client/dist/sockjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/stompjs/lib/stomp.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css">
+    <link th:href="@{/static/assets/css/groupPage.css}" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css">
+
+    <!-- File Upload Model Box -->
+    <link th:href="@{/static/assets/css/fileUploadModelBox.css}" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.slim.js" integrity="sha512-docBEeq28CCaXCXN7cINkyQs0pRszdQsVBFWUd+pLNlEk3LDlSDDtN7i1H+nTB8tshJPQHS0yu0GW9YGFd/CRg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>    -->
+    <!--    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>-->
+</head>
+<body>
+
+<div th:include="header"></div>
+
+<!-- ======= Sidebar ======= -->
+<div th:include="sidebar"></div>
+<main id="main" class="main">
+
+    <!-- Banner Area Start Here -->
+
+    <div class="banner">
+
+        <div class="container text-center">
+            <div class="row">
+                <div class="banner_img">
+                    <img src="https://github.com/ecemgo/mini-samples-great-tricks/assets/13468728/cce4084a-01a4-428d-961f-935bafe7a6e3" alt="">
+                    <p th:each="group : ${groups}">
+                        <a href="#" th:text="${group.rule}">Group Rule</a>
+                    </p>
+                </div>
+                <div class="banner_mid">
+                    <div class="container">
+
+                        <div class="row">
+
+                                <div class="col-lg-6 banner_mid_left">
+                                    <div th:each="group : ${groups}">
+                                    <h2 th:text="${group.name}">Group Name</h2>
+                                    <p class="text-left" ><span ><i class="fa fa-globe" aria-hidden="true" ></i></span>Public group .<span th:text="${group.memberCount} +Members"></span> </p>
+                                </div>
+                                </div>
+                            <div class="col-lg-6 banner_mid_right">
+                                <div class="members">
+<!--                                    th:text="${group.memberCount}-->
+                                    <ul>
+                                        <li><img src="https://i.ibb.co/drM5wPs/rahana.jpg" alt=""></li>
+                                        <li><img src="https://i.ibb.co/drM5wPs/rahana.jpg" alt=""></li>
+                                        <li><img src="https://i.ibb.co/drM5wPs/rahana.jpg" alt=""></li>
+                                        <li><img src="https://i.ibb.co/drM5wPs/rahana.jpg" alt=""></li>
+                                        <li><img src="https://i.ibb.co/drM5wPs/rahana.jpg" alt=""></li>
+                                        <li><img src="https://i.ibb.co/drM5wPs/rahana.jpg" alt=""></li>
+                                        <li><img src="https://i.ibb.co/drM5wPs/rahana.jpg" alt=""></li>
+                                        <li><img src="https://i.ibb.co/drM5wPs/rahana.jpg" alt=""></li>
+                                    </ul>
+                                </div>
+
+
+                                <!--                                <button id="inviteButton" class="btn btn-primary">+ invite</button>-->
+
+                                <button type="button" class="btn btn-primary" value="Invite" id="inviteBtn" onclick="populateCreateGroupFormForInvitation()"><i class="fa-solid fa-user-plus"></i>Invite</button>
+                                <button type="button" class="btn btn-success" value="Join" id="joinBtn" onclick="joinGroup()"><i class="fa-solid fa-user-check"></i>Join</button>
+                                <div id="invitationMessage"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="banner_bottom">
+                    <div class="banner_bottom_menu">
+                        <ul>
+                            <li>Members</li>
+                            <li>Events</li>
+                            <li>Media</li>
+                            <li>Files</li>
+                        </ul>
+                    </div>
+                    <button class="banner_bottom_btn">...</button>
+                </div>
+
+
+                <div class="container">
+                    <div class="modal fade" id="invitationFormModal" tabindex="-1" aria-labelledby="createCommunityModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="createGroupModalLabel">Invite friends</h5>
+                                </div>
+                                <div class="modal-body">
+                                    <form id="inviteForm">
+                                        <input type="hidden" id="communityId1" name="communityId">
+                                        <div class="row mb-4">
+                                            <label>Choose Member's List:</label><br>
+                                            <div class="col-md-4" style="margin-left: 200px">
+                                                <input type="text" class="form-control" id="userSearch" placeholder="Search users.." style="margin-left: 100px">
+                                                <div id="usersList"></div>
+                                            </div>
+                                        </div>
+                                        <input type="hidden" id="userIds" name="userIds">
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal" id="inviteModalCloseBtn">Close</button>
+                                    <button type="button" class="btn btn-primary" id="inviteUserBtn">Invite</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section class="section dashboard">
+        <div class="row">
+
+            <div class="center-flex-container flex-item">
+                <!--Upload Post Create-->
+                <div class="post-tweet">
+                    <form id="post-form" th:action="@{/post/create}" method="post" enctype="multipart/form-data">
+                        <div class="form-group-1">
+                            <img th:src="@{/static/assets/img/profile-img.jpg}" alt="profile-pics">
+                            <input type="text" placeholder="What's happening?" name="text">
+                        </div>
+                        <div class="form-group-2">
+                            <div class="post-icons">
+                                <label for="image-upload" class="file-icon">
+                                    <i class="far fa-image"></i>
+                                    <input id="image-upload" type="file" name="images" multiple style="display: none;">
+                                </label>
+                                <label for="file-upload" class="file-icon">
+                                    <i class="far fa-file-image"></i>
+                                    <input id="file-upload" type="file" name="files" multiple style="display: none;">
+                                </label>
+                                <label for="video-upload" class="file-icon">
+                                    <i class="fas fa-video"></i>
+                                    <input id="video-upload" type="file" name="videos" multiple style="display: none;">
+                                    <!--<button id="video" type="button" style="display: none;" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal"></button>-->
+                                </label>
+                                <i class="far fa-smile"></i>
+                                <i class="far fa-calendar-check"></i>
+                            </div>
+                            <button class="btn" type="submit">Post</button>
+                        </div>
+                        <p id="video-error" style="color: red; display: none;">Your video is larger than 100MB</p>
+                    </form>
+                </div>
+                <!--End Upload Post-->
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                            </div>
+                            <div class="body">
+                                <div class="wrapper">
+                                    <header>Video Uploader</header>
+                                    <form id="video-form" th:action="@{/post/create}" method="post" enctype="multipart/form-data">
+                                        <input id="video" class="file-input" type="file" name="video" hidden>
+                                        <i class="fas fa-cloud-upload-alt"></i>
+                                        <p>Browse File to Upload</p>
+                                    </form>
+                                    <section class="progress-area"></section>
+                                    <section class="uploaded-area"></section>
+                                </div>
+                                <script src="/static/assets/js/fileUploadModelBox.js"></script>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>-->
+                                <button type="button" class="btn btn-primary">Save changes</button>-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- User Content Posts -->
+                <div class="tweets-container "><!-- Content will be set dynamically --></div>
+                <!-- User Content Posts End -->
+
+                <!-- Toast Message -->
+                <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+                    <div id="liveToast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div class="toast-header" style="background-color: black; color: whitesmoke">
+                            <strong class="me-auto">Notification</strong>
+                            <button  type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+                        </div>
+                        <div class="toast-body">
+                            <!-- Content will be set dynamically -->
+                        </div>
+                    </div>
+                </div>
+                <!-- Toast Message End -->
+
+            </div>
+
+            <!-- Comment dialong  -->
+
+            <!--End dialog-->
+
+            <!-- Search -->
+            <div class="right-flex-container flex-item" style="height: 100%";>
+
+                <form class="search-box" id="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" name="searchResult" placeholder="Search Post">
+                </form>
+
+                <!--Trends Topic-->
+                <div class="trends">
+                    <ul id="trends-topic">
+                        <li class="nav-list">Topics</li>
+                    </ul>
+                </div>
+                <!--End Topic-->
+            </div>
+            <!--End Search-->
+
+
+            <!--Loading-->
+            <div id="loadingSpinner" style="display: none;">
+                <div class="spinner"></div>
+            </div>
+
+
+
+        </div>
+    </section>
+
+
+    <!-- Popper.js first, then Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js"></script>
+</main>
+<div th:include="footer"></div>
+
+<script th:src="@{/static/assets/js/invitation.js}"></script>
+</body>
+<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+<!--<script th:src="@{/static/assets/js/postDisplay.js}"></script>-->
+<script th:src="@{/static/assets/js/videoplayer.js}"></script>
+<script type="module" src="../static/assets/js/postDisplay.js" defer></script>
+<script th:src="@{/static/assets/js/successfulmessage.js}"></script>
+<!-- Vendor JS Files -->
+<script th:src="@{/static/assets/vendor/apexcharts/apexcharts.min.js}"></script>
+<script th:src="@{/static/assets/vendor/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/static/assets/vendor/chart.js/chart.umd.js}"></script>
+<script th:src="@{/static/assets/vendor/echarts/echarts.min.js}"></script>
+<script th:src="@{/static/assets/vendor/quill/quill.min.js}"></script>
+<script th:src="@{/static/assets/vendor/simple-datatables/simple-datatables.js}"></script>
+<script th:src="@{static/assets/vendor/tinymce/tinymce.min.js}"></script>
+<script th:src="@{/static/assets/vendor/php-email-form/validate.js}"></script>
+
+<!-- Template Main JS File -->
+<script th:src="@{/static/assets/js/changeDefaultPassword.js}"></script>
+<script th:src="@{/static/assets/js/skill.js}"></script>
+<script th:src="@{/static/assets/js/mode.js}"></script>
+
+
+</html>

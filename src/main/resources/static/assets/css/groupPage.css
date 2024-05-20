@@ -1,0 +1,416 @@
+ul{
+    display: block;
+}
+
+li{
+    list-style: none;
+    display: inline;
+}
+.content{
+    width: 940px;
+    margin: 0px auto;
+}
+.m_a {
+    margin: 0px auto;
+}
+
+.m_b {
+    border-bottom: 1px solid #ddd;
+}
+/* header top css */
+
+.header_top{
+    margin-top: 10px;
+    border-bottom: 1px solid #ddd;
+    height: 55px;
+}
+
+/* header-left css */
+.logo {
+    float: left;
+}
+
+.logo img {
+    height: 45px;
+    border-radius: 50%;
+}
+.header_left form {
+    float: left;
+    padding-left: 26px;
+}
+
+.header_left input.form-control {
+    padding: 10px 39px 10px 50px;
+    font-size: 17px;
+    border-radius: 23px;
+    background: #F0F2F5;
+    border: none;
+    position: relative;
+}
+
+.header_left span {
+    position: absolute;
+    top: 16px;
+    left: 100px;
+    color: #b9acac;
+    font-size: 20px;
+}
+.icon_list li {
+    padding: 3px;
+    font-size: 25px;
+    color: #65676B;
+    padding-right: 66px;
+}
+/* header mid css */
+.header_mid img {
+    height: 31px;
+    border-radius: 50%;
+    float: left;
+    margin-right: 10px;
+    margin-top: 6px;
+}
+
+.header_mid .account {
+    line-height: 2.5;
+    float: left;
+    width: 30%;
+}
+
+.header_mid .account p {
+    font-weight: 600;
+    color: #212529;
+}
+
+/* header right css */
+
+.right_icon li {
+    padding: 10px 10px 10px 10px;
+    background: #D8DADF;
+    border-radius: 50%;
+    height: 45px;
+    width: 45px;
+    text-align: center;
+    font-size: 20px;
+    line-height: 0.5;
+    margin-left: 9px;
+}
+
+.account {
+    margin-left: 50px;
+}
+
+.right_icon {
+    margin-left: -50px;
+}
+/* banner css */
+
+.banner{
+    width: 940px;
+    margin: 0px auto;
+
+}
+
+.banner_img img{
+    width: 940px;
+    height: 150px;
+}
+.banner_img p {
+    color: #fff;
+    background: #455462;
+    padding: 10px;
+    font-weight: 600;
+    width: 940px;
+    border-radius: 0px 0px 10px 10px;
+}
+.banner_img a{
+    color: #fff;
+}
+
+/* banner mid css */
+
+.banner_mid{
+    border-bottom: 1px solid #ddd;
+}
+
+.banner_mid_left h2 {
+    font-weight: 700;
+}
+
+.banner_mid_left p {
+    margin-left: 5px;
+    font-size: 16px;
+    color: #888282;
+}
+.members ul {
+    width: 346px;
+    float: left;
+}
+.members ul li img {
+    height: 35px;
+    border: 2px solid #fff;
+    border-radius: 50%;
+}
+
+/* banner bottom css */
+
+.banner_bottom_menu {
+    float: left;
+    line-height: 2.5;
+}
+
+.banner_bottom_menu ul li {
+    padding: 10px;
+    font-size: 16px;
+    font-weight: 700;
+    color: #65676b;
+}
+
+button.banner_bottom_btn {
+    float: right;
+    border: none;
+    padding: 0px 18px 10px 18px;
+    font-weight: 700;
+    margin-top: 10px;
+    border-radius: 5px;
+}
+
+/* newsfeed area css */
+
+.newsfeed_area{
+    background: #e4e6eb;
+}
+.card {
+    border-radius: 10px;
+}
+.card_head input {
+    padding: 7px 16px 7px 50px;
+    font-size: 17px;
+    border-radius: 23px;
+    background: #F0F2F5;
+    border: none;
+}
+.card_head form {
+    float: right;
+    width: 88%;
+}
+
+.card_item span {
+    float: left;
+    margin-right: 10px;
+    font-size: 24px;
+}
+.card_item i.fa.fa-file-image-o {
+    color: #8B5BEA;
+}
+
+.card_item i.fa.fa-user {
+    color: #41B35D;
+}
+
+.card_item i.fa.fa-smile-o {
+    color: #1771E6;
+}
+
+.card_item p {
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 2.5;
+}
+
+/* card 1 css */
+.card.card_1 p {
+    font-weight: 600;
+    font-size: 20px;
+    float: left;
+    width: 60%;
+}
+
+.card.card_1 span {
+    float: right;
+    width: 40%;
+    text-align: right;
+}
+.card.card_1 .jvai img {
+    height: 45px;
+    border-radius: 50%;
+    float: left;
+}
+
+.col-lg-9.jvai p {
+    font-size: 13px;
+    padding-left: 16px;
+    position: relative;
+}
+
+.jvai i.fa.fa-shield {
+    float: left;
+    position: absolute;
+    top: 23px;
+    left: 5px;
+}
+
+.jvai i.fa.fa-globe {
+    position: absolute;
+    top: 24px;
+    right: 35px;
+}
+.j_content p {
+    font-size: 15px!important;
+    display: inherit;
+}
+.j p {
+    font-size: 17px !important;
+    position: relative;
+    left: 21px;
+    top: 10px;
+    font-weight: 400 !important;
+}
+
+.j i.fa.fa-pencil-square {
+    position: absolute;
+    left: 19px;
+    top: 558px;
+
+}
+.col-lg-6.j_com_count p {
+    font-size: 15px;
+    float: right;
+}
+
+
+.j_like.col-lg-6 {
+    float: left;
+    display: inherit;
+}
+
+
+.j_like i.fa.fa-thumbs-up {
+    color: #87C9F9;
+    border: 1px solid blue;
+    border-radius: 50%;
+    height: 20px;
+    width: 20px;
+    text-align: center;
+}
+.j_like i.fa.fa-gratipay {
+    color: red;
+    border: 1px solid red;
+    border-radius: 50%;
+    height: 20px;
+    width: 20px;
+    text-align: center;
+}
+.j_like i.fa.fa-frown-o {
+    color: orange;
+    border: 1px solid orange;
+    border-radius: 50%;
+    height: 20px;
+    width: 20px;
+    text-align: center;
+}
+.col-lg-6.j_like p {
+    font-size: 16px;
+}
+
+.j_like ul {
+    display: inherit;
+}
+
+.j_like li {
+    padding-right: 6px;
+}
+.col-lg-6.j_com_count {
+    width: 100%;
+    display: inline-block;
+    margin-top: -41px;
+}
+.love span {
+    float: left !important;
+    width: 25% !important;
+    padding-right: 5px !important;
+    color: #b7b1b1;
+    font-size: 20px;
+
+}
+
+.love p {
+    float: right;
+    width: 76%;
+    font-weight: normal !important;
+    font-size: 20px !important;
+    color: #676161;}
+
+.love {
+    display: inline-block;
+    width: 100%;
+    margin-top: 8px;
+}
+.comments img {
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
+    float: left;
+}
+
+
+.comments p {
+    background: #F0F2F5;
+    font-size: 15px !important;
+    font-weight: normal;
+    border-radius: 14px;
+    text-align: left;
+    padding-left: 17px;
+    margin-left: 5px;
+}
+.comments ul {
+    margin-top: 19px;
+    position: absolute;
+    left: 34px;
+}
+.comments ul li {
+    font-size: 14px;
+}
+
+
+/* newsfeed_area_right style */
+
+.newsfeed_area_right .card{
+    border-radius: 10px;
+}
+
+.card_content .icon {
+    float: left;
+    width: 10%;
+}
+
+.content_right {
+    float: right;
+    width: 90%;
+}
+.card_content span {
+    font-size: 20px;
+}
+.right_menu li {
+    background: #ddd;
+    padding: 5px;
+    margin: 4px;
+    border-radius: 19px;
+}
+
+.right_menu ul {
+    margin-left: -29px;
+}
+
+.card_content_recent span {
+    font-size: 39px;
+    float: left;
+    width: 20%;
+}
+
+.card_content_recent .content_right {
+    float: revert;
+}
+
+.card_content_recent {
+    margin-top: 10px;
+}
