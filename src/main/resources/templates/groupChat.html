@@ -101,21 +101,31 @@
 <main id="main" class="main">
 
     <div class="container-fluid h-100">
-        <div class="row justify-content-center h-100">
+        <div class="row justify-content-center h-100" style="overflow-x: hidden">
 
             <div class="col-md-8 col-xl-6 chat">
-                <div class="card" style="width: 500px;margin-left: -80px; height: 500px">
+                <div class="card" style="width: 500px; height: 500px;">
                     <div class="card-header msg_head">
                         <div class="d-flex bd-highlight">
 
                             <div class="users-list-container">
-                                <h2 style="color: #000000c2">Chats</h2>
+<!--                                <h2 style="color: #000000c2">Chats</h2>-->
                             </div>
                             <div class="user_info">
 
-                                <button class="dropdown-btn" >
-                                    Select Group: <i class="fa fa-caret-down"></i>
-                                </button>
+<!--                                <button class="dropdown-btn" >-->
+<!--                                    Select Group: <i class="fa fa-caret-down"></i>-->
+<!--                                </button>-->
+<!--                                <div>-->
+<!--                                    <h2>Joker</h2>-->
+<!--                                    <span>1 participant</span>-->
+<!--                                </div>-->
+
+                                <div th:each="group : ${groups}">
+                                    <h3 th:text="${group.name}">Group Name</h3>
+                                   <span th:text="${group.memberCount} +Members"></span>
+                                </div>
+
                                 <div class="action_menu" style="right: auto;">
                                     <input type="hidden" th:value="${user.id}" id="id">
                                     <input type="hidden" th:value="${user.name}" id="name">
@@ -134,8 +144,7 @@
 
 
 
-
-                        <span class="dropdown-btn" style="margin-left: 450px; margin-top: -42px">
+                        <span class="dropdown-btn" style="margin-left: 440px; margin-top: -42px">
                                  <i class="fas fa-ellipsis-v"></i>
                             </span>
                         <div class="action_menu">
@@ -148,23 +157,24 @@
 
                     </div>
 
+<!--                    <div class="card-body msg_card_body" id="cardBody">-->
+<!--                        <section>-->
+<!--                            <img src="https://www.redditstatic.com/chat-web/images/welcome-6AUNLRD4.png" alt="Welcome to chat!" style="width: 200px; margin: 100px;margin-top: 1px">-->
+<!--                            <h4 style="margin: 100px; margin-top: -90px">Welcome to chat!</h4>-->
+<!--                            <p style="text-align: center; margin-top: -90px">Start a direct or group chat with other members.</p>-->
+
+<!--                        </section>-->
+<!--                    </div>-->
                     <div class="card-body msg_card_body" id="cardBody">
-                        <section>
-                            <img src="https://www.redditstatic.com/chat-web/images/welcome-6AUNLRD4.png" alt="Welcome to chat!" style="width: 200px; margin: 100px;margin-top: 1px">
-                            <h4 style="margin: 100px; margin-top: -90px">Welcome to chat!</h4>
-                            <p style="text-align: center; margin-top: -90px">Start a direct or group chat with other members.</p>
-
-                        </section>
                     </div>
-
                     <div class="card-footer">
 
                         <form id="messageForm" name="messageForm" class="hidden">
                             <div class="message-input">
 
                             <textarea autocomplete="off" type="text" id="message" placeholder="Type your message..." style="
-    width: -webkit-fill-available; background-color: rgba(0, 0, 0, 0.33)";></textarea>
-                                <ul class="utility-group">
+    width: -webkit-fill-available; background-color: rgba(0, 0, 0, 0.14); border-radius: 10px";></textarea>
+                                <ul class="utility-group" style="margin-left: -30px">
                                     <li class="emoji-selector" id="emojiSelector" >
                                         <div class="input-container">
                                             <input id="emojiSearch" type="text" name=""  placeholder="Search...">
@@ -172,7 +182,7 @@
                                         <ul id="emojiList" class="emoji-list">
                                         </ul>
                                     </li>
-                                    <li id="emojiSelectorIcon"><img src="http://res.cloudinary.com/dwdplsd2c/image/upload/v1714860227/a44f1bbb-835a-45f3-a11b-503149741fdb.webp" alt="" style="width:50px"></li>
+                                    <li id="emojiSelectorIcon"><img src="http://res.cloudinary.com/dwdplsd2c/image/upload/v1714860227/a44f1bbb-835a-45f3-a11b-503149741fdb.webp" alt="" style="width:40px;border-radius: 50px;margin-top: 20px"></li>
                                 </ul>
                                 <span id="arrow" class="input-group-text send_btn"><i class="fas fa-location-arrow"></i></span>
 
@@ -247,8 +257,6 @@
     </div>
 </div>
 
-<div th:include="footer"></div>
-
 <script>
     const dropdowns = document.querySelectorAll(".dropdown-btn");
     dropdowns.forEach(function(dropdown) {
@@ -291,6 +299,7 @@
         });
     });
 </script>
+<div th:include="footer"></div>
 </body>
 <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 <!--<script th:src="@{/static/assets/js/postDisplay.js}"></script>-->

@@ -95,11 +95,10 @@
                                     </ul>
                                 </div>
 
-
-                                <!--                                <button id="inviteButton" class="btn btn-primary">+ invite</button>-->
-
+                                <button type="button" class="btn btn-primary" ><i class="fab fa-facebook-messenger"></i>Message</button>
                                 <button type="button" class="btn btn-primary" value="Invite" id="inviteBtn" onclick="populateCreateGroupFormForInvitation()"><i class="fa-solid fa-user-plus"></i>Invite</button>
                                 <button type="button" class="btn btn-success" value="Join" id="joinBtn" onclick="joinGroup()"><i class="fa-solid fa-user-check"></i>Join</button>
+
                                 <div id="invitationMessage"></div>
                             </div>
                         </div>
@@ -124,21 +123,25 @@
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="createGroupModalLabel">Invite friends</h5>
+                                    <h5 class="modal-title" id="createGroupModalLabel">Invite Members</h5>
                                 </div>
+
                                 <div class="modal-body">
                                     <form id="inviteForm">
                                         <input type="hidden" id="communityId1" name="communityId">
                                         <div class="row mb-4">
                                             <label>Choose Member's List:</label><br>
+
                                             <div class="col-md-4" style="margin-left: 200px">
                                                 <input type="text" class="form-control" id="userSearch" placeholder="Search users.." style="margin-left: 100px">
                                                 <div id="usersList"></div>
                                             </div>
+
                                         </div>
                                         <input type="hidden" id="userIds" name="userIds">
                                     </form>
                                 </div>
+
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal" id="inviteModalCloseBtn">Close</button>
                                     <button type="button" class="btn btn-primary" id="inviteUserBtn">Invite</button>
@@ -175,7 +178,6 @@
                                 <label for="video-upload" class="file-icon">
                                     <i class="fas fa-video"></i>
                                     <input id="video-upload" type="file" name="videos" multiple style="display: none;">
-                                    <!--<button id="video" type="button" style="display: none;" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal"></button>-->
                                 </label>
                                 <i class="far fa-smile"></i>
                                 <i class="far fa-calendar-check"></i>
@@ -234,7 +236,6 @@
 
             </div>
 
-            <!-- Comment dialong  -->
 
             <!--End dialog-->
 
@@ -272,9 +273,17 @@
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js"></script>
 </main>
-<div th:include="footer"></div>
 
+<!--<script>-->
+<!--    const goToChatRoom = (id) => {-->
+<!--        localStorage.setItem('chatRoomIdForGroup', id);-->
+<!--        window.location.href = `/goMal-chatRoom`;-->
+<!--    }-->
+<!--</script>-->
+<div th:include="footer"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
 <script th:src="@{/static/assets/js/invitation.js}"></script>
+
 </body>
 <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 <!--<script th:src="@{/static/assets/js/postDisplay.js}"></script>-->

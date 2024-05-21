@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.GroupDto;
 import com.example.demo.entity.Group;
 import com.example.demo.entity.UserHasGroup;
 import com.example.demo.entity.OTP;
@@ -20,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -149,4 +151,26 @@ public class LoginController {
         model.addAttribute("user",user);
         return "groupchat";
     }
+    @GetMapping("/chart")
+    public String charts(){
+        return "chart";
+    }
+    
+
+    @GetMapping("/groupPage/{id}")
+    public String getGroupPage(@PathVariable("id")Long id, Model model) {
+        GroupDto groups=groupService.getCommunityById((long)id);
+        model.addAttribute("groups",groups);
+        return "groupPage";
+    }
+    @GetMapping("/chatRoom/{id}")
+    public String goToChatRoom(@PathVariable("id")Long id,Model model){
+        Authentication auth=SecurityContextHolder.getContext().getAuthentication();
+        User user=userService.findByStaffId(auth.getName());
+        GroupDto groups=groupService.getCommunityById((long)id);
+        model.addAttribute("groups",groups);
+        model.addAttribute("user",user);
+        return "groupchat";
+    }
 }
+
