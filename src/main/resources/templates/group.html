@@ -87,6 +87,7 @@
         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createCommunityModal">
             Create Group
         </button>
+
         <br><br>
 
         <!-- Card Container -->
@@ -139,24 +140,6 @@
     <div class="container" >
         <div  id="communityList"></div>
 
-<!--        <table class="table table-striped" id="groupTable">-->
-<!--            <thead>-->
-<!--            <tr>-->
-<!--                <th scope="col">#</th>-->
-<!--                <th scope="col">Group ID</th>-->
-<!--                <th scope="col">Group's Photo</th>-->
-<!--                <th scope="col">Group's Name</th>-->
-<!--                <th scope="col">Description</th>-->
-<!--                <th scope="col">Rule</th>-->
-<!--                <th scope="col">Admin</th>-->
-<!--                <th scope="col">Members</th>-->
-<!--                <th scope="col">Add</th>-->
-<!--                <th scope="col">Delete</th>-->
-<!--            </tr>-->
-<!--            </thead>-->
-<!--            <tbody id="communityTableBody">-->
-<!--            </tbody>-->
-<!--        </table>-->
     </div>
     <div class="container">
         <div class="modal fade" id="createGroupModal" tabindex="-1" aria-labelledby="createCommunityModalLabel"
@@ -176,14 +159,16 @@
                                 <input type="text" class="form-control" id="name1" name="name">
                             </div>
                             <input type="hidden" id="communityId1" name="id">
-                            <div class="row mb-4">
-                                <label class="col-md-2 col-form-label">Choose Owner's Name</label>
-                                <div class="col-md-4">
-                                    <div id="usersList">
 
-                                    </div>
+                            <div class="row mb-4">
+                                <label class="col-md-2 col-form-label">Choose Owner's Name</label><br>
+                                <div class="col-md-4" style="margin-left: 200px">
+                                    <input type="text" class="form-control" id="userSearch" placeholder="Search users.." style="margin-left: 50px">
+                                    <div id="usersList"></div>
                                 </div>
                             </div>
+
+
                             <div class="form-group">
                                 <label for="description1">Description:</label>
                                 <input type="text" class="form-control" id="description1" name="description">
@@ -214,16 +199,17 @@
              aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
-
+                    <div class="modal-header">
+                        <h5 class="modal-title">Kick Members</h5>
+                    </div>
                     <div class="modal-body">
                         <form id="kickForm">
                             <div class="row mb-4">
-                                <label class="col-md-2 col-form-label">Member</label>
-                                <div class="col-md-4">
-                                    <div id="userList">
-
-                                    </div>
-                                </div>
+                                <label>Choose Member's List:</label>
+                                <div class="col-md-4" style="margin-left: 200px">
+                                <input type="text" class="form-control" id="usersSearch" placeholder="Search users.." style="margin-left: 100px">
+                                <div id="userList"></div>
+                            </div>
                             </div>
                             <input type="hidden" id="communityId" name="id">
                         </form>
@@ -236,6 +222,8 @@
             </div>
         </div>
     </div>
+
+
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
@@ -347,9 +335,13 @@
                 <li>${'Rule : '+community.rule}</li>
                 <li>${'Admin : '+community.ownerUserName}</li>
                 <li>${'Members : '+ownerNames.join(', ')}</li>
+
+                 <button type="button" class="btn btn-primary chat-button" onclick="goToChatRoom(${community.id})"><i class="fa fa-comments"></i></button>
                 <button type="button" class="btn btn-success" data-toggle="modal" data-target="#createGroupModal" onclick="populateCreateGroupForm('${community.id}', '${community.name}', '${community.ownerName}', '${community.description}','${community.rule}', '${community.image}')">Add</button>
                 <button type="button" class="btn btn-danger" onclick="deleteCommunity(${community.id})">Delete</button>
                 <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#kickModal" ${isCurrentUserOwner ? 'disabled' : ''} onclick="populateKickGroupForm(${community.id})">Kick</button>
+
+
             </ul>
         `;
             }
@@ -389,30 +381,44 @@
             return data;
         }
 
-        async function populateCreateGroupForm(id, name, ownerName, description,rule) {
+        document.getElementById('userSearch').addEventListener('input', function() {
+            const searchValue = this.value.toLowerCase();
+            const allUsers = document.querySelectorAll('#usersList div');
+
+            allUsers.forEach(userContainer => {
+                const userNameElement = userContainer.querySelector('.user-list-span');
+                if (userNameElement) {
+                    const userName = userNameElement.textContent.toLowerCase();
+                    if (userName.includes(searchValue)) {
+                        userContainer.style.display = 'block';
+                    } else {
+                        userContainer.style.display = 'none';
+                    }
+                }
+            });
+        });
+
+        async function populateCreateGroupForm(id, name, ownerName, description, rule) {
             document.getElementById('communityId1').value = id;
             document.getElementById('name1').value = name;
             document.getElementById('description1').value = description;
             document.getElementById('rule1').value = rule;
 
-
             const allUsers = await getAllUsers();
             const communityUsers = await getUsersByCommunityId(id);
 
-
-            const usersNotInCommunity = await allUsers.filter(user => !communityUsers.some(communityUser => communityUser.id === user.id));
-
+            const usersNotInCommunity = allUsers.filter(user => !communityUsers.some(communityUser => communityUser.id === user.id));
             const usersList = document.getElementById('usersList');
 
             usersList.innerHTML = '';
 
-
             usersNotInCommunity.forEach(user => {
                 const userDiv = document.createElement('div');
+                userDiv.style.display = 'none'; // Initially hide the user element
                 userDiv.innerHTML = `
-            <input type="checkbox" name="user" id="user1" value="${user.id}"/>
+            <input type="checkbox" name="user" id="user_${user.id}" value="${user.id}"/>
             <label class="form-check-label">
-                <span>${user.name}</span>
+                <span class="user-list-span">${user.name}</span>
             </label>
         `;
                 usersList.appendChild(userDiv);
@@ -420,6 +426,7 @@
 
             $('#createGroupModal').modal('show');
         }
+
 
         document.getElementById('createGroupBtn').addEventListener('click', async (e) => {
             e.preventDefault();
@@ -468,35 +475,45 @@
 
         let currentCommunityID;
 
+        document.getElementById('usersSearch').addEventListener('input', function() {
+            const searchValue = this.value.toLowerCase();
+            const allUsers = document.querySelectorAll('#userList div');
+
+            allUsers.forEach(userContainer => {
+                const userNameElement = userContainer.querySelector('.user-list-span');
+                if (userNameElement) {
+                    const userName = userNameElement.textContent.toLowerCase();
+                    if (userName.includes(searchValue)) {
+                        userContainer.style.display = 'block';
+                    } else {
+                        userContainer.style.display = 'none';
+                    }
+                }
+            });
+        });
+
         async function populateKickGroupForm(id) {
             currentCommunityID = id;
             document.getElementById('communityId').value = id;
             const communityUsers = await getUsersByCommunityId(id);
             const usersList = document.getElementById('userList');
-            const kickGroup=document.getElementById('kickGroup');
+            const kickGroup = document.getElementById('kickGroup');
 
             const community = await getCommunityById(id);
             const currentUser = await getCurrentUser();
 
             usersList.innerHTML = '';
+
             communityUsers.forEach(user => {
-                if (currentUser.role === "ADMIN") {
-                    const userDiv = document.createElement('div');
-                    userDiv.innerHTML = `
-                <input type="checkbox" name="userIds" id="user${user.id}" value="${user.id}" />
-                <label class="form-check-label">
-                    <span>${user.name}</span>
-                </label>
-            `;
-                    usersList.appendChild(userDiv);
-                } else if (user.name !== community.ownerName) {
-                    const userDiv = document.createElement('div');
-                    userDiv.innerHTML = `
-                <input type="checkbox" name="userIds" id="user${user.id}" value="${user.id}" />
-                <label class="form-check-label">
-                    <span>${user.name}</span>
-                </label>
-            `;
+                const userDiv = document.createElement('div');
+                userDiv.style.display = 'none'; // Initially hide the user element
+                userDiv.innerHTML = `
+            <input type="checkbox" name="userIds" id="user${user.id}" value="${user.id}" />
+            <label class="form-check-label">
+                <span class="user-list-span">${user.name}</span>
+            </label>
+        `;
+                if (currentUser.role === "ADMIN" || user.name !== community.ownerName) {
                     usersList.appendChild(userDiv);
                 }
             });
@@ -523,6 +540,12 @@
                 document.getElementById('message').innerHTML = 'Error kicking users from community';
             }
         });
+
+        const goToChatRoom = (id) => {
+            localStorage.setItem('chatRoomIdForGroup', id);
+            window.location.href = `/chatRoom/${id}`;
+        }
+
     </script>
 </main>
 
@@ -547,3 +570,4 @@
 
 
 </html>
+

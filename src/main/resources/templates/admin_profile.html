@@ -320,6 +320,7 @@
                 </div>
             </div>
 
+
             <div class="col-xl-8">
 
                 <div class="card">
@@ -500,6 +501,23 @@
 
             </div>
         </div>
+
+        <div class="col-lg-6 pt-3 pt-lg-0 content">
+            <div th:if="${groupRequestMessage}" th:text="${groupRequestMessage}" th:class="${'alert ' + alertClass}"/>
+            <div th:if="${cantDeleteWithoutAccept}" th:text="${cantDeleteWithoutAccept}" th:class="${'alert ' + alertClass}"/>
+            <div th:if="${accepted}" th:text="${accepted}" th:class="${'alert ' + alertClass}"/>
+            <div th:each="allRequestGroup, no : ${allRequestGroups}" class="col-lg-6 col-md-6">
+                <div class="box featured" data-aos="fade-up" data-aos-delay="100">
+                    <h3 th:text="${'Group Request No.'+ (no.index+1)}"></h3>
+                    <ul>
+                        <li th:text="${'User : '+ allRequestGroup.user.getName()}"></li>
+                        <li th:text="${'Group : '+allRequestGroup.group.getName()}"></li>
+                        <li th:unless="${allRequestGroup.hasConfirmed}"><a th:href="@{/groupRequest/accept(id=${allRequestGroup.id})}">Accept</a></li>
+                        <li th:if="${allRequestGroup.hasConfirmed}"><a style="color: red" th:href="@{/groupRequest/delete(id=${allRequestGroup.id})}">Delete</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
     </section>
 </main>
 
@@ -637,6 +655,7 @@
         console.log(file);
         const url = 'user/save-new-image';
         const formData = new FormData();
+        console.log(file);
         formData.append('file',file);
         fetch(url,{
             method:'POST',

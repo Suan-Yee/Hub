@@ -1,0 +1,103 @@
+.drop-container {
+    width: auto;
+    height: 150px;
+    border: 3px dashed #838181;
+    border-radius: 10px;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.carousel{
+    width: 600px;
+    /* height: 350px; */
+    margin-left: 30px;
+}
+.imageCreate {
+    max-width: 600px;
+    height: 350px;
+    object-fit: cover;
+}
+#carousalWrapper{
+    width: auto;
+}
+.drop-container p {
+    margin: 0;
+    font-size: 16px;
+    color: #666;
+    text-align: center;
+}
+
+.drop-container.drag-over {
+    background-color: #f0f0f0;
+}
+.file-input-container {
+    display: flex;
+    align-items: center;
+}
+
+.file-input-label {
+    display: flex;
+    align-items: center;
+}
+
+.file-input-label input[type="file"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.fa-cloud-arrow-up {
+
+    text-align: center;
+}
+.iconContainer{
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    background-color: rgba(160, 158, 157, 0.366);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 5px;
+}
+#carouselExample{
+    display: 'none';
+}
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    width: 40px;
+    height: 40px;
+    background-color: rgba(160, 158, 157, 0.821);
+    border-radius: 50%;
+}
+.carousel.slide {
+    position: relative;
+}
+
+.objectContainer {
+    margin-top: 10px;
+    display: flex;
+    position: absolute;
+    top: 0;
+    z-index: 1000;
+    justify-content: space-between;
+    width: 100%;
+}
+
+#objectAdd, #objectDelete {
+    background-color: rgba(160, 158, 157, 0.821);
+    padding: 4px 10px;
+    border-radius: 13px;
+    color: white;
+    cursor: pointer;
+}
+
+#objectAdd {
+    margin-left: 4px;
+}
+
+#objectDelete {
+    margin-right: 4px;
+}
