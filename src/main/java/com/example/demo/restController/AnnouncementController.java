@@ -25,7 +25,7 @@ public class AnnouncementController {
         log.info("CreateAnnouncement reached mee mee{}",announcement);
         Announcement createdAnnouncement = announcementService.createAnnouncement(announcement);
         if (createdAnnouncement != null) {
-            return ResponseEntity.ok(HttpStatus.OK);
+            return ResponseEntity.ok(createdAnnouncement);
         } else {
             return ResponseEntity.notFound().build();
         }

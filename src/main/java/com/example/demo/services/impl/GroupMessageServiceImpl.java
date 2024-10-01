@@ -10,6 +10,9 @@ import com.example.demo.services.GroupMessageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,9 +40,27 @@ public class GroupMessageServiceImpl implements GroupMessageService {
     }
 
     @Override
-    public List<GroupMessage> findChatMessagesByGroup(Group group) {
-        return groupMessageRepository.findMessageByGroup(group);
+    public List<GroupMessage> findChatMessagesByGroup(Group group, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("time").descending());
+        return groupMessageRepository.findMessageByGroup(group,pageable);
     }
 
+    @Override
+    public GroupMessage editMessage(Long messageId, String newContent) {
+        GroupMessage groupMessage = groupMessageRepository.findById(messageId).orElse(null);
+        if(groupMessage != null){
+            groupMessage.setContent(newContent);
+            return groupMessageRepository.save(groupMessage);
+        }
+        return null;
+    }
+
+    @Override
+    public void deleteMessage(Long messageId) {
+        GroupMessage groupMessage = groupMessageRepository.findById(messageId).orElse(null);
+        if(groupMessage != null){
+            groupMessageRepository.deleteById(messageId);
+        }
+    }
 
 }

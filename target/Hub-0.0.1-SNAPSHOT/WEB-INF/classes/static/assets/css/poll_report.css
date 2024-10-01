@@ -1,0 +1,117 @@
+*{
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Raleway", sans-serif !important;
+    background: #f0f5ff !important;
+}
+.polls-container {
+    display: flex;
+    flex-direction: column; /* Align polls vertically */
+    align-items: center; /* Center items horizontally */
+}
+.poll {
+    width: 400px;
+    margin: 20px 0; /* Add margin between polls */
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0px 0px 20px 5px rgba(35, 30, 128, 0.05) !important;
+    transform: translate(1%);
+}
+
+.remove-vote {
+    cursor: pointer;
+    width: 100px;
+    height: 30px;
+    padding: 3px;
+    border-radius: 8px;
+    color: #b2bec3;
+    background-color: #2d3436;
+    border: none;
+    transition: 0.2s ease-in-out;
+}
+
+.remove-vote:hover {
+    color: #dfe6e9;
+}
+
+.poll .question {
+    padding: 20px;
+    color: #111;
+    font-size: 18px;
+    border-bottom: 1px solid #eee;
+}
+
+.poll .answers {
+    padding: 20px 20px 10px;
+}
+.poll .answers .option-detail{
+    text-decoration: underline; /* Add underline */
+    cursor: pointer; /* Change cursor to pointer on hover */
+    color: #608bea;
+    font-size: 14px;
+    margin-bottom: 10px;
+
+}
+.poll .answers .option-detail i{
+    padding-right: 3px;
+    font-size: 13px;
+}
+.poll .answers .option-detail:hover{
+    color: #607D8B;
+}
+.poll .answers .answer {
+    position: relative;
+    width: 100%;
+    height: 40px;
+    padding: 0px 10px;
+    line-height: 40px;
+    color: #111;
+    margin-bottom: 0px;
+    border: 1.3px solid #d4d4d4;
+    border-radius: 3px;
+    cursor: default;
+    overflow: hidden;
+}
+
+.poll .answers .answer span.percentage-value {
+    position: absolute;
+    top: 50%;
+    right: 0px;
+    width: 40px;
+    transform: translateY(-50%) !important;
+    color: #111;
+    font-size: 15px;
+}
+
+.poll .answers .answer span.percentage-bar{
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 0%;
+    height: 100%;
+    background:#ccd8f1;
+    z-index: -1;
+    transition: width 600ms linear;
+}
+
+.pollInfo-container{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    margin-top: 6px;
+}
+.expiration-date{
+    font-size: 0.9rem;
+    padding: 3px 3px 2px 2px;
+    color: #800000;
+}
+.totalVote{
+    font-size: 0.9rem;
+    padding: 3px 3px 2px 2px;
+    margin-right: 3px;
+    color: #800000;
+}

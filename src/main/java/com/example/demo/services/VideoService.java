@@ -8,4 +8,8 @@ public interface VideoService {
     Video createVideo(String videoURL, Content content);
 
     Video findByContentId(Long id);
+
+    void deleteVideo(Long id);
+
+    void deleteVideoByUrl(String imageUrl,Long contentId);
 }

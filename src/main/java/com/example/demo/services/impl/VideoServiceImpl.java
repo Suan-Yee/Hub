@@ -6,6 +6,7 @@ import com.example.demo.repository.VideoRepository;
 import com.example.demo.services.VideoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -24,5 +25,16 @@ public class VideoServiceImpl implements VideoService {
     @Override
     public Video findByContentId(Long id) {
         return videoRepository.findByContent_Id(id);
+    }
+
+    @Override
+    public void deleteVideo(Long id) {
+        videoRepository.deleteById(id);
+    }
+
+    @Override
+    @Transactional
+    public void deleteVideoByUrl(String videoUrl, Long contentId) {
+        videoRepository.deleteByContentId(videoUrl,contentId);
     }
 }

@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page Title</title>
+    <link rel="stylesheet" th:href="@{/static/assets/css/poll.css}">
+</head>
+<body>
+
+<div class="polls-container">
+    <!-- Polls will be dynamically added here -->
+</div>
+
+<!-- Add your JavaScript code here -->
+
+<!--<script>-->
+<!--    let pollsData;-->
+<!--    const getPolls = async () => {-->
+<!--        const response = await fetch("/get-all-poll");-->
+<!--        const data = await response.json();-->
+<!--        pollsData = data;-->
+<!--        console.log(pollsData);-->
+<!--        data.forEach(pollOption => {-->
+<!--            const poll = {-->
+<!--                id: pollOption.id,-->
+<!--                question: pollOption.question,-->
+<!--                answers: pollOption.answers,-->
+<!--                pollCount: pollOption.pollCount,-->
+<!--                answersWeight: pollOption.answersWeight,-->
+<!--                expiredDate : pollOption.expiredDate,-->
+<!--                selectedAnswer: -1-->
+<!--            };-->
+<!--            const pollHTML = createPollHTML(poll);-->
+<!--            appendPollToContainer(pollHTML);-->
+<!--            checkAnswerUserVoted(poll);-->
+<!--        });-->
+<!--    };-->
+
+<!--    const createPollHTML = (poll) => {-->
+
+<!--        let answersHTML = "";-->
+<!--        for (const [answerId, answer] of Object.entries(poll.answers)) {-->
+<!--            answersHTML += `-->
+<!--             <div class="answer" onclick="markAnswerAfterClick('${answerId}','${poll.id}')">-->
+<!--                ${answer}-->
+<!--                <span class="percentage-bar"></span>-->
+<!--                <span class="percentage-value"></span>-->
+<!--            </div>`;-->
+<!--        }-->
+<!--        return `-->
+<!--        <div class="poll" data-id="${poll.id}">-->
+<!--            <div class="question">${poll.question}-->
+<!--               <div class="pollInfo-container">-->
+<!--               <div class="totalVote">${poll.pollCount}votes</div>-->
+<!--             <div class="expiration-date">${poll.expiredDate}</div>-->
+<!--</div>-->
+<!--            </div>-->
+<!--            <div class="answers">${answersHTML}</div>-->
+<!--        </div>`;-->
+<!--    };-->
+
+
+<!--    const appendPollToContainer = (pollHTML) => {-->
+<!--        const pollsContainer = document.querySelector('.polls-container');-->
+<!--        pollsContainer.innerHTML += pollHTML;-->
+<!--    };-->
+
+<!--    const checkAnswerUserVoted = async (poll) => {-->
+<!--        const response = await fetch('/check-answer-user-voted?pollId=' + poll.id);-->
+<!--        const data = await response.json();-->
+
+<!--        if ("optionIdUserVoted" in data) {-->
+<!--            const userVotedOptionId = data.optionIdUserVoted;-->
+
+<!--            if (userVotedOptionId !== null) {-->
+<!--                const selectedAnswerIndex = Object.keys(poll.answers).findIndex(key => parseInt(key) === userVotedOptionId);-->
+<!--                if (selectedAnswerIndex !== -1) {-->
+<!--                    poll.selectedAnswer = selectedAnswerIndex;-->
+<!--                    markAnswer(poll, userVotedOptionId, selectedAnswerIndex);-->
+<!--                }-->
+<!--            }-->
+<!--        }-->
+<!--    };-->
+
+<!--    const markAnswer = (poll, answerId, i) => {-->
+<!--        poll.selectedAnswer = +i;-->
+
+<!--        const answers = document.querySelectorAll(`.poll[data-id="${poll.id}"] .answers .answer`);-->
+<!--        answers.forEach((answer) => {-->
+<!--            answer.classList.remove("selected");-->
+<!--            answer.classList.add("disabled");-->
+<!--            answer.onclick = null;-->
+<!--        });-->
+
+<!--        const selectedAnswer = document.querySelector(`.poll[data-id="${poll.id}"] .answers .answer:nth-child(${i + 1})`);-->
+<!--        if (selectedAnswer) {-->
+<!--            selectedAnswer.classList.add("selected");-->
+<!--        }-->
+<!--        showRemoveVoteButton(answerId,poll);-->
+<!--        showResults(poll);-->
+<!--    };-->
+
+<!--    const markAnswerAfterClick = async (answerId,pollId) => {-->
+<!--        const poll = pollsData.find(poll => poll.id === parseInt(pollId));-->
+<!--        console.log("Answer Id : " + answerId);-->
+<!--        console.log("Poll Answers: ", poll.answers);-->
+<!--        const selectedAnswerIndex = Object.keys(poll.answers).findIndex(key => key === answerId);-->
+<!--        poll.selectedAnswer = +selectedAnswerIndex;-->
+
+<!--        const answers = document.querySelectorAll(`.poll[data-id="${poll.id}"] .answers .answer`);-->
+<!--        answers.forEach((answer) => {-->
+<!--                answer.classList.add("disabled");-->
+<!--                answer.onclick = null;-->
+<!--        });-->
+
+<!--        const selectedAnswer = document.querySelector(`.poll[data-id="${poll.id}"] .answers .answer:nth-child(${poll.selectedAnswer + 1})`);-->
+<!--        if (selectedAnswer) {-->
+<!--            selectedAnswer.classList.add("selected");-->
+<!--        }-->
+<!--       let result = await saveUserVotedAnswer(poll,answerId);-->
+<!--       if(result === true){-->
+<!--           showResultsAfterClick(poll);-->
+<!--           showRemoveVoteButton(answerId,poll);-->
+<!--       }-->
+<!--    };-->
+
+<!--    const saveUserVotedAnswer = async (poll, answerId) => {-->
+<!--        const response = await fetch('/save-user-voted-answer', {-->
+<!--            method: 'POST',-->
+<!--            headers: {-->
+<!--                'Content-type': 'application/json'-->
+<!--            },-->
+<!--            body: JSON.stringify({ pollId: poll.id, answerId: answerId })-->
+<!--        });-->
+<!--        let result = await response.json();-->
+<!--        return result;-->
+<!--    };-->
+<!--        function showRemoveVoteButton(answerId,poll) {-->
+<!--        const removeVoteButtonHTML = '<button class="remove-vote" onclick="removeVote('+answerId+')">Remove Vote</button>';-->
+<!--        const answersContainer = document.querySelector(`.poll[data-id="${poll.id}"] .answers`);-->
+<!--        answersContainer.insertAdjacentHTML('beforeend', removeVoteButtonHTML);-->
+<!--    }-->
+<!--    const removeVote=(pollId)=>{-->
+<!--        fetch('/remove-user-voted-answer',{-->
+<!--            method:'POST',-->
+<!--            headers:{'Content-type':'application/json'},-->
+<!--            body:JSON.stringify(pollId)-->
+<!--        })-->
+<!--            .then(response=>{-->
+<!--                if(response.ok)-->
+<!--                    return response.json();-->
+<!--                else throw new Error('Network fail');-->
+<!--            })-->
+<!--            .then(data=>{-->
+<!--                console.log("Removing user voted answer :"+data);-->
+<!--                if(data===true)-->
+<!--                    window.location.reload();-->
+<!--            })-->
+<!--    }-->
+<!--    const showResults = (poll) => {-->
+<!--        const totalVotes = poll.pollCount;-->
+<!--        const answers = document.querySelectorAll(`.poll[data-id="${poll.id}"] .answers .answer`);-->
+
+<!--        answers.forEach((answer, i) => {-->
+<!--            let percentage = 0;-->
+<!--            if (totalVotes > 0) {-->
+<!--                percentage = Math.round((poll.answersWeight[i]) * 100 / totalVotes);-->
+<!--            }-->
+<!--            answer.querySelector(".percentage-bar").style.width = percentage + "%";-->
+<!--            answer.querySelector(".percentage-value").innerText = percentage + "%";-->
+<!--        });-->
+<!--    };-->
+
+<!--    const showResultsAfterClick = (poll) => {-->
+<!--        const totalVotes = poll.pollCount;-->
+<!--        const answers = document.querySelectorAll(`.poll[data-id="${poll.id}"] .answers .answer`);-->
+<!--        const totalVoteDiv = document.querySelector(`.poll[data-id="${poll.id}"] .pollInfo-container .totalVote`);-->
+<!--        totalVoteDiv.innerHTML = '';-->
+<!--        totalVoteDiv.innerHTML = totalVotes+1 +"votes";-->
+<!--        answers.forEach((answer, i) => {-->
+<!--            let percentage = 0;-->
+<!--            if (i === poll.selectedAnswer) {-->
+<!--                percentage = Math.floor((poll.answersWeight[i] + 1) * 100 / (totalVotes + 1));-->
+<!--            } else {-->
+<!--                percentage = Math.floor((poll.answersWeight[i]) * 100 / (totalVotes + 1));-->
+<!--            }-->
+<!--            const  percentageBar= answer.querySelector(".percentage-bar");-->
+<!--            if(percentageBar){-->
+<!--                percentageBar.style.background = "#ccd8f1";-->
+<!--                percentageBar.style.width = percentage +"%";-->
+<!--            }-->
+<!--           /* answer.querySelector(".percentage-bar").style.width = percentage + "%";*/-->
+<!--            answer.querySelector(".percentage-value").innerText = percentage + "%";-->
+<!--        });-->
+<!--    };-->
+
+<!--    getPolls();-->
+<!--</script>-->
+
+</body>
+</html>

@@ -1,0 +1,70 @@
+.whatsapp {
+    width: 100%;
+    max-width: 320px;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    display: table;
+    margin: auto;
+    background-image: url("https://raw.githubusercontent.com/Azdaema/AO3-Skin_Messaging/master/WhatsApp/images/WhatsApp_background.png");
+    background-repeat: repeat-y;
+    background-size: 100%;
+}
+
+.whatsapp dd {
+    max-width: 65%;
+    clear: both;
+    position: relative;
+    color: #000000;
+    box-align: start;
+    border-radius: 5px;
+    padding: 5px;
+    margin: 1px 15px;
+    border-bottom: 1px solid rgba(0,0,0, 0.2);
+    z-index: 1;
+}
+.whatsapp dd:last-child {
+    margin-bottom: 10px;
+}
+
+/*
+ * Outgoing texts
+ */
+.whatsapp .out dd {
+    float: right;
+    background: #DCF8C6;
+}
+
+/*
+ * Incoming texts
+ */
+.whatsapp .in dd {
+    float: left;
+    background: #FFFFFF;
+}
+
+/*
+ * Group chat
+ */
+.whatsapp dt {
+    display: none;
+}
+.whatsapp.grouptext .in dt +dd {
+    padding-top: 1.5em;
+    z-index: 0;
+}
+.whatsapp.grouptext .in dt {
+    position: relative;
+    display: table !important;
+    clear: both;
+    font-weight: bold;
+    z-index: 1;
+    transform: translate(20px, 1.5em);
+}
+
+.whatsapp.grouptext .in.p1 dt { color: #e54c51;}
+.whatsapp.grouptext .in.p2 dt { color: #ee7d37;}
+.whatsapp.grouptext .in.p3 dt { color: #dfa64f;}
+.whatsapp.grouptext .in.p4 dt { color: #58b042;}
+.whatsapp.grouptext .in.p5 dt { color: #58bfe8;}
+.whatsapp.grouptext .in.p6 dt { color: #367cdc;}
+.whatsapp.grouptext .in.p7 dt { color: #6f4bf5;}
+.whatsapp.grouptext .in.p8 dt { color: #ec68a1;}

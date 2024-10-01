@@ -1,0 +1,97 @@
+.groupCardcontainer {
+    background-color: #ecf0f1;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+    padding: 2px 10px;
+    max-width: 400px;
+    margin: auto;
+    height: 100px;
+}
+.groupCardcontainer:not(:first-child) {
+    margin-top: 10px;
+}
+.groupImage {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background-size: cover;
+    margin-right: 20px;
+}
+.groupImage img{
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+.box-container {
+    flex-grow: 1;
+}
+.box-container .h1tag{
+    font-size: 16px;
+    margin-bottom: 30px;
+}
+.box-container h1{
+    font-size: 16px;
+}
+.imageContainer {
+    display: flex;
+}
+
+.dot {
+    height: 25px;
+    width: 25px;
+    background-color: #bbb;
+    border-radius: 50%;
+    text-align: center;
+}
+.imageContainer img:not(:first-child) {
+    margin-left: -8px;
+}
+.text{
+    margin-top: 3px;
+    margin-left: 10px;
+}
+.viewGroup {
+    padding: 8px 15px;
+    background-color: #aaeded;
+    color: #373333;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    line-height: normal;
+    font-size: 13px;
+}
+.text-container{
+    display: flex;
+    justify-content: space-between;
+    margin-top: 8px;
+}
+.bottom{
+    display: flex;
+    justify-content: space-between;
+}
+.randomGroupCard{
+    margin-bottom: 10px;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    padding: 2px 10px;
+    max-width: 300px;
+    height: 100px;
+    cursor: pointer;
+    background-color: #fbf9f4;
+}
+.randomGroupImage{
+    border-radius: 50%;
+    background-size: cover;
+    margin-right: 20px;
+}
+.randomGroupImage img{
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
+    border-radius: 10px;
+}
