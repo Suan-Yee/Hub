@@ -1,27 +1,38 @@
-package com.example.demo.presentation.rest;
+package com.example.demo.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
-@EnableWebMvc
-public class AppViewController implements WebMvcConfigurer {
+public class WebMvcConfig implements WebMvcConfigurer {
+
+    @Value("${app.cors.allowed-origins:http://localhost:3000}")
+    private String allowedOrigins;
+
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+                .allowedOrigins(allowedOrigins.split(","))
+                .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
+                .allowedHeaders("*")
+                .allowCredentials(true)
+                .maxAge(3600);
+    }
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/static/**").addResourceLocations("classpath:/static/");
     }
+
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/logout").setViewName("/login");
         registry.addViewController("/index").setViewName("index");
         registry.addViewController("/forgetPassword").setViewName("/forgetPassword");
         registry.addViewController("/access-denied").setViewName("/exception/accessDenied");
-       /* registry.addViewController("/profile").setViewName("/admin_profile");*/
-        registry.addViewController("/userList").setViewName("/userList");
         registry.addViewController("/bookmark").setViewName("/bookmark");
         registry.addViewController("/pollVoting").setViewName("/poll");
         registry.addViewController("/poll_request").setViewName("/poll_result");

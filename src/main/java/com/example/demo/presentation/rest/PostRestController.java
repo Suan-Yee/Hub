@@ -34,6 +34,7 @@ public class PostRestController {
     private final TopicService topicService;
     private final MentionService mentionService;
     private final FileUploadService uploadService;
+    private final GroupService groupService;
 
     @GetMapping
     public ResponseEntity<List<Post>> findAllPosts(){
@@ -45,6 +46,58 @@ public class PostRestController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+    @PostMapping("/create")
+    public ResponseEntity<PostDto> createPost(
+            @RequestParam("text") String text,
+            @RequestParam(name = "files", required = false) List<MultipartFile> files,
+            @RequestParam(name = "selectedGroupId", required = false) Long selectedGroupId,
+            @RequestParam(name = "gifUrl", required = false) List<String> gifUrls,
+            @RequestParam(name = "mentionStaff", required = false) List<String> userList,
+            Principal principal) throws IOException, ExecutionException, InterruptedException {
+        User user = userService.findByStaffId(principal.getName());
+        String newText = topicService.extractTopicWithoutHash(text);
+        Content newContent = contentService.createContent(newText);
+
+        if (files != null && !files.isEmpty()) {
+            List<CompletableFuture<String>> uploadFutures = new ArrayList<>();
+            for (MultipartFile file : files) {
+                if (!file.isEmpty()) {
+                    String ext = getFileExtension(file.getOriginalFilename());
+                    if (isImageFile(ext)) {
+                        uploadFutures.add(handleImageFile(file, newContent));
+                    } else {
+                        uploadFutures.add(handleOtherFile(file, newContent));
+                    }
+                }
+            }
+            CompletableFuture.allOf(uploadFutures.toArray(new CompletableFuture[0])).join();
+        }
+
+        if (gifUrls != null && !gifUrls.isEmpty()) {
+            for (String gifUrl : gifUrls) {
+                imageService.createImage(gifUrl, newContent);
+            }
+        }
+
+        Post newPost = postService.createPost(newContent, text);
+        if (selectedGroupId != null && selectedGroupId != 0L) {
+            groupService.findById(selectedGroupId).ifPresent(g -> postService.saveGroup(newPost, g));
+        }
+        if (userList != null && !userList.isEmpty()) {
+            for (String staffId : userList) {
+                mentionService.saveNewMention(newPost, staffId);
+            }
+        }
+        PostDto dto = postService.findByPostDtoId(newPost.getId());
+        return ResponseEntity.status(HttpStatus.CREATED).body(dto);
+    }
+
+    @GetMapping("/details/{postId}")
+    public ResponseEntity<PostDto> getPostDetails(@PathVariable("postId") Long postId) {
+        PostDto post = postService.findByPostDtoId(postId);
+        return post != null ? ResponseEntity.ok(post) : ResponseEntity.notFound().build();
+    }
+
     @GetMapping("/{postId}")
     public ResponseEntity<?> findPostById(@PathVariable("postId") Long postId){
         PostDto post = postService.findByPostDtoId(postId);
