@@ -1,14 +1,18 @@
 package com.example.demo.dto;
 
-import lombok.*;
+public record UserRequestGroupDto(
+        Long user,
+        Long group
+) {
+    public UserRequestGroupDto() {
+        this(null, null);
+    }
 
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
-public class UserRequestGroupDto {
+    public Long getUser() {
+        return user;
+    }
 
-    private Long user;
-    private Long group;
+    public Long getGroup() {
+        return group;
+    }
 }

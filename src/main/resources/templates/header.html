@@ -30,10 +30,8 @@
 <header id="header" class="header fixed-top d-flex align-items-center">
 
     <div class="container-scroller">
-        <a href="index.html" class="logo d-flex align-items-center">
-            <!--        <img src="/assets/img/logo.png" alt="">-->
-            <a class="navbar-brand brand-logo mr-5" th:href="@{/}"><img
-                    th:src="@{/static/assets/img/download.png}" alt="logo" style="max-width: 100%;height: 50px; margin-bottom: 5px;"/></a>
+        <a th:href="@{/}" class="logo d-flex align-items-center navbar-brand brand-logo mr-5">
+            <img th:src="@{/static/assets/img/download.png}" alt="logo" style="max-width: 100%;height: 50px; margin-bottom: 5px;"/>
         </a>
         <i class="fa-solid fa-bars" style="font-size: 1.5rem;color: black"></i>
     </div><!-- End Logo -->
@@ -388,7 +386,7 @@
 
 </script>
 <script th:src="@{/static/assets/js/excelUpload.js}"></script>
-<script type="module" src="../static/assets/js/fetchNoti.js" defer ></script>
+<script type="module" th:src="@{/static/assets/js/fetchNoti.js}" defer></script>
 <script th:src="@{/static/assets/js/polloptions.js}"></script>
 <script type="module" th:src="@{/static/assets/js/headerPostCreate.js}"></script>
 

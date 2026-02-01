@@ -1,26 +1,31 @@
 package com.example.demo.dto;
 
-import lombok.Getter;
-import lombok.Setter;
-
 import java.util.Date;
 
-@Getter
-@Setter
-public class ChatMessageDto {
+public record ChatMessageDto(
+        String content,
+        Date time,
+        Long recipientId,
+        Long senderId,
+        String chatId
+) {
+    public String getContent() {
+        return content;
+    }
 
-    private String content;
-    private Date time;
-    private Long recipientId;
-    private String chatId;
-    private Long senderId;
+    public Date getTime() {
+        return time;
+    }
 
+    public Long getRecipientId() {
+        return recipientId;
+    }
 
-    public ChatMessageDto(String content, Date time, Long recipientId, Long senderId, String chatId) {
-        this.content = content;
-        this.time = time;
-        this.recipientId = recipientId;
-        this.senderId = senderId;
-        this.chatId=chatId;
+    public Long getSenderId() {
+        return senderId;
+    }
+
+    public String getChatId() {
+        return chatId;
     }
 }

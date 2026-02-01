@@ -2,7 +2,7 @@ package com.example.demo.dtoMapper;
 
 import com.example.demo.dto.GroupPostPopulation;
 import com.example.demo.entity.Group;
-import com.example.demo.repository.GroupRepository;
+import com.example.demo.infrastructure.persistence.repository.GroupRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

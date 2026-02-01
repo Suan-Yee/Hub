@@ -2,7 +2,7 @@ package com.example.demo.config;
 
 import com.example.demo.entity.User;
 import com.example.demo.enumeration.Role;
-import com.example.demo.services.UserService;
+import com.example.demo.application.usecase.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationArguments;

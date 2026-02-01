@@ -1,19 +1,22 @@
 package com.example.demo.dto;
 
-import com.example.demo.entity.User;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
-public class NotificationChatRoomDto {
+public record NotificationChatRoomDto(
+        Long id,
+        String sender,
+        String content
+) {
+    public Long getId() {
+        return id;
+    }
 
-    private Long id;
-    private String sender;
-    private String content;
+    public String getSender() {
+        return sender;
+    }
 
+    public String getContent() {
+        return content;
+    }
 }

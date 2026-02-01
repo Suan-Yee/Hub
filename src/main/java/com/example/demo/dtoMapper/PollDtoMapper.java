@@ -5,7 +5,7 @@ import com.example.demo.dto.UserDto;
 import com.example.demo.entity.Poll;
 import com.example.demo.entity.PollOption;
 import com.example.demo.entity.User;
-import com.example.demo.services.UserService;
+import com.example.demo.application.usecase.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
