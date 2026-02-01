@@ -43,21 +43,22 @@ public class ChatController {
     }
 
     @GetMapping("/messages/{senderId}/{selectedUserId}")
-    public ResponseEntity<List<ChatMessageDto>> findChatMessages(@PathVariable String senderId,
-                                                                 @PathVariable String selectedUserId) {
+    public ResponseEntity<List<ChatMessageDto>> findChatMessages(
+            @PathVariable String senderId,
+            @PathVariable String selectedUserId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size) {
         User user = userService.findById(Long.parseLong(senderId));
-        List<ChatMessage> messages = chatMessageService.findChatMessages(user, Long.parseLong(selectedUserId));
-        List<ChatMessageDto> chatMessageDto = messages.stream().map(message -> new ChatMessageDto(
-                message.getContent(),
-                message.getTime(),
-                message.getRecipientId(),
-                message.getReceiver().getId(),
-                message.getChatId()
-        )).collect(Collectors.toList());
-
-
-        return ResponseEntity
-                .ok(chatMessageDto);
+        List<ChatMessage> messages = chatMessageService.findChatMessages(user, Long.parseLong(selectedUserId), page, size);
+        List<ChatMessageDto> chatMessageDto = messages.stream()
+                .map(message -> new ChatMessageDto(
+                        message.getContent(),
+                        message.getTime(),
+                        message.getRecipientId(),
+                        message.getReceiver().getId(),
+                        message.getChatId()))
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(chatMessageDto);
     }
 
 
@@ -127,6 +128,21 @@ public class ChatController {
             }
         }
         return ResponseEntity.status(HttpStatus.OK).body(userList);
+    }
+
+    @PostMapping("/group-messages/upload")
+    public ResponseEntity<Map<String, String>> uploadGroupMessageFile(
+            @RequestParam("file") MultipartFile file,
+            @RequestParam("type") String type) throws IOException {
+        String url;
+        if ("voice".equals(type)) {
+            url = fileUploadService.uploadVoice(file);
+        } else if ("image".equals(type) || "video".equals(type)) {
+            url = fileUploadService.uploadFile(file);
+        } else {
+            return ResponseEntity.badRequest().body(Map.of("error", "Unsupported type. Use voice, image, or video."));
+        }
+        return ResponseEntity.ok(Map.of("url", url));
     }
 
     @PostMapping("/send-photo-toChatRoom")

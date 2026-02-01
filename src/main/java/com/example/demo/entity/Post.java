@@ -40,10 +40,6 @@ public class Post {
     @JoinColumn(name = "content_id")
     private Content content;
 
-    @JsonIgnore
-    @OneToOne(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
-    private UserMention userMention;
-
     @ManyToOne
     @JsonManagedReference
     @JoinColumn(name = "topic_id")

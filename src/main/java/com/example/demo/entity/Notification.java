@@ -53,11 +53,3 @@ public class Notification {
     private NotificationType type;
 
 }
-
-//    @OneToOne
-//    @JoinColumn(name = "user_mention_id")
-//    private UserMention user_mention;
-//
-//    @OneToOne
-//    @JoinColumn(name = "announcement_id")
-//    private Announcement announcement;

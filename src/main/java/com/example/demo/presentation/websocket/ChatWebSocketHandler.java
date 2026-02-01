@@ -4,16 +4,13 @@ import com.example.demo.dto.ChatMessageDto;
 import com.example.demo.dto.GroupMessageDto;
 import com.example.demo.entity.*;
 import com.example.demo.application.usecase.*;
-import com.example.demo.utils.Base64Multipart;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
@@ -30,7 +27,6 @@ public class ChatWebSocketHandler {
     private final ChatMessageService chatMessageService;
     private final GroupService groupService;
     private final GroupMessageService groupMessageService;
-    private final FileUploadService fileUploadService;
 
     @MessageMapping("/chat")
     public void processMessage(@Payload ChatMessage chatMessage) {
@@ -43,29 +39,17 @@ public class ChatWebSocketHandler {
     }
 
     @MessageMapping("/group-chat")
-    public void groupMessage(@Payload GroupMessageDto groupMessageDto) throws IOException {
+    public void groupMessage(@Payload GroupMessageDto groupMessageDto) {
         User user = userService.findById(groupMessageDto.getSenderId());
         Group group = groupService.findGroupsByRoomId(groupMessageDto.getRoomId());
 
-        if (groupMessageDto.getType() != null && groupMessageDto.getContent() != null) {
-            byte[] decodedBytes = java.util.Base64.getDecoder().decode(groupMessageDto.getContent());
-            MultipartFile multipartFile;
-            String uploadedUrl;
-
-            if (groupMessageDto.getType().equals("voice")) {
-                multipartFile = new Base64Multipart(decodedBytes, "data:audio/wav;base64");
-                uploadedUrl = fileUploadService.uploadVoice(multipartFile);
-            } else if (groupMessageDto.getType().equals("image")) {
-                multipartFile = new Base64Multipart(decodedBytes, "data:image/jpeg;base64");
-                uploadedUrl = fileUploadService.uploadFile(multipartFile);
-            } else if (groupMessageDto.getType().equals("video")) {
-                multipartFile = new Base64Multipart(decodedBytes, "data:video/mp4;base64");
-                uploadedUrl = fileUploadService.uploadFile(multipartFile);
-            } else {
-                throw new IllegalArgumentException("Unsupported message type: " + groupMessageDto.getType());
+        String type = groupMessageDto.getType();
+        String content = groupMessageDto.getContent();
+        if (type != null && content != null && ("voice".equals(type) || "image".equals(type) || "video".equals(type))) {
+            if (!content.startsWith("http://") && !content.startsWith("https://")) {
+                throw new IllegalArgumentException(
+                    "File messages must use REST upload first. POST /group-messages/upload, then send the returned URL via WebSocket.");
             }
-
-            groupMessageDto = groupMessageDto.withContent(uploadedUrl);
         }
 
         GroupMessage groupMessage = new GroupMessage();

@@ -11,6 +11,10 @@ import java.util.Date;
 @NoArgsConstructor
 @Entity
 @Builder
+@Table(name = "chat_message", indexes = {
+        @Index(name = "idx_chat_message_chat_id_time", columnList = "chatId, time"),
+        @Index(name = "idx_chat_message_room_time", columnList = "room_id, time")
+})
 public class ChatMessage {
 
     @Id

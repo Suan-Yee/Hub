@@ -1,9 +1,11 @@
 package com.example.demo.presentation.rest;
 
 import com.example.demo.dto.LikeDto;
+import com.example.demo.dto.MediaDto;
 import com.example.demo.dto.PostDto;
 import com.example.demo.entity.*;
 import com.example.demo.application.usecase.*;
+import com.example.demo.enumeration.MediaType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -29,8 +31,7 @@ public class PostRestController {
     private final PostService postService;
     private final UserService userService;
     private final ContentService contentService;
-    private final ImageService imageService;
-    private final VideoService videoService;
+    private final MediaService mediaService;
     private final TopicService topicService;
     private final MentionService mentionService;
     private final FileUploadService uploadService;
@@ -75,7 +76,7 @@ public class PostRestController {
 
         if (gifUrls != null && !gifUrls.isEmpty()) {
             for (String gifUrl : gifUrls) {
-                imageService.createImage(gifUrl, newContent);
+                mediaService.createMedia(gifUrl, MediaType.IMAGE, newContent);
             }
         }
 
@@ -207,29 +208,14 @@ public class PostRestController {
         }
         if (removeMedia != null && !removeMedia.isEmpty()) {
             for (String mediaUrl : removeMedia) {
-                if (mediaUrl.endsWith(".mp4")) {
-                    videoService.deleteVideoByUrl(mediaUrl, exitContent.getId());
-                } else {
-                    imageService.deleteImageByUrl(mediaUrl, exitContent.getId());
-                }
+                mediaService.deleteByUrl(mediaUrl, exitContent.getId());
             }
         }
 
-        List<Image> images = new ArrayList<>();
-        List<Video> videos = new ArrayList<>();
         if (existingMedia != null && !existingMedia.isEmpty()) {
             for (String mediaUrl : existingMedia) {
-                if (mediaUrl.endsWith(".mp4")) {
-                    Video video = new Video();
-                    video.setName(mediaUrl);
-                    video.setContent(exitContent);
-                    videos.add(video);
-                } else {
-                    Image image = new Image();
-                    image.setName(mediaUrl);
-                    image.setContent(exitContent);
-                    images.add(image);
-                }
+                MediaType type = mediaUrl.endsWith(".mp4") ? MediaType.VIDEO : MediaType.IMAGE;
+                mediaService.createMedia(mediaUrl, type, exitContent);
             }
         }
 
@@ -252,32 +238,19 @@ public class PostRestController {
                 }
             }
 
-            CompletableFuture<Void> allUploads = CompletableFuture.allOf(uploadFutures.toArray(new CompletableFuture[0]));
-            allUploads.join();
+            CompletableFuture.allOf(uploadFutures.toArray(new CompletableFuture[0])).join();
 
-            // Optionally process the uploaded image URLs if needed
             for (CompletableFuture<String> future : uploadFutures) {
-                String mediaUrl = future.get(); // This blocks until the upload completes
-                if (mediaUrl.endsWith(".mp4")) {
-                    Video video = new Video();
-                    video.setName(mediaUrl);
-                    video.setContent(exitContent);
-                    videos.add(video);
-                } else {
-                    Image image = new Image();
-                    image.setName(mediaUrl);
-                    image.setContent(exitContent);
-                    images.add(image);
-                }
+                String mediaUrl = future.get();
+                MediaType type = mediaUrl.endsWith(".mp4") ? MediaType.VIDEO : MediaType.IMAGE;
+                mediaService.createMedia(mediaUrl, type, exitContent);
             }
         }
 
-//        exitContent.setImages(images);
-//        contentService.save(exitContent);
         Post savedPost = postService.findById(id);
         topicService.extractTopicList(savedPost, text);
         PostDto post = postService.findByPostDtoId(id);
-        log.info("New Post After save {}",post.getContent().getImages().stream().map(Image::getName).toList());
+        log.info("New Post After save {}", post.getContent().getMedia().stream().map(MediaDto::getUrl).toList());
         return new ResponseEntity<>(post, HttpStatus.OK);
     }
 
@@ -289,15 +262,7 @@ public class PostRestController {
 
 
     private void deleteImages(Content content) {
-        List<Image> images = imageService.findByContentId(content.getId());
-        if (images != null && !images.isEmpty()) {
-            for (Image image : images) {
-                // Delete image from database
-                imageService.deleteImage(image.getId());
-                // Optionally, delete image file from storage if applicable
-                // uploadService.deleteImageFile(image.getName());
-            }
-        }
+        mediaService.findByContentId(content.getId()).forEach(m -> mediaService.deleteById(m.getId()));
     }
 
     private boolean isImageFile(String fileExtension) {
@@ -320,12 +285,9 @@ public class PostRestController {
     }
 
     private CompletableFuture<String> handleImageFile(MultipartFile file, Content content) throws IOException {
-        byte[] fileBytes = file.getBytes(); // Read file bytes synchronously
-        return uploadService.imageFileUpload(fileBytes)
+        return uploadService.imageFileUpload(file.getBytes())
                 .thenApply(imageURL -> {
-                    Image newImage = imageService.createImage(imageURL, content);
-                    System.out.println(newImage);
-                    System.out.println("Handling an image file: " + file.getOriginalFilename());
+                    mediaService.createMedia(imageURL, MediaType.IMAGE, content);
                     return imageURL;
                 })
                 .exceptionally(ex -> {
@@ -335,10 +297,9 @@ public class PostRestController {
                 });
     }
     private CompletableFuture<String> handleOtherFile(MultipartFile file, Content content) throws IOException {
-        byte[] fileBytes = file.getBytes();
-        return uploadService.videoFileUpload(fileBytes)
+        return uploadService.videoFileUpload(file.getBytes())
                 .thenApply(videoUrl -> {
-                    Video newVideo = videoService.createVideo(videoUrl, content);
+                    mediaService.createMedia(videoUrl, MediaType.VIDEO, content);
                     return videoUrl;
                 })
                 .exceptionally(ex -> {

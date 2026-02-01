@@ -15,5 +15,7 @@ public interface ChatMessageService {
 //    public List<ChatMessage> findChatMessagesByRoomId(Long id);
 
     List<ChatMessage> findChatMessages(User senderId, Long recipientId);
+
+    List<ChatMessage> findChatMessages(User senderId, Long recipientId, int page, int size);
     public ChatMessage saveWithAttachment(Long id, MultipartFile file, String sender, String date) throws IOException;
 }

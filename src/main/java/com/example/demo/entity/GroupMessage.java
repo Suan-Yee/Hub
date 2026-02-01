@@ -14,7 +14,9 @@ import java.util.Date;
 @NoArgsConstructor
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-@Table(name = "group_message")
+@Table(name = "group_message", indexes = {
+        @Index(name = "idx_group_message_group_time", columnList = "group_id, time")
+})
 public class GroupMessage {
 
     @Id
@@ -35,7 +37,7 @@ public class GroupMessage {
 
     @ManyToOne
     @JoinColumn(name = "group_id")
-    private Group group;;
+    private Group group;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

@@ -3,7 +3,6 @@ package com.example.demo.application.usecase.impl;
 import com.example.demo.entity.Content;
 import com.example.demo.infrastructure.persistence.repository.ContentRepository;
 import com.example.demo.application.usecase.ContentService;
-import com.example.demo.application.usecase.VideoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
