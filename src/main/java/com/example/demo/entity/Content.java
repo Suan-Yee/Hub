@@ -2,7 +2,6 @@ package com.example.demo.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,8 +9,6 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import java.util.List;
-
-import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_DEFAULT;
 
 @Data
 @NoArgsConstructor
@@ -33,17 +30,6 @@ public class Content {
     @OneToOne(mappedBy = "content", cascade = CascadeType.ALL, orphanRemoval = true)
     private Post post;
 
-    @OneToOne
-    @JoinColumn(name = "announcement_id")
-    private Announcement announcement;
-
-    @OneToMany(mappedBy = "content")
-    private List<Video> videos;
-
-    @OneToMany(mappedBy = "content")
-    private List<File> files;
-
-    @OneToMany(mappedBy = "content")
-    private List<Image> images;
-
+    @OneToMany(mappedBy = "content", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Media> media;
 }

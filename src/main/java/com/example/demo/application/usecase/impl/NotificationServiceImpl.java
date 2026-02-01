@@ -10,6 +10,7 @@ import com.example.demo.exception.ApiException;
 import com.example.demo.infrastructure.persistence.repository.NotificationRepository;
 import com.example.demo.application.usecase.NotificationService;
 import com.example.demo.application.usecase.UserService;
+import com.example.demo.config.NotificationSseEmitterStore;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -35,13 +36,13 @@ public class NotificationServiceImpl implements NotificationService {
 
     private final SimpMessagingTemplate messagingTemplate;
     private final NotificationRepository notificationRepository;
-
     private final UserService userService;
+    private final NotificationSseEmitterStore sseEmitterStore;
 
     @Override
     public void notifyUser(String staffId, String message) {
         messagingTemplate.convertAndSendToUser(staffId, "/queue/notifications", message);
-//        messagingTemplate.convertAndSend("/queue/notifications/" + userId.toString(),message);
+        sseEmitterStore.push(staffId, message);
     }
 
     @Override

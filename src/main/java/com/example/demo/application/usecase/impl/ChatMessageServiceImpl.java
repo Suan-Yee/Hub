@@ -8,6 +8,9 @@ import com.example.demo.infrastructure.persistence.repository.ChatMessageReposit
 import com.example.demo.application.usecase.ChatMessageService;
 import com.example.demo.application.usecase.ChatRoomService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -40,6 +43,14 @@ public class ChatMessageServiceImpl implements ChatMessageService {
     public List<ChatMessage> findChatMessages(User senderId, Long recipientId) {
         var chatId = chatRoomService.getChatRoomId(senderId, recipientId, false);
         return chatId.map(chatMessageRepository::findByChatId).orElse(new ArrayList<>());
+    }
+
+    @Override
+    public List<ChatMessage> findChatMessages(User senderId, Long recipientId, int page, int size) {
+        var chatId = chatRoomService.getChatRoomId(senderId, recipientId, false);
+        if (chatId.isEmpty()) return new ArrayList<>();
+        Pageable pageable = PageRequest.of(page, size, Sort.by("time").descending());
+        return chatMessageRepository.findByChatIdOrderByTimeDesc(chatId.get(), pageable);
     }
 
     @Override

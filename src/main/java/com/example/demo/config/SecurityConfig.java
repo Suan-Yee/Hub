@@ -1,49 +1,57 @@
 package com.example.demo.config;
 
 
-import com.example.demo.enumeration.Role;
 import com.example.demo.exception.CustomAccessDeniedHandler;
-import com.example.demo.exception.CustomAuthenticationEntryPoint;
-import com.example.demo.exception.CustomAuthenticationSuccessHandler;
-import com.example.demo.application.usecase.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.MediaType;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 
 @EnableWebSecurity
 @Configuration
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private String [] URL = {"/login","/error/**","/forgetPassword","/sendCode","/verify/**","/static/**","/resetPassword/**","/resetpassword","/verify-OTPCode","/user/upload","/dashboard"};
-    private final UserService userService;
-
+    private static final String[] PUBLIC_URLS = {
+            "/error/**",
+            "/sendCode",
+            "/verify/**",
+            "/resetpassword",
+            "/api/auth/login"
+    };
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-        http.formLogin(form -> form.loginPage("/login")
-                .usernameParameter("staffId")
-                .loginProcessingUrl("/signIn")
-//                .successHandler(new CustomAuthenticationEntryPoint(userService))
-                .defaultSuccessUrl("/", true));
-        http.logout(logout ->
-                logout.invalidateHttpSession(true)
-                        .clearAuthentication(true)
-                        .logoutUrl("/logout")
-                        .logoutSuccessUrl("/"));
         http.csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(URL).permitAll()
-                        /*.requestMatchers("/user/**").hasAnyAuthority(Role.USER.name())*/
+                        .requestMatchers(PUBLIC_URLS).permitAll()
                         .anyRequest().authenticated())
-                .exceptionHandling(access -> access.accessDeniedHandler(new CustomAccessDeniedHandler()));
+                .exceptionHandling(access -> access
+                        .accessDeniedHandler(new CustomAccessDeniedHandler())
+                        .authenticationEntryPoint(this::unauthorizedResponse));
 
         return http.build();
+    }
+
+    @Bean
+    AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
+        return configuration.getAuthenticationManager();
+    }
+
+    private void unauthorizedResponse(jakarta.servlet.http.HttpServletRequest request,
+                                      jakarta.servlet.http.HttpServletResponse response,
+                                      AuthenticationException exception) throws java.io.IOException {
+        response.setStatus(401);
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+        response.getWriter().write("{\"status\":401,\"error\":\"Unauthorized\",\"message\":\"Authentication required\"}");
     }
 }

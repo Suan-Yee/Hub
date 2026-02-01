@@ -15,7 +15,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -119,8 +118,7 @@ public class GroupController {
     }
 
     @GetMapping("/user/{communityId}")
-    public ResponseEntity<?> getAllUsersByCommunity(@PathVariable("communityId")Long communityId,Model model){
-
+    public ResponseEntity<?> getAllUsersByCommunity(@PathVariable("communityId")Long communityId){
         List<UserDto> userList = userHasGroupService.findByGroupId(communityId);
         return ResponseEntity.status(HttpStatus.OK).body(userList);
     }

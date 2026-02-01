@@ -1,1 +1,25 @@
 MIGRATION_PLAN.md
+
+# Maven
+target/
+*.war
+*.ear
+*.class
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Frontend artifacts (if colocated)
+node_modules/
+dist/
+dist-ssr/
+*.local

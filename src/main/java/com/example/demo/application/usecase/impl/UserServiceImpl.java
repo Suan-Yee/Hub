@@ -80,6 +80,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<UserDto> findAllUser() {
         List<User> userList = userRepository.findAll();
         List<UserDto> userDto = userList.stream().map(UserDto::new).collect(Collectors.toList());
@@ -187,6 +188,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public User findAuthenticatedUser(Principal principal) {
         User currentUser = findByStaffId(principal.getName());
         User user = findById(currentUser.getId());
