@@ -1,5 +1,8 @@
 package com.example.demo.presentation.rest;
 
+import com.example.demo.dto.UserDto;
+import com.example.demo.dto.response.UserListResponse;
+import com.example.demo.dto.response.UserProfileResponse;
 import com.example.demo.entity.User;
 import com.example.demo.application.usecase.SkillService;
 import com.example.demo.application.usecase.UserService;
@@ -7,17 +10,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
-import java.util.stream.Collectors;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
 public class UserController {
 
@@ -25,73 +23,45 @@ public class UserController {
     private final SkillService skillService;
 
     @GetMapping("/profile")
-    public String userProfile(ModelMap model, Principal principal){
+    public ResponseEntity<UserProfileResponse> profile(Principal principal) {
         String staffId = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userService.findByStaffId(staffId);
-        Long userId = userService.findByStaffId(principal.getName()).getId();
-        List<String> skill= skillService.findSkillByUserId(userId);
-        model.addAttribute("skill",skill);
-        model.addAttribute("User",user);
-        return "admin_profile";
+        List<String> skills = skillService.findSkillByUserId(user.getId());
+        return ResponseEntity.ok(UserProfileResponse.from(user, skills));
     }
 
     @GetMapping("/list")
-    public String defaultUserList(ModelMap model) {
-        return userList(model, 1);
+    public ResponseEntity<UserListResponse> defaultUserList() {
+        return userList(1);
     }
+
     @GetMapping("/list/{pageNo}")
-    public String userList(ModelMap m,@PathVariable(value = "pageNo") int pageNo) {
+    public ResponseEntity<UserListResponse> userList(@PathVariable(value = "pageNo") int pageNo) {
         int pageSize = 10;
         Page<User> page = userService.findAllUser(pageNo, pageSize);
-        List<User> list =page.getContent();
-        m.addAttribute("currentPage", pageNo);
-        m.addAttribute("totalPages", page.getTotalPages());
-        m.addAttribute("totalItems", page.getTotalElements());
-        m.addAttribute("list",list);
-        int startCount = (pageNo - 1) * pageSize + 1;
-        int endCount = Math.min(pageNo * pageSize, (int) page.getTotalElements());
-
-        m.addAttribute("startCount", startCount);
-        m.addAttribute("endCount", endCount);
-        m.addAttribute("pageUrlPrefix", "/list/");
-        m.addAttribute("pageUrlPostfix", "");
-
-        m.addAttribute("userRoles", list.stream().map(User::getRole).collect(Collectors.toList()));
-        return "user-listing";
+        return ResponseEntity.ok(UserListResponse.from(page, "/list/", ""));
     }
 
     @GetMapping("/userprofile/{id}")
-    public  String userProfileDetails(@PathVariable("id") Long userId, ModelMap m){
-        User user =userService.findById(userId);
-        List<String> skill= skillService.findSkillByUserId(userId);
-        m.addAttribute("skill",skill);
-        m.addAttribute("list",user);
-        return "userprofiledetail";
+    public ResponseEntity<UserProfileResponse> userProfileDetails(@PathVariable("id") Long userId) {
+        User user = userService.findById(userId);
+        if (user == null) return ResponseEntity.notFound().build();
+        List<String> skills = skillService.findSkillByUserId(userId);
+        return ResponseEntity.ok(UserProfileResponse.from(user, skills));
     }
 
     @GetMapping("/searchusers")
-    public String searchUsers(@RequestParam(name = "query") String query,
-                              @RequestParam(name = "pageNo", defaultValue = "1") int pageNo,
-                              ModelMap model) {
-        if ("null".equals(query)) {
-            query = "";
-        }
-        int pageSize = 10; // Change this to your desired page size
-        Page<User> usersPage = userService.searchUsers(query, pageNo, pageSize);
-
-        model.addAttribute("users", usersPage.getContent());
-        model.addAttribute("totalPages", usersPage.getTotalPages());
-        model.addAttribute("totalItems", usersPage.getTotalElements());
-        model.addAttribute("currentPage", pageNo);
-        model.addAttribute("startCount", (pageNo - 1) * pageSize + 1);
-        model.addAttribute("endCount", Math.min(pageNo * pageSize, usersPage.getTotalElements()));
-        model.addAttribute("pageUrlPrefix", "/searchusers?query=" + (query.isEmpty() ? "" : query) + "&pageNo=");
-        model.addAttribute("pageUrlPostfix", "");
-        model.addAttribute("query", query);
-        return "user-listing";
+    public ResponseEntity<UserListResponse> searchUsers(@RequestParam(name = "query", defaultValue = "") String query,
+                                                        @RequestParam(name = "pageNo", defaultValue = "1") int pageNo) {
+        if ("null".equals(query)) query = "";
+        int pageSize = 10;
+        Page<User> page = userService.searchUsers(query, pageNo, pageSize);
+        String prefix = "/searchusers?query=" + (query.isEmpty() ? "" : query) + "&pageNo=";
+        return ResponseEntity.ok(UserListResponse.from(page, prefix, ""));
     }
+
     @GetMapping("/userList")
-    public ResponseEntity<List<User>> userList(){
-        return ResponseEntity.ok(userService.findByAccess());
+    public ResponseEntity<List<UserDto>> userList() {
+        return ResponseEntity.ok(userService.findByAccess().stream().map(UserDto::new).toList());
     }
 }

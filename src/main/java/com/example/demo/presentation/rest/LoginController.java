@@ -1,19 +1,24 @@
 package com.example.demo.presentation.rest;
 
 import com.example.demo.dto.GroupDto;
+import com.example.demo.dto.response.ChatRoomResponse;
+import com.example.demo.form.ResetPasswordForm;
 import com.example.demo.entity.Group;
 import com.example.demo.entity.UserHasGroup;
 import com.example.demo.entity.OTP;
 import com.example.demo.entity.User;
 import com.example.demo.enumeration.Role;
-import com.example.demo.form.ResetPasswordForm;
-import com.example.demo.form.UserRequestGroupCheck;
+import com.example.demo.dto.request.ResetPasswordRequest;
+import com.example.demo.dto.request.SendCodeRequest;
+import com.example.demo.dto.request.VerifyOtpRequest;
+import com.example.demo.dto.response.AuthResponse;
 import com.example.demo.infrastructure.persistence.repository.GroupRepository;
 import com.example.demo.application.usecase.*;
 import com.example.demo.utils.OTPGenerator;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -74,18 +79,32 @@ public class LoginController {
         }
     }
     @Transactional
-    @PostMapping("/sendCode")
-    public String change(@RequestParam("email")String email){
+    @PostMapping(value = "/sendCode", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity<AuthResponse> sendCode(@RequestBody SendCodeRequest request) {
+        try {
+            User result = userService.findByEmail(request.email());
+            String otpCode = OTPGenerator.otpCode();
+            OTP checkOTP = otpService.findByUserId(result.getId());
+            if (checkOTP != null) {
+                otpService.deleteByUserId(result.getId());
+            }
+            otpService.saveCode(otpCode, result);
+            return ResponseEntity.ok(AuthResponse.success(result.getId(), "/verify/" + result.getId()));
+        } catch (Exception e) {
+            log.warn("sendCode failed: {}", e.getMessage());
+            return ResponseEntity.badRequest().body(AuthResponse.error("Invalid email"));
+        }
+    }
+
+    @Transactional
+    @PostMapping(value = "/sendCode", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    public String sendCodeForm(@RequestParam("email") String email) {
         User result = userService.findByEmail(email);
         String otpCode = OTPGenerator.otpCode();
         OTP checkOTP = otpService.findByUserId(result.getId());
-        log.info("Here i am in sendCode {}",checkOTP);
-        if(checkOTP != null){
-            otpService.deleteByUserId(result.getId());
-        }
-        log.info("Here i am in sendCode 2");
-        otpService.saveCode(otpCode,result);
-        /*emailService.sendOtpEmail(result.getName(),email,otpCode);*/
+        if (checkOTP != null) otpService.deleteByUserId(result.getId());
+        otpService.saveCode(otpCode, result);
         return "redirect:/verify/" + result.getId();
     }
     @GetMapping("/verify/{userId}")
@@ -94,20 +113,34 @@ public class LoginController {
         return "/verifyCode";
     }
 
-    @PostMapping("/verify")
-    public String verifyOtp(@RequestParam("hiddenId") Long userId, @RequestParam("otp") String otp,Model model) {
+    @PostMapping(value = "/verify", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity<AuthResponse> verifyOtp(@RequestBody VerifyOtpRequest request) {
+        OTP otpCode = otpService.findByUserId(request.userId());
+        if (otpCode == null) {
+            return ResponseEntity.badRequest().body(AuthResponse.error("User not found"));
+        }
+        String dbCode = otpCode.getOtpCode();
+        if (!request.otp().equals(dbCode)) {
+            return ResponseEntity.badRequest().body(AuthResponse.error("The code is not valid. Try again!"));
+        }
+        if (!otpService.isValidCode(request.userId())) {
+            return ResponseEntity.badRequest().body(AuthResponse.error("The code is expired. Try again!"));
+        }
+        return ResponseEntity.ok(AuthResponse.success(request.userId(), "/resetPassword/" + request.userId()));
+    }
 
+    @PostMapping(value = "/verify", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    public String verifyOtpForm(@RequestParam("hiddenId") Long userId, @RequestParam("otp") String otp, Model model) {
         OTP otpCode = otpService.findByUserId(userId);
         String dbCode = otpCode.getOtpCode();
-
-        if(otp.equals(dbCode)){
-            if(!otpService.isValidCode(userId)){
-                model.addAttribute("error","The code is expire.Try again!");
-                return "/forgetPassword";
-            }
-        }else{
-            model.addAttribute("error","The code is not valid.Try again!");
+        if (!otp.equals(dbCode)) {
+            model.addAttribute("error", "The code is not valid.Try again!");
             return "redirect:/verify/" + userId;
+        }
+        if (!otpService.isValidCode(userId)) {
+            model.addAttribute("error", "The code is expire.Try again!");
+            return "/forgetPassword";
         }
         return "redirect:/resetPassword/" + userId;
     }
@@ -118,55 +151,67 @@ public class LoginController {
         model.addAttribute("userId",userId);
         return "/changePassword";
     }
-    @PostMapping("/resetpassword")
-    public String resetPassword(@ModelAttribute("form")ResetPasswordForm form,
-                                @RequestParam("hiddenId")Long userId,Model model){
-        if(form.getPassword().equals(form.getConfirmPassword())){
-            log.info("User id {}",userId);
+    @Transactional
+    @PostMapping(value = "/resetpassword", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity<AuthResponse> resetPassword(@RequestBody ResetPasswordRequest request) {
+        if (!request.password().equals(request.confirmPassword())) {
+            return ResponseEntity.badRequest().body(AuthResponse.error("Password does not match"));
+        }
+        User user = userService.findById(request.userId());
+        user.setPassword(encoder.encode(request.password()));
+        userService.save(user);
+        return ResponseEntity.ok(AuthResponse.success(null, "/login"));
+    }
+
+    @PostMapping(value = "/resetpassword", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    public String resetPasswordForm(@ModelAttribute("form") ResetPasswordForm form,
+                                   @RequestParam("hiddenId") Long userId, Model model) {
+        if (form.getPassword().equals(form.getConfirmPassword())) {
             User user = userService.findById(userId);
             user.setPassword(encoder.encode(form.getPassword()));
             userService.save(user);
-            log.info("User password {}",user.getPassword());
-            return "redirect:/welcome";
-        }else{
-            model.addAttribute("error","Password does not match");
-            return "/resetPassword";
+            return "redirect:/login";
         }
+        model.addAttribute("error", "Password does not match");
+        return "/resetPassword";
     }
     @GetMapping("/group")
-    public String group(Model model){
-        List<User> users = groupService.getAll();
-        model.addAttribute("users", users);
-        return "group";
+    @ResponseBody
+    public ResponseEntity<List<User>> group() {
+        return ResponseEntity.ok(groupService.getAll());
     }
     @GetMapping("/viewCommunity")
-    public String views(){
-        return "community-view";
+    @ResponseBody
+    public ResponseEntity<Object> viewCommunity() {
+        return ResponseEntity.ok().build();
     }
     @GetMapping("/user_profile")
-    public String profile(){
-        return "user_profile";
+    @ResponseBody
+    public ResponseEntity<Object> userProfile() {
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/group-chat")
-    public String groupChat(Model model){
-        Authentication auth=SecurityContextHolder.getContext().getAuthentication();
-        User user=userService.findByStaffId(auth.getName());
-        model.addAttribute("user",user);
-        return "groupchat";
+    @ResponseBody
+    public ResponseEntity<User> groupChat() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.findByStaffId(auth.getName());
+        return ResponseEntity.ok(user);
     }
     @GetMapping("/chart")
-    public String charts(){
-        return "chart";
+    @ResponseBody
+    public ResponseEntity<Object> chart() {
+        return ResponseEntity.ok().build();
     }
     
 
     @GetMapping("/groupPage/{id}")
-    public String getGroupPage(@PathVariable("id")Long id, Model model,HttpSession session) {
-        GroupDto groups=groupService.getCommunityById(id);
-        model.addAttribute("groups",groups);
+    @ResponseBody
+    public ResponseEntity<GroupDto> getGroupPage(@PathVariable("id") Long id, HttpSession session) {
+        GroupDto groups = groupService.getCommunityById(id);
         session.setAttribute("groupId", id);
-        return "groupPage";
+        return ResponseEntity.ok(groups);
     }
 //    @GetMapping("/checkUserRequest/{groupId}")
 //    public ResponseEntity<UserRequestGroupCheck> checkUserRequest(Principal principal, @PathVariable Long groupId) {
@@ -176,13 +221,11 @@ public class LoginController {
 
     @GetMapping("/chatRoom/{id}")
     @ResponseBody
-    public String goToChatRoom(@PathVariable("id")Long id,Model model){
-        Authentication auth=SecurityContextHolder.getContext().getAuthentication();
-        User user=userService.findByStaffId(auth.getName());
-        GroupDto groups=groupService.getCommunityById((long)id);
-        model.addAttribute("groups",groups);
-        model.addAttribute("user",user);
-        return "groupchat";
+    public ResponseEntity<ChatRoomResponse> chatRoom(@PathVariable("id") Long id) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.findByStaffId(auth.getName());
+        GroupDto groups = groupService.getCommunityById(id);
+        return ResponseEntity.ok(new ChatRoomResponse(groups, user));
     }
 }
 

@@ -3,6 +3,7 @@ com\example\demo\application\event\NotificationReadyEventListener.class
 com\example\demo\infrastructure\persistence\repository\UserRepository.class
 com\example\demo\entity\Rule.class
 com\example\demo\application\usecase\UserRoomService.class
+com\example\demo\presentation\websocket\CommentWebSocketHandler.class
 com\example\demo\entity\PostTopic.class
 com\example\demo\presentation\rest\NotificationController.class
 com\example\demo\exception\CustomAuthenticationSuccessHandler.class
@@ -10,24 +11,28 @@ com\example\demo\form\UserCommentForm$UserCommentFormBuilder.class
 com\example\demo\application\usecase\NotificationService.class
 com\example\demo\presentation\rest\CommentLikeController.class
 com\example\demo\config\WebSocketConfig.class
+com\example\demo\config\WebMvcConfig.class
 com\example\demo\application\usecase\GuideLinesService.class
 com\example\demo\application\usecase\EmailService.class
 com\example\demo\application\usecase\ChatRoomService.class
 com\example\demo\application\usecase\PollOptionService.class
 com\example\demo\form\UserVotedPollOption.class
 com\example\demo\application\usecase\ImageService.class
+com\example\demo\dto\request\ResetPasswordRequest.class
 com\example\demo\form\UserKickForm.class
 com\example\demo\infrastructure\persistence\repository\CommentRepository.class
 com\example\demo\dto\TopicDto.class
 com\example\demo\application\usecase\MentionService.class
 com\example\demo\infrastructure\persistence\repository\ContentRepository.class
 com\example\demo\application\usecase\CommentService.class
+com\example\demo\dto\response\UserProfileResponse.class
 com\example\demo\infrastructure\persistence\repository\AnnouncementRepository.class
 com\example\demo\infrastructure\persistence\repository\UserHasSkillRepository.class
 com\example\demo\application\usecase\GroupMessageService.class
 com\example\demo\dtoMapper\PollOptionReportDtoMapper.class
 com\example\demo\dto\CommentDto.class
 com\example\demo\presentation\rest\TopicController.class
+com\example\demo\dto\request\SendCodeRequest.class
 com\example\demo\utils\EmailUtils.class
 com\example\demo\entity\UserHasGroup$UserHasGroupBuilder.class
 com\example\demo\application\usecase\SkillService.class
@@ -67,6 +72,7 @@ com\example\demo\dto\PostDto.class
 com\example\demo\application\usecase\ExcelUploadService.class
 com\example\demo\entity\CommentLike$CommentLikeBuilder.class
 com\example\demo\presentation\rest\ChatController.class
+com\example\demo\dto\response\GroupRequestResponse.class
 com\example\demo\application\usecase\impl\GuideLinesServiceImpl.class
 com\example\demo\infrastructure\persistence\repository\PostRepository.class
 com\example\demo\entity\UserRequestGroup.class
@@ -94,7 +100,6 @@ com\example\demo\dto\UserRequestGroupDto.class
 com\example\demo\application\usecase\FileService.class
 com\example\demo\entity\UserRoom.class
 com\example\demo\form\UserIdAndOTPViewObject.class
-com\example\demo\presentation\rest\AppViewController.class
 com\example\demo\presentation\rest\PostRestController.class
 com\example\demo\entity\User.class
 com\example\demo\application\usecase\impl\ImageServiceImpl.class
@@ -130,6 +135,7 @@ com\example\demo\dto\UserInvitationDto.class
 com\example\demo\application\usecase\impl\PollOptionServiceImpl.class
 com\example\demo\entity\BookMark$BookMarkBuilder.class
 com\example\demo\dto\PollOptionReportDto$PollOptionReportDtoBuilder.class
+com\example\demo\presentation\websocket\ChatWebSocketHandler.class
 com\example\demo\utils\TimeFormatter.class
 com\example\demo\entity\GuideLines$GuideLinesBuilder.class
 com\example\demo\infrastructure\persistence\repository\GroupRepository.class
@@ -145,6 +151,7 @@ com\example\demo\entity\Topic.class
 com\example\demo\entity\Like$LikeBuilder.class
 com\example\demo\entity\GuideLines.class
 com\example\demo\dto\GroupMessageDto.class
+com\example\demo\dto\response\UserListResponse.class
 com\example\demo\application\usecase\impl\CommentLikeServiceImpl.class
 com\example\demo\infrastructure\persistence\repository\PollRepository.class
 com\example\demo\application\usecase\impl\ExcelUploadServiceImpl.class
@@ -165,6 +172,7 @@ com\example\demo\form\UserCommentForm.class
 com\example\demo\entity\Image$ImageBuilder.class
 com\example\demo\entity\ChatRoomRequest.class
 com\example\demo\application\usecase\ContentService.class
+com\example\demo\dto\response\AuthResponse.class
 com\example\demo\application\usecase\impl\FileUploadServiceImpl.class
 com\example\demo\entity\Image$ImageBuilderImpl.class
 com\example\demo\form\GroupForm.class
@@ -180,11 +188,11 @@ com\example\demo\infrastructure\persistence\repository\NotificationRepository.cl
 com\example\demo\exception\CustomAccessDeniedHandler.class
 com\example\demo\infrastructure\persistence\repository\FileRepository.class
 com\example\demo\infrastructure\persistence\repository\UserInvitationRepository.class
+com\example\demo\dto\response\ChatRoomResponse.class
 com\example\demo\application\usecase\VideoService.class
 com\example\demo\infrastructure\persistence\repository\GroupMessageRepository.class
 com\example\demo\presentation\rest\LikeController.class
 com\example\demo\dto\InvitationDto.class
-com\example\demo\presentation\rest\PostController.class
 com\example\demo\form\ChangePasswordInput.class
 com\example\demo\application\usecase\impl\VideoServiceImpl.class
 com\example\demo\dto\GroupDto$GroupDtoBuilder.class
@@ -204,6 +212,7 @@ com\example\demo\application\usecase\impl\PollServiceImpl.class
 com\example\demo\ServletInitializer.class
 com\example\demo\application\usecase\impl\OnlineStatusServiceImpl$1.class
 com\example\demo\application\usecase\impl\UserServiceImpl.class
+com\example\demo\dto\request\VerifyOtpRequest.class
 com\example\demo\dto\GroupReport.class
 com\example\demo\form\PollCreationForm.class
 com\example\demo\application\event\NotificationReadyEvent.class

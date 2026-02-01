@@ -1,5 +1,6 @@
 C:\SpringBoot\Hub\src\main\java\com\example\demo\application\usecase\VideoService.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\application\usecase\AnnouncementService.java
+C:\SpringBoot\Hub\src\main\java\com\example\demo\dto\request\ResetPasswordRequest.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\entity\Mention.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\entity\Content.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\application\usecase\impl\ChatMessageServiceImpl.java
@@ -12,6 +13,7 @@ C:\SpringBoot\Hub\src\main\java\com\example\demo\application\usecase\BookMarkSer
 C:\SpringBoot\Hub\src\main\java\com\example\demo\application\usecase\impl\OnlineStatusServiceImpl.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\entity\Skill.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\entity\Comment.java
+C:\SpringBoot\Hub\src\main\java\com\example\demo\presentation\websocket\ChatWebSocketHandler.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\dto\CommentDto.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\entity\GuideLines.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\infrastructure\persistence\repository\OtpRepository.java
@@ -20,6 +22,7 @@ C:\SpringBoot\Hub\src\main\java\com\example\demo\form\ChangeDefaultPassword.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\infrastructure\persistence\repository\UserHasSkillRepository.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\presentation\rest\UserApi.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\presentation\rest\PollRestController.java
+C:\SpringBoot\Hub\src\main\java\com\example\demo\dto\response\UserProfileResponse.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\application\usecase\UserRoomService.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\dtoMapper\PostDtoMapper.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\enumeration\NotificationType.java
@@ -70,7 +73,6 @@ C:\SpringBoot\Hub\src\main\java\com\example\demo\infrastructure\persistence\repo
 C:\SpringBoot\Hub\src\main\java\com\example\demo\application\usecase\impl\CommentServiceImpl.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\entity\UserMention.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\entity\Rule.java
-C:\SpringBoot\Hub\src\main\java\com\example\demo\presentation\rest\PostController.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\entity\Announcement.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\infrastructure\persistence\repository\VideoRepository.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\form\GroupForm.java
@@ -79,6 +81,7 @@ C:\SpringBoot\Hub\src\main\java\com\example\demo\presentation\rest\BookMarkContr
 C:\SpringBoot\Hub\src\main\java\com\example\demo\config\CloudinaryConfig.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\infrastructure\persistence\repository\PollOptionRepository.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\presentation\rest\LoginController.java
+C:\SpringBoot\Hub\src\main\java\com\example\demo\presentation\websocket\CommentWebSocketHandler.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\application\usecase\CommentLikeService.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\entity\UserHasSkill.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\presentation\rest\UserRequestGroupController.java
@@ -107,6 +110,7 @@ C:\SpringBoot\Hub\src\main\java\com\example\demo\application\usecase\impl\PollOp
 C:\SpringBoot\Hub\src\main\java\com\example\demo\entity\UserHasGroup.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\entity\ChatRoom.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\application\usecase\impl\ChatRoomServiceImpl.java
+C:\SpringBoot\Hub\src\main\java\com\example\demo\dto\request\VerifyOtpRequest.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\dto\GroupPostPopulation.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\dto\LikeDto.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\application\usecase\CommentService.java
@@ -120,6 +124,7 @@ C:\SpringBoot\Hub\src\main\java\com\example\demo\form\VoteRemoveForm.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\application\usecase\OnlineStatusService.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\entity\Group.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\entity\OTP.java
+C:\SpringBoot\Hub\src\main\java\com\example\demo\dto\response\ChatRoomResponse.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\infrastructure\persistence\repository\GroupRepository.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\presentation\rest\CommentController.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\form\GroupUserDisplay.java
@@ -141,6 +146,7 @@ C:\SpringBoot\Hub\src\main\java\com\example\demo\application\usecase\impl\SkillS
 C:\SpringBoot\Hub\src\main\java\com\example\demo\dtoMapper\GroupPostPopulationMapper.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\dtoMapper\PollDtoMapper.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\infrastructure\persistence\repository\CommentRepository.java
+C:\SpringBoot\Hub\src\main\java\com\example\demo\dto\response\GroupRequestResponse.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\application\usecase\GuideLinesService.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\application\usecase\impl\BookMarkServiceImpl.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\presentation\rest\SkillController.java
@@ -148,7 +154,6 @@ C:\SpringBoot\Hub\src\main\java\com\example\demo\infrastructure\persistence\repo
 C:\SpringBoot\Hub\src\main\java\com\example\demo\entity\BookMark.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\dto\PollDto.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\dto\AnnouncementDto.java
-C:\SpringBoot\Hub\src\main\java\com\example\demo\presentation\rest\AppViewController.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\application\usecase\SkillService.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\exception\CustomAccessDeniedHandler.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\application\usecase\impl\PostTopicServiceImpl.java
@@ -163,6 +168,7 @@ C:\SpringBoot\Hub\src\main\java\com\example\demo\application\usecase\impl\Conten
 C:\SpringBoot\Hub\src\main\java\com\example\demo\entity\UserInvitation.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\application\usecase\impl\GroupServiceImpl.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\application\usecase\impl\FileServiceImpl.java
+C:\SpringBoot\Hub\src\main\java\com\example\demo\dto\request\SendCodeRequest.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\application\usecase\ChatMessageService.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\application\usecase\ContentService.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\entity\Topic.java
@@ -189,10 +195,13 @@ C:\SpringBoot\Hub\src\main\java\com\example\demo\infrastructure\persistence\repo
 C:\SpringBoot\Hub\src\main\java\com\example\demo\application\usecase\PollOptionService.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\exception\CustomAuthenticationEntryPoint.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\infrastructure\persistence\repository\ChatRoomRepository.java
+C:\SpringBoot\Hub\src\main\java\com\example\demo\dto\response\UserListResponse.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\application\usecase\EmailService.java
+C:\SpringBoot\Hub\src\main\java\com\example\demo\dto\response\AuthResponse.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\application\usecase\OtpService.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\entity\ChatRoomRequest.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\entity\Post.java
+C:\SpringBoot\Hub\src\main\java\com\example\demo\config\WebMvcConfig.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\entity\UserRequestGroup.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\application\usecase\impl\GuideLinesServiceImpl.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\entity\Like.java
