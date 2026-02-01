@@ -1,6 +1,6 @@
 package com.example.demo.utils;
 
-import com.example.demo.services.OtpService;
+import com.example.demo.application.usecase.OtpService;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Random;

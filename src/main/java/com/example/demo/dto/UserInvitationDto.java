@@ -1,16 +1,16 @@
 package com.example.demo.dto;
 
-import lombok.*;
-
 import java.util.List;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
-public class UserInvitationDto {
+public record UserInvitationDto(
+        Long communityId,
+        List<Long> userIds
+) {
+    public Long getCommunityId() {
+        return communityId;
+    }
 
-    private Long communityId;
-    private List<Long> userIds;
+    public List<Long> getUserIds() {
+        return userIds;
+    }
 }

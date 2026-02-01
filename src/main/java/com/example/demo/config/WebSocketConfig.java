@@ -1,11 +1,14 @@
 package com.example.demo.config;
 
 
+import com.example.demo.application.usecase.OnlineStatusService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.converter.DefaultContentTypeResolver;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 import org.springframework.messaging.converter.MessageConverter;
+import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
@@ -18,7 +21,10 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 
 @EnableWebSocketMessageBroker
 @Configuration
+@RequiredArgsConstructor
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
+
+    private final OnlineStatusService onlineStatusService;
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
@@ -28,8 +34,14 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
         registry.setApplicationDestinationPrefixes("/app");
-        registry.enableSimpleBroker("/topic","/comment","/queue","groupChat");
+        registry.enableSimpleBroker("/topic", "/queue", "/comment")
+                .setHeartbeatValue(new long[]{10000, 10000});
         registry.setUserDestinationPrefix("/user");
+    }
+
+    @Override
+    public void configureClientInboundChannel(ChannelRegistration registration) {
+        registration.interceptors(onlineStatusService.sessionChannelInterceptor());
     }
     @Override
     public boolean configureMessageConverters(List<MessageConverter> messageConverters) {

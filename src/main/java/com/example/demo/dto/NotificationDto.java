@@ -1,54 +1,99 @@
 package com.example.demo.dto;
 
 import com.example.demo.entity.Notification;
-import com.example.demo.entity.Post;
-import com.example.demo.entity.User;
 import com.example.demo.enumeration.NotificationType;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import static com.example.demo.utils.TimeFormatter.formatTimeAgo;
 
-@Getter @Setter
-@AllArgsConstructor @NoArgsConstructor
-public class NotificationDto {
-
-    private Long id;
-    private String message;
-    private Long recipientId;
-    private Long triggeredById;
-    private Long postId;
-    private boolean status;
-    private String userPhoto;
-    private NotificationType type;
-    private String time;
-    private Long totalNotification;
-    private boolean isRead;
-    private Long commentId;
-    private Long rootCommentId;
-
-    public NotificationDto(Notification notification){
-        this.id = notification.getId();
-        this.message = notification.getMessage();
-        this.recipientId = notification.getRecipient().getId();
-        this.triggeredById = notification.getTriggeredBy().getId();
-        this.postId = notification.getPost().getId();
-        this.status = notification.isStatus();
-        this.type = notification.getType();
-        this.userPhoto = notification.getTriggeredBy().getPhoto();
-        this.time = formatTimeAgo(notification.getTime());
-        this.isRead = notification.isRead();
-        if(notification.getComment() != null){
-            this.commentId = notification.getComment().getId();
-            if(notification.getComment().getRootComment() != null){
-                this.rootCommentId = notification.getComment().getRootComment().getId();
-            }
-        }
+public record NotificationDto(
+        Long id,
+        String message,
+        Long recipientId,
+        Long triggeredById,
+        Long postId,
+        boolean status,
+        String userPhoto,
+        NotificationType type,
+        String time,
+        Long totalNotification,
+        boolean isRead,
+        Long commentId,
+        Long rootCommentId
+) {
+    public NotificationDto(Notification notification) {
+        this(
+                notification.getId(),
+                notification.getMessage(),
+                notification.getRecipient().getId(),
+                notification.getTriggeredBy().getId(),
+                notification.getPost().getId(),
+                notification.isStatus(),
+                notification.getTriggeredBy().getPhoto(),
+                notification.getType(),
+                formatTimeAgo(notification.getTime()),
+                null,
+                notification.isRead(),
+                notification.getComment() != null ? notification.getComment().getId() : null,
+                notification.getComment() != null && notification.getComment().getRootComment() != null
+                        ? notification.getComment().getRootComment().getId()
+                        : null
+        );
     }
-    public NotificationDto setTotalNotification(Long totalNotification) {
-        this.totalNotification = totalNotification;
-        return this; // Return the current object
+
+    public NotificationDto withTotalNotification(Long value) {
+        return new NotificationDto(id, message, recipientId, triggeredById, postId, status, userPhoto, type, time,
+                value, isRead, commentId, rootCommentId);
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public Long getRecipientId() {
+        return recipientId;
+    }
+
+    public Long getTriggeredById() {
+        return triggeredById;
+    }
+
+    public Long getPostId() {
+        return postId;
+    }
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public String getUserPhoto() {
+        return userPhoto;
+    }
+
+    public NotificationType getType() {
+        return type;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public Long getTotalNotification() {
+        return totalNotification;
+    }
+
+    public boolean isRead() {
+        return isRead;
+    }
+
+    public Long getCommentId() {
+        return commentId;
+    }
+
+    public Long getRootCommentId() {
+        return rootCommentId;
     }
 }

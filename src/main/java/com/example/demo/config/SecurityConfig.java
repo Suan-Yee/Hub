@@ -5,7 +5,7 @@ import com.example.demo.enumeration.Role;
 import com.example.demo.exception.CustomAccessDeniedHandler;
 import com.example.demo.exception.CustomAuthenticationEntryPoint;
 import com.example.demo.exception.CustomAuthenticationSuccessHandler;
-import com.example.demo.services.UserService;
+import com.example.demo.application.usecase.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

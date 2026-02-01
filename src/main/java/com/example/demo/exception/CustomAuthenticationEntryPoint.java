@@ -1,7 +1,7 @@
 package com.example.demo.exception;
 
 import com.example.demo.entity.User;
-import com.example.demo.services.UserService;
+import com.example.demo.application.usecase.UserService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

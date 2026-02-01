@@ -1,16 +1,24 @@
 package com.example.demo.dto;
 
-import lombok.*;
+import lombok.Builder;
 
 import java.util.List;
 
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
 @Builder
-public class GroupReport {
-    private List<String> groupList;
-    private List<Integer> postCount;
-    private List<Integer> memberCount;
+public record GroupReport(
+        List<String> groupList,
+        List<Integer> postCount,
+        List<Integer> memberCount
+) {
+    public List<String> getGroupList() {
+        return groupList;
+    }
+
+    public List<Integer> getPostCount() {
+        return postCount;
+    }
+
+    public List<Integer> getMemberCount() {
+        return memberCount;
+    }
 }

@@ -1,33 +1,45 @@
 package com.example.demo.dto;
 
-import com.example.demo.entity.Comment;
 import com.example.demo.entity.Mention;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Getter @Setter
-@AllArgsConstructor @NoArgsConstructor
-public class MentionDto {
+public record MentionDto(
+        Long userId,
+        String userName,
+        Long commentId,
+        Long postId,
+        String userStaffId
+) {
+    public MentionDto(Mention mention) {
+        this(
+                mention.getUser() != null ? mention.getUser().getId() : null,
+                mention.getUser() != null ? mention.getUser().getName() : null,
+                mention.getComment() != null ? mention.getComment().getId() : null,
+                mention.getPost() != null ? mention.getPost().getId() : null,
+                mention.getUser() != null ? mention.getUser().getStaffId() : null
+        );
+    }
 
-    private Long userId;
-    private String userName;
-    private Long commentId;
-    private Long postId;
-    private String userStaffId;
+    public MentionDto withUserStaffId(String value) {
+        return new MentionDto(userId, userName, commentId, postId, value);
+    }
 
-    public MentionDto(Mention mention){
-        if (mention.getUser() != null) {
-            this.userId = mention.getUser().getId();
-            this.userName = mention.getUser().getName();
-            this.userStaffId = mention.getUser().getStaffId();
-        }
-        if (mention.getComment() != null) {
-            this.commentId = mention.getComment().getId();
-        }
-        if (mention.getPost() != null) {
-            this.postId = mention.getPost().getId();
-        }
+    public Long getUserId() {
+        return userId;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public Long getCommentId() {
+        return commentId;
+    }
+
+    public Long getPostId() {
+        return postId;
+    }
+
+    public String getUserStaffId() {
+        return userStaffId;
     }
 }

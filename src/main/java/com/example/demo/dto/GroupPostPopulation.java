@@ -1,14 +1,24 @@
 package com.example.demo.dto;
 
 import lombok.Builder;
-import lombok.Data;
 
 import java.util.List;
 
-@Data
 @Builder
-public class GroupPostPopulation {
-    private Long id;
-    private String groupName;
-    private List<Integer> postPopulation;
+public record GroupPostPopulation(
+        Long id,
+        String groupName,
+        List<Integer> postPopulation
+) {
+    public Long getId() {
+        return id;
+    }
+
+    public String getGroupName() {
+        return groupName;
+    }
+
+    public List<Integer> getPostPopulation() {
+        return postPopulation;
+    }
 }

@@ -1,18 +1,29 @@
 package com.example.demo.dto;
 
-import com.example.demo.entity.UserInvitation;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+public record InvitationDto(
+        String groupName,
+        String requestUserName,
+        Long groupId,
+        Long requestUserStaffId,
+        String userProfile
+) {
+    public String getGroupName() {
+        return groupName;
+    }
 
-@Getter @Setter
-@AllArgsConstructor @NoArgsConstructor
-public class InvitationDto {
+    public String getRequestUserName() {
+        return requestUserName;
+    }
 
-    private String groupName;
-    private String requestUserName;
-    private Long groupId;
-    private Long requestUserStaffId;
-    private String userProfile;
+    public Long getGroupId() {
+        return groupId;
+    }
+
+    public Long getRequestUserStaffId() {
+        return requestUserStaffId;
+    }
+
+    public String getUserProfile() {
+        return userProfile;
+    }
 }

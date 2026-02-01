@@ -1,22 +1,29 @@
 package com.example.demo.dto;
 
-import com.example.demo.entity.Post;
 import com.example.demo.entity.Topic;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Getter @Setter
-@AllArgsConstructor @NoArgsConstructor
-public class TopicDto {
+public record TopicDto(
+        Long id,
+        String name,
+        int totalPost
+) {
+    public TopicDto(Topic topic) {
+        this(topic.getId(), topic.getName(), 0);
+    }
 
-    private Long id;
-    private String name;
-    private int totalPost;
+    public TopicDto withTotalPost(int value) {
+        return new TopicDto(id, name, value);
+    }
 
-    public TopicDto(Topic topic){
-        this.id = topic.getId();
-        this.name = topic.getName();
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getTotalPost() {
+        return totalPost;
     }
 }

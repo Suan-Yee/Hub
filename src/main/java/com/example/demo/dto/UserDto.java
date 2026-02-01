@@ -1,51 +1,86 @@
 package com.example.demo.dto;
 
-import com.example.demo.entity.*;
+import com.example.demo.entity.User;
+import com.example.demo.entity.UserHasGroup;
 import com.example.demo.enumeration.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.*;
 
 import java.util.List;
 
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
-public class UserDto {
-
-    private Long id;
-    private String staffId;
-    private String name;
-    private String dob;
-    private String email;
-    private String department;
-    private String photo;
-    private String biography;
-    private boolean status;
-    private Role role;
-
-    @JsonIgnore
-    private List<UserHasGroup> userHasGroup;
-
-    public UserDto(User user){
-        this.id = user.getId();
-        this.staffId = user.getStaffId();
-        this.name = user.getName();
-        this.email = user.getEmail();
-        this.department = user.getDepartment();
-        this.photo = user.getPhoto();
-        this.role = user.getRole();
-        this.userHasGroup = user.getGroups();
-
+public record UserDto(
+        Long id,
+        String staffId,
+        String name,
+        String dob,
+        String email,
+        String department,
+        String photo,
+        String biography,
+        boolean status,
+        Role role,
+        @JsonIgnore List<UserHasGroup> userHasGroup
+) {
+    public UserDto(User user) {
+        this(
+                user.getId(),
+                user.getStaffId(),
+                user.getName(),
+                user.getDob(),
+                user.getEmail(),
+                user.getDepartment(),
+                user.getPhoto(),
+                user.getBiography(),
+                user.isStatus(),
+                user.getRole(),
+                user.getGroups()
+        );
     }
 
-    public UserDto(String staffId, String name, String department,  Role role, String photo, Long id) {
-        this.staffId = staffId;
-        this.name = name;
-        this.department = department;
-        this.role = role;
-        this.photo=photo;
-        this.id=id;
+    public UserDto(String staffId, String name, String department, Role role, String photo, Long id) {
+        this(id, staffId, name, null, null, department, photo, null, false, role, null);
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getStaffId() {
+        return staffId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDob() {
+        return dob;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public String getPhoto() {
+        return photo;
+    }
+
+    public String getBiography() {
+        return biography;
+    }
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public List<UserHasGroup> getUserHasGroup() {
+        return userHasGroup;
     }
 }

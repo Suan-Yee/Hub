@@ -1,25 +1,35 @@
 package com.example.demo.dto;
 
 import com.example.demo.entity.BookMark;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Getter @Setter
-@AllArgsConstructor @NoArgsConstructor
-public class BookMarkDto {
-
-    private Long id;
-    private Long userId;
-    private Long postId;
-    private boolean status;
-
-    public BookMarkDto(BookMark bookMark){
-        this.id = bookMark.getId();
-        this.userId = bookMark.getUser().getId();
-        this.postId = bookMark.getPost().getId();
-        this.status = bookMark.isStatus();
+public record BookMarkDto(
+        Long id,
+        Long userId,
+        Long postId,
+        boolean status
+) {
+    public BookMarkDto(BookMark bookMark) {
+        this(
+                bookMark.getId(),
+                bookMark.getUser().getId(),
+                bookMark.getPost().getId(),
+                bookMark.isStatus()
+        );
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public Long getPostId() {
+        return postId;
+    }
+
+    public boolean isStatus() {
+        return status;
+    }
 }
