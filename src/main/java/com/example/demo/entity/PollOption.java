@@ -26,8 +26,10 @@ public class PollOption {
     @JoinColumn(name = "poll_id")
     private Poll poll;
 
-    @ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
-    @JoinTable(name = "option_has_user", joinColumns = {@JoinColumn(name = "poll_option_id")}, inverseJoinColumns = {@JoinColumn(name = "user_id")})
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(name = "option_has_user", 
+            joinColumns = {@JoinColumn(name = "poll_option_id")}, 
+            inverseJoinColumns = {@JoinColumn(name = "user_id")})
     private List<User> user;
 
 }

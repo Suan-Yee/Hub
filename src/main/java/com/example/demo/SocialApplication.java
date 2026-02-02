@@ -12,10 +12,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @EnableAsync
 @EnableJpaAuditing
 @EnableScheduling
-public class HubApplication {
+public class SocialApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(HubApplication.class, args);
+		SpringApplication.run(SocialApplication.class, args);
 	}
 
 	@Bean
