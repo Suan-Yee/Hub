@@ -8,16 +8,13 @@ import org.springframework.web.servlet.support.RequestContextUtils;
 
 @ControllerAdvice
 @Slf4j
-public class CommunityHubExceptionHandler {
+public class SocialGodExceptionHandler {
 
-
-    @ExceptionHandler(value = CommunityHubException.class)
-    public String exceptionHandler(CommunityHubException e, HttpServletRequest request) {
+    @ExceptionHandler(value = SocialGodException.class)
+    public String exceptionHandler(SocialGodException e, HttpServletRequest request) {
         RequestContextUtils.getOutputFlashMap(request)
                 .put("message", e.getMessage());
-        log.info("StudentProjectException occurred: {}", e.getMessage());
+        log.info("SocialGodException occurred: {}", e.getMessage());
         return null;
     }
 }
-
-

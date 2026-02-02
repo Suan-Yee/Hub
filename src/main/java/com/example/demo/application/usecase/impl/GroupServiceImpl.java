@@ -8,7 +8,7 @@ import com.example.demo.entity.Group;
 import com.example.demo.entity.User;
 import com.example.demo.entity.UserHasGroup;
 import com.example.demo.entity.UserInvitation;
-import com.example.demo.exception.CommunityHubException;
+import com.example.demo.exception.SocialGodException;
 import com.example.demo.form.GroupForm;
 import com.example.demo.form.GroupUserDisplay;
 import com.example.demo.infrastructure.persistence.repository.*;
@@ -138,11 +138,11 @@ public class GroupServiceImpl implements GroupService {
     @Override
     public List<Group> getAllCommunityWithUserId() {
         var list = new ArrayList<UserHasGroup>();
-        var user = userRepository.findByStaffId(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(()->new CommunityHubException("not found"));
+        var user = userRepository.findByStaffId(SecurityContextHolder.getContext().getAuthentication().getName()).orElseThrow(()->new SocialGodException("not found"));
         var ids =    userHasGroupRepository.findDistinctGroupIdByUserId(user.getId());
         var communities = new ArrayList<Group>();
         for(var id : ids){
-            communities.add(groupRepository.findById(id).orElseThrow(()->new CommunityHubException("not found group")));
+            communities.add(groupRepository.findById(id).orElseThrow(()->new SocialGodException("not found group")));
         }
         return  communities;
     }

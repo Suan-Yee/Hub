@@ -70,7 +70,6 @@ com\example\demo\infrastructure\persistence\repository\UserRequestGroupRepositor
 com\example\demo\application\usecase\EmailService.class
 com\example\demo\application\usecase\impl\MentionServiceImpl.class
 com\example\demo\dto\GroupReport$GroupReportBuilder.class
-com\example\demo\exception\CommunityHubExceptionHandler.class
 com\example\demo\application\usecase\impl\PollServiceImpl.class
 com\example\demo\application\usecase\ChatRoomService.class
 com\example\demo\application\usecase\PollOptionService.class
@@ -198,7 +197,6 @@ com\example\demo\entity\Mention.class
 com\example\demo\entity\Skill.class
 com\example\demo\infrastructure\persistence\repository\ChatMessageRepository.class
 com\example\demo\enumeration\Role.class
-com\example\demo\exception\CommunityHubException.class
 com\example\demo\utils\OTPGenerator.class
 com\example\demo\dto\ChatMessageDto.class
 com\example\demo\config\QueryPerformanceConfig.class

@@ -1,6 +1,6 @@
-# Hub (Byte Bunnies)
+# SocialGod
 
-Community social media application built with Spring Boot. Users can create posts, comment, like, join groups, chat, create polls, manage skills and topics, and receive notifications.
+SocialGod is a community social media application built with Spring Boot. Users can create posts, comment, like, join groups, chat, create polls, manage skills and topics, and receive notifications.
 
 ---
 
@@ -34,10 +34,10 @@ Community social media application built with Spring Boot. Users can create post
 
 ### 1. Database
 
-Create a MySQL database (e.g. `communityhub`):
+Create a MySQL database (e.g. `socialgod`):
 
 ```sql
-CREATE DATABASE communityhub CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE DATABASE socialgod CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 ```
 
 Apply schema and migrations with Flyway (runs on startup if configured).
@@ -47,7 +47,7 @@ Apply schema and migrations with Flyway (runs on startup if configured).
 Copy or edit `src/main/resources/application.properties` and set at least:
 
 ```properties
-spring.datasource.url=jdbc:mysql://localhost:3306/communityhub
+spring.datasource.url=jdbc:mysql://localhost:3306/socialgod
 spring.datasource.username=<your-db-user>
 spring.datasource.password=<your-db-password>
 ```
@@ -71,7 +71,7 @@ Or build and run the WAR:
 
 ```bash
 mvn clean package
-java -jar target/Hub-0.0.1-SNAPSHOT.war
+java -jar target/social-0.0.1-SNAPSHOT.war
 ```
 
 Default context is `/`. Use the configured port (e.g. `8080`) for REST and Web UI.
@@ -82,7 +82,7 @@ Default context is `/`. Use the configured port (e.g. `8080`) for REST and Web U
 
 ```
 src/main/java/com/example/demo/
-├── HubApplication.java              # Entry point, JPA auditing, async, scheduling
+├── SocialApplication.java           # Entry point, JPA auditing, async, scheduling
 ├── application/
 │   ├── event/                       # Application events (e.g. notification ready)
 │   └── usecase/                     # Service interfaces
@@ -289,5 +289,5 @@ mvn test
 
 ## Version
 
-- **Artifact:** `Hub` `0.0.1-SNAPSHOT`
-- **App title:** Byte Bunnies (from `spring.application.title`)
+- **Artifact:** `social` `0.0.1-SNAPSHOT`
+- **App name / title:** SocialGod (from `spring.application.name` and `spring.application.title`)
