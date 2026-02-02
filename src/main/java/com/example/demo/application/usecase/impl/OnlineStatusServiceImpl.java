@@ -104,6 +104,7 @@ public class OnlineStatusServiceImpl implements OnlineStatusService {
     private void updateActivity(String sessionId) {
         if (sessionId != null) {
             lastActivityMap.put(sessionId, System.currentTimeMillis());
+            sessionManager.updateActivity(sessionId);
         }
     }
 
@@ -133,9 +134,7 @@ public class OnlineStatusServiceImpl implements OnlineStatusService {
                         heartbeatHandler.isSessionHealthy(entry.getKey()));
     }
 
-    /**
-     * Get the last activity time for a staff ID.
-     */
+    @Override
     public long getLastActivityTime(String staffId) {
         if (staffId == null) {
             return 0;
@@ -150,9 +149,7 @@ public class OnlineStatusServiceImpl implements OnlineStatusService {
                 .orElse(0L);
     }
 
-    /**
-     * Get all session IDs for a staff ID.
-     */
+    @Override
     public Set<String> getSessionsForStaffId(String staffId) {
         if (staffId == null) {
             return Set.of();
@@ -164,9 +161,7 @@ public class OnlineStatusServiceImpl implements OnlineStatusService {
                 .collect(Collectors.toSet());
     }
 
-    /**
-     * Get online status statistics.
-     */
+    @Override
     public Map<String, Object> getStatistics() {
         int totalSessions = sessionIdToStaffId.size();
         int healthySessions = (int) sessionIdToStaffId.keySet().stream()
@@ -181,9 +176,7 @@ public class OnlineStatusServiceImpl implements OnlineStatusService {
         );
     }
 
-    /**
-     * Clean up stale sessions that are no longer healthy.
-     */
+    @Override
     public int cleanupStaleSessions() {
         Set<String> staleSessionIds = sessionIdToStaffId.keySet().stream()
                 .filter(sessionId -> !heartbeatHandler.isSessionHealthy(sessionId))

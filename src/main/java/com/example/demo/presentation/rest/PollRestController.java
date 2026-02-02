@@ -105,15 +105,10 @@ public class PollRestController {
     public Boolean saveUserVotedAnswer(@RequestBody UserVotedPollOption userVotedPollOption
             ,Principal principal){
         User user = userService.findByStaffId(principal.getName());
-        PollOption pollOption = pollOptionService.findPollOptionById(userVotedPollOption.getAnswerId());
-        if(user!=null & pollOption !=null){
-            if (!pollOptionService.checkUserHaveAlreadyVoted(userVotedPollOption.getAnswerId(),user.getId())) {
-                pollOption.getUser().add(user);
-                pollOptionService.save(pollOption);
-                return true;
-            }
+        if (user == null) {
+            return false;
         }
-        return false;
+        return pollOptionService.addUserVote(userVotedPollOption.getAnswerId(), user);
     }
 
     @PostMapping("/remove-user-voted-answer")

@@ -1,12 +1,14 @@
 package com.example.demo.presentation.rest;
 
-import com.example.demo.application.usecase.impl.OnlineStatusServiceImpl;
+import com.example.demo.application.usecase.OnlineStatusService;
 import com.example.demo.config.WebSocketEventListener;
 import com.example.demo.config.WebSocketHeartbeatHandler;
 import com.example.demo.config.WebSocketSessionManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,13 +19,15 @@ import java.util.Set;
 /**
  * REST controller for WebSocket metrics and monitoring.
  * Provides insights into connection health, session statistics, and online users.
+ * Restricted to ADMIN role.
  */
 @RestController
 @RequestMapping("/api/websocket")
 @RequiredArgsConstructor
+@PreAuthorize("hasRole('ADMIN')")
 public class WebSocketMetricsController {
 
-    private final OnlineStatusServiceImpl onlineStatusService;
+    private final OnlineStatusService onlineStatusService;
     private final WebSocketSessionManager sessionManager;
     private final WebSocketHeartbeatHandler heartbeatHandler;
     private final WebSocketEventListener eventListener;
@@ -113,9 +117,10 @@ public class WebSocketMetricsController {
     }
 
     /**
-     * Trigger cleanup of stale sessions manually.
+     * Trigger cleanup of stale sessions manually (POST; side-effecting).
      */
-    @GetMapping("/cleanup")
+    @PostMapping("/cleanup")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Map<String, Object>> cleanupStaleSessions() {
         int cleanedCount = onlineStatusService.cleanupStaleSessions();
         

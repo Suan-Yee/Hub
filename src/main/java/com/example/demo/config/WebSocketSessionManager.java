@@ -25,6 +25,9 @@ public class WebSocketSessionManager {
     
     // Session ID -> Set of subscribed destinations
     private final Map<String, Set<String>> sessionSubscriptions = new ConcurrentHashMap<>();
+    
+    // Session ID -> (Subscription ID -> Destination) for correct removal
+    private final Map<String, Map<String, String>> subscriptionIdToDestination = new ConcurrentHashMap<>();
 
     /**
      * Register a new WebSocket session.
@@ -34,7 +37,8 @@ public class WebSocketSessionManager {
             return;
         }
 
-        SessionInfo sessionInfo = new SessionInfo(sessionId, username, System.currentTimeMillis());
+        long now = System.currentTimeMillis();
+        SessionInfo sessionInfo = new SessionInfo(sessionId, username, now, now);
         sessions.put(sessionId, sessionInfo);
         
         if (username != null) {
@@ -56,6 +60,7 @@ public class WebSocketSessionManager {
 
         SessionInfo sessionInfo = sessions.remove(sessionId);
         sessionSubscriptions.remove(sessionId);
+        subscriptionIdToDestination.remove(sessionId);
         
         if (sessionInfo != null && sessionInfo.username() != null) {
             Set<String> userSessions = usernameSessions.get(sessionInfo.username());
@@ -72,24 +77,35 @@ public class WebSocketSessionManager {
     }
 
     /**
-     * Add a subscription to a session.
+     * Add a subscription to a session. Stores subscriptionId -> destination for correct removal.
      */
-    public void addSubscription(String sessionId, String destination) {
+    public void addSubscription(String sessionId, String subscriptionId, String destination) {
         if (sessionId != null && destination != null) {
             sessionSubscriptions.computeIfAbsent(sessionId, k -> ConcurrentHashMap.newKeySet())
                     .add(destination);
-            log.debug("Subscription added - Session: {}, Destination: {}", sessionId, destination);
+            if (subscriptionId != null) {
+                subscriptionIdToDestination
+                        .computeIfAbsent(sessionId, k -> new ConcurrentHashMap<>())
+                        .put(subscriptionId, destination);
+            }
+            log.debug("Subscription added - Session: {}, Subscription: {}, Destination: {}", sessionId, subscriptionId, destination);
         }
     }
 
     /**
-     * Remove a subscription from a session.
+     * Remove a subscription from a session by subscriptionId (looks up destination from mapping).
      */
     public void removeSubscription(String sessionId, String subscriptionId) {
         if (sessionId != null && subscriptionId != null) {
-            Set<String> subscriptions = sessionSubscriptions.get(sessionId);
-            if (subscriptions != null) {
-                subscriptions.removeIf(dest -> dest.contains(subscriptionId));
+            Map<String, String> idToDest = subscriptionIdToDestination.get(sessionId);
+            if (idToDest != null) {
+                String destination = idToDest.remove(subscriptionId);
+                if (destination != null) {
+                    Set<String> subscriptions = sessionSubscriptions.get(sessionId);
+                    if (subscriptions != null) {
+                        subscriptions.remove(destination);
+                    }
+                }
                 log.debug("Subscription removed - Session: {}, Subscription: {}", sessionId, subscriptionId);
             }
         }
@@ -159,12 +175,25 @@ public class WebSocketSessionManager {
     }
 
     /**
-     * Get sessions that have been idle for longer than specified duration.
+     * Update last activity time for a session (call on user activity).
+     */
+    public void updateActivity(String sessionId) {
+        if (sessionId != null) {
+            SessionInfo info = sessions.get(sessionId);
+            if (info != null) {
+                long now = System.currentTimeMillis();
+                sessions.put(sessionId, new SessionInfo(info.sessionId(), info.username(), info.connectedAt(), now));
+            }
+        }
+    }
+
+    /**
+     * Get sessions that have been idle for longer than specified duration (by last activity, not connection time).
      */
     public List<SessionInfo> getIdleSessions(long idleThresholdMs) {
         long now = System.currentTimeMillis();
         return sessions.values().stream()
-                .filter(session -> (now - session.connectedAt()) > idleThresholdMs)
+                .filter(session -> (now - session.lastActivityTime()) > idleThresholdMs)
                 .collect(Collectors.toList());
     }
 
@@ -206,7 +235,8 @@ public class WebSocketSessionManager {
     public record SessionInfo(
             String sessionId,
             String username,
-            long connectedAt
+            long connectedAt,
+            long lastActivityTime
     ) {
         public long getSessionDuration() {
             return System.currentTimeMillis() - connectedAt;

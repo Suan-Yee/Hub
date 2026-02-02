@@ -48,9 +48,28 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
+        // CORS: wildcard (*) with allowCredentials=true is invalid per spec; guard against it
+        String[] origins = properties.getCors().getAllowedOrigins();
+        boolean allowCredentials = properties.getCors().isAllowCredentials();
+        if (origins != null && origins.length > 0 && allowCredentials) {
+            boolean hasWildcard = false;
+            for (String o : origins) {
+                if ("*".equals(o)) {
+                    hasWildcard = true;
+                    break;
+                }
+            }
+            if (hasWildcard) {
+                log.warn("Invalid CORS: allowedOrigins contains '*' with allowCredentials=true. Using empty origins and allowCredentials=false.");
+                origins = new String[0];
+                allowCredentials = false;
+            }
+        }
+        String[] allowedOrigins = (origins != null && origins.length > 0) ? origins : new String[0];
+
         // Register WebSocket endpoint with SockJS fallback
         registry.addEndpoint("/ws")
-                .setAllowedOrigins(properties.getCors().getAllowedOrigins())
+                .setAllowedOrigins(allowedOrigins)
                 .withSockJS()
                 .setClientLibraryUrl("https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js")
                 .setStreamBytesLimit(512 * 1024)  // 512KB for SockJS streaming
@@ -59,7 +78,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         
         // Also register native WebSocket endpoint (for better performance when available)
         registry.addEndpoint("/ws")
-                .setAllowedOrigins(properties.getCors().getAllowedOrigins());
+                .setAllowedOrigins(allowedOrigins);
         
         log.info("WebSocket endpoints registered: /ws (with SockJS fallback)");
     }

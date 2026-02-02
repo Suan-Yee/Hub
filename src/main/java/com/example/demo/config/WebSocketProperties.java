@@ -128,14 +128,15 @@ public class WebSocketProperties {
     @Setter
     public static class Cors {
         /**
-         * Allowed origins (default: all).
+         * Allowed origins. Cannot use {"*"} when allowCredentials is true (CORS spec).
+         * Default empty; set explicitly in application.properties (e.g. http://localhost:3000).
          */
-        private String[] allowedOrigins = {"*"};
+        private String[] allowedOrigins = new String[0];
 
         /**
-         * Allow credentials.
+         * Allow credentials. Must be false when allowedOrigins is wildcard.
          */
-        private boolean allowCredentials = true;
+        private boolean allowCredentials = false;
 
         /**
          * Allowed headers.

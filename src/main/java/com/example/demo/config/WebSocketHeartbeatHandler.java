@@ -1,6 +1,7 @@
 package com.example.demo.config;
 
 import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
@@ -157,8 +158,9 @@ public class WebSocketHeartbeatHandler implements ChannelInterceptor {
     }
 
     /**
-     * Shutdown the heartbeat monitor (for cleanup).
+     * Shutdown the heartbeat monitor when the bean is destroyed.
      */
+    @PreDestroy
     public void shutdown() {
         heartbeatScheduler.shutdown();
         try {

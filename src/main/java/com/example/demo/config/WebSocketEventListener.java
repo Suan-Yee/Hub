@@ -89,13 +89,14 @@ public class WebSocketEventListener {
     public void handleWebSocketSubscribeListener(SessionSubscribeEvent event) {
         StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
         String sessionId = headerAccessor.getSessionId();
+        String subscriptionId = headerAccessor.getSubscriptionId();
         String destination = headerAccessor.getDestination();
         String username = getUsername(headerAccessor);
         
-        log.debug("WebSocket subscription - Session: {}, User: {}, Destination: {}", 
-                sessionId, username, destination);
+        log.debug("WebSocket subscription - Session: {}, User: {}, Subscription: {}, Destination: {}", 
+                sessionId, username, subscriptionId, destination);
         
-        sessionManager.addSubscription(sessionId, destination);
+        sessionManager.addSubscription(sessionId, subscriptionId, destination);
     }
 
     @EventListener

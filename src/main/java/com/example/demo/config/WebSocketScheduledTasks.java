@@ -1,6 +1,6 @@
 package com.example.demo.config;
 
-import com.example.demo.application.usecase.impl.OnlineStatusServiceImpl;
+import com.example.demo.application.usecase.OnlineStatusService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit;
 @RequiredArgsConstructor
 public class WebSocketScheduledTasks {
 
-    private final OnlineStatusServiceImpl onlineStatusService;
+    private final OnlineStatusService onlineStatusService;
     private final WebSocketSessionManager sessionManager;
     private final WebSocketProperties properties;
 

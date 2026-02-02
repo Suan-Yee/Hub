@@ -40,6 +40,9 @@ public class DatabaseConfig {
     @Value("${spring.datasource.password}")
     private String dbPassword;
 
+    @Value("${spring.jpa.hibernate.ddl-auto:update}")
+    private String ddlAuto;
+
     /**
      * HikariCP DataSource - High-performance connection pool.
      * HikariCP is the fastest, most reliable connection pool for Java.
@@ -109,9 +112,9 @@ public class DatabaseConfig {
     private Properties hibernateProperties() {
         Properties properties = new Properties();
         
-        // Basic settings
+        // Basic settings (ddl-auto from config: use 'validate' in prod, 'update' in dev)
         properties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
-        properties.setProperty("hibernate.hbm2ddl.auto", "update");
+        properties.setProperty("hibernate.hbm2ddl.auto", ddlAuto);
         properties.setProperty("hibernate.show_sql", "false");
         properties.setProperty("hibernate.format_sql", "false");
         

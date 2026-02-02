@@ -27,6 +27,7 @@ com\example\demo\infrastructure\persistence\repository\GroupRepository.class
 com\example\demo\presentation\websocket\CommentWebSocketHandler.class
 com\example\demo\dtoMapper\TopicDtoMapper.class
 com\example\demo\config\SecurityConfig.class
+com\example\demo\application\usecase\CachedDataService.class
 com\example\demo\infrastructure\persistence\repository\PostTopicRepository.class
 com\example\demo\config\NotificationSseEmitterStore.class
 com\example\demo\dto\PollOptionReportDto.class
