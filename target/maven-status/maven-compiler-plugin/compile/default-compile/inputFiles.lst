@@ -46,7 +46,6 @@ C:\SpringBoot\Hub\src\main\java\com\example\demo\application\usecase\UserInvitat
 C:\SpringBoot\Hub\src\main\java\com\example\demo\enumeration\MediaType.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\entity\GroupMessage.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\dto\BookMarkDto.java
-C:\SpringBoot\Hub\src\main\java\com\example\demo\exception\CommunityHubException.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\application\usecase\PollService.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\application\usecase\impl\EmailServiceImpl.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\dto\GroupMessageDto.java
@@ -83,7 +82,6 @@ C:\SpringBoot\Hub\src\main\java\com\example\demo\exception\CustomAuthenticationS
 C:\SpringBoot\Hub\src\main\java\com\example\demo\application\usecase\impl\MediaServiceImpl.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\form\ChangePasswordInput.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\application\usecase\MentionService.java
-C:\SpringBoot\Hub\src\main\java\com\example\demo\exception\CommunityHubExceptionHandler.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\infrastructure\persistence\repository\GroupMessageRepository.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\presentation\rest\AuthController.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\utils\EmailUtils.java
@@ -163,6 +161,7 @@ C:\SpringBoot\Hub\src\main\java\com\example\demo\SocialApplication.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\presentation\rest\PostRestController.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\presentation\rest\UserController.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\application\usecase\impl\OtpServiceImpl.java
+C:\SpringBoot\Hub\src\main\java\com\example\demo\exception\SocialGodExceptionHandler.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\application\usecase\impl\ContentServiceImpl.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\entity\UserInvitation.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\application\usecase\impl\GroupServiceImpl.java
@@ -211,5 +210,6 @@ C:\SpringBoot\Hub\src\main\java\com\example\demo\application\usecase\GroupMessag
 C:\SpringBoot\Hub\src\main\java\com\example\demo\presentation\rest\LikeController.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\dto\GroupDto.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\infrastructure\persistence\repository\PollRepository.java
+C:\SpringBoot\Hub\src\main\java\com\example\demo\exception\SocialGodException.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\infrastructure\persistence\repository\UserHasGroupRepository.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\entity\AppUser.java

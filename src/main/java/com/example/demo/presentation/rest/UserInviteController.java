@@ -3,7 +3,7 @@ package com.example.demo.presentation.rest;
 import com.example.demo.dto.UserDto;
 import com.example.demo.dto.UserInvitationDto;
 import com.example.demo.entity.User;
-import com.example.demo.exception.CommunityHubException;
+import com.example.demo.exception.SocialGodException;
 import com.example.demo.application.usecase.UserInvitationService;
 import com.example.demo.application.usecase.UserService;
 import lombok.RequiredArgsConstructor;

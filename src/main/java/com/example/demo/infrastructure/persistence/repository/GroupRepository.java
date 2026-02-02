@@ -24,7 +24,7 @@ public interface GroupRepository extends JpaRepository<Group,Long>, JpaSpecifica
     @Query(value = "select g.* from `group` g left join post p on g.id=p.group_id where g.deleted = false group by g.id order by count(p.id) desc limit 5",nativeQuery = true)
     List<Group> findTop5ByPostCount();
 
-    @Query(value = "SELECT * FROM communityhub.group g WHERE g.deleted = false AND g.id NOT IN (SELECT group_id FROM user_has_group WHERE user_id = :userId) ORDER BY RAND() LIMIT 2", nativeQuery = true)
+    @Query(value = "SELECT * FROM socialgod.`group` g WHERE g.deleted = false AND g.id NOT IN (SELECT group_id FROM user_has_group WHERE user_id = :userId) ORDER BY RAND() LIMIT 2", nativeQuery = true)
     List<Group> getRandomGroupsNotInUser(@Param("userId") Long userId);
 
     @Query(value="Select g.* from `group` g left join user_has_group u on g.id=u.group_id where g.deleted = false group by  g.id order by  count(u.group_id) desc limit 5",nativeQuery=true)

@@ -3,7 +3,7 @@ package com.example.demo.application.usecase.impl;
 import com.example.demo.dto.UserInvitationDto;
 import com.example.demo.entity.UserHasGroup;
 import com.example.demo.entity.UserInvitation;
-import com.example.demo.exception.CommunityHubException;
+import com.example.demo.exception.SocialGodException;
 import com.example.demo.infrastructure.persistence.repository.UserInvitationRepository;
 import com.example.demo.application.usecase.GroupService;
 import com.example.demo.application.usecase.UserHasGroupService;
@@ -88,7 +88,7 @@ public class UserInvitationServiceImpl implements UserInvitationService {
     }
 
     public void processAcceptInvitation(Long id,Long communityId){
-        var invitation = userInvitationRepository.findById(id).orElseThrow(() -> new CommunityHubException("Invitation not found exception!!"));
+        var invitation = userInvitationRepository.findById(id).orElseThrow(() -> new SocialGodException("Invitation not found exception!!"));
         var user = userService.findById(invitation.getRecipientId());
         var community = groupService.getCommunityByIds(communityId);
         var user_group = userHasGroupService.findByUserIdAndGroupId(user.getId(),community.getId());
