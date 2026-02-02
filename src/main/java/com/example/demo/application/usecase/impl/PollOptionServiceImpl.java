@@ -4,6 +4,7 @@ import com.example.demo.dto.PollOptionReportDto;
 import com.example.demo.dto.UserDto;
 import com.example.demo.dtoMapper.PollOptionReportDtoMapper;
 import com.example.demo.entity.PollOption;
+import com.example.demo.entity.User;
 import com.example.demo.infrastructure.persistence.repository.PollOptionRepository;
 import com.example.demo.application.usecase.PollOptionService;
 import lombok.RequiredArgsConstructor;
@@ -71,6 +72,7 @@ public class PollOptionServiceImpl implements PollOptionService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<UserDto> findUsersByPollOptionId(long pollOptionId) {
         Optional<PollOption> pollOption = pollOptionRepository.findById(pollOptionId);
         if(pollOption.isPresent()){
@@ -78,5 +80,24 @@ public class PollOptionServiceImpl implements PollOptionService {
         }else{
             throw new RuntimeException("PollOption not found for id :: " + pollOptionId);
         }
+    }
+
+    @Override
+    @Transactional
+    public boolean addUserVote(Long pollOptionId, User user) {
+        if (pollOptionId == null || user == null) {
+            return false;
+        }
+        Optional<PollOption> opt = pollOptionRepository.findById(pollOptionId);
+        if (opt.isEmpty()) {
+            return false;
+        }
+        PollOption pollOption = opt.get();
+        if (pollOptionRepository.existsByPollOptionIdAndUserId(pollOptionId, user.getId())) {
+            return false;
+        }
+        pollOption.getUser().add(user);
+        pollOptionRepository.save(pollOption);
+        return true;
     }
 }
