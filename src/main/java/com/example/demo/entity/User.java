@@ -1,98 +1,88 @@
 package com.example.demo.entity;
 
-import com.example.demo.enumeration.Role;
-import com.example.demo.enumeration.Access;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
-import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.List;
+import java.time.OffsetDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
-@Getter @Setter
-@AllArgsConstructor @NoArgsConstructor
-@Builder 
 @Entity
-@Table(name = "user")
-@EntityListeners(AuditingEntityListener.class)
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@Table(name = "users", indexes = {
+    @Index(name = "idx_users_username", columnList = "username"),
+    @Index(name = "idx_users_email", columnList = "email")
+})
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class User {
-
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String staffId;
-    private String name;
-    private String dob;
+    
+    @Column(unique = true, nullable = false, length = 30)
+    private String username;
+    
+    @Column(unique = true, nullable = false, length = 255)
     private String email;
-    private String password;
-    private String department;
-    private String division;
-    private String team;
-    private String door_log_number;
-    private String photo;
-    private String interest;
-    private String biography;
-    private boolean status;
-    private boolean roleChangePending;
-    private Long triggeredByUserId;
-    private LocalDateTime time;
-    private boolean turnNoti = false;
-
-    @Enumerated(EnumType.STRING)
-    private Access access;
-
-    @CreatedDate
-    @Column(name = "created_at",nullable = false,updatable = false)
-    private LocalDateTime createdAt;
-    @UpdateTimestamp
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
-
-    @Enumerated(EnumType.STRING)
-    private Role role;
-
-    @JsonIgnore
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private OTP otp;
-
-    @JsonIgnore
-    @JsonBackReference
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    private List<Post> posts;
-
-    @JsonIgnore
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<UserHasGroup> groups;
-
-    @JsonIgnore
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    private List<Like> likes;
-
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    private List<Comment> comments;
-
-    @JsonIgnore
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    private List<BookMark> bookMarks;
-
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(name = "skill_has_user", joinColumns = {@JoinColumn(name = "user_id")}, inverseJoinColumns = {@JoinColumn(name = "skill_id")})
-    private List<Skill> skills;
-
+    
+    @Column(name = "password_hash", nullable = false, length = 255)
+    private String passwordHash;
+    
+    @Column(columnDefinition = "TEXT")
+    private String bio;
+    
+    @Column(name = "avatar_url", columnDefinition = "TEXT")
+    private String avatarUrl;
+    
+    @Column(name = "is_verified")
+    private Boolean isVerified = false;
+    
+    @Column(name = "is_private_account")
+    private Boolean isPrivateAccount = false;
+    
+    @Column(name = "allow_messages_from", length = 20)
+    private String allowMessagesFrom = "everyone"; // 'everyone', 'followers'
+    
+    @Column(name = "created_at", columnDefinition = "TIMESTAMP WITH TIME ZONE")
+    private OffsetDateTime createdAt;
+    
+    @Column(name = "last_active_at", columnDefinition = "TIMESTAMP WITH TIME ZONE")
+    private OffsetDateTime lastActiveAt;
+    
+    // Relationships
+    @OneToMany(mappedBy = "follower", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private Set<UserRelation> following = new HashSet<>();
+    
+    @OneToMany(mappedBy = "following", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private Set<UserRelation> followers = new HashSet<>();
+    
+    @OneToMany(mappedBy = "blocker", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private Set<UserBlock> blocking = new HashSet<>();
+    
+    @OneToMany(mappedBy = "blocked", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private Set<UserBlock> blockedBy = new HashSet<>();
+    
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private Set<Post> posts = new HashSet<>();
+    
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private Set<Comment> comments = new HashSet<>();
+    
+    @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private Set<Message> messages = new HashSet<>();
+    
     @PrePersist
-    public void beforePersist(){
-        this.updatedAt = LocalDateTime.now();
+    protected void onCreate() {
+        createdAt = OffsetDateTime.now();
     }
-
-    @OneToMany(mappedBy = "user", cascade = {CascadeType.MERGE, CascadeType.PERSIST}, fetch = FetchType.LAZY)
-    private Set<UserRoom> user_chatRooms;
 }
-

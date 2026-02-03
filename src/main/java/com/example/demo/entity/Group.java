@@ -1,72 +1,53 @@
 package com.example.demo.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import org.springframework.web.multipart.MultipartFile;
+import java.time.OffsetDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
-
-import java.io.Serializable;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-
-@Getter @Setter
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
-@Table(name = "`group`")
-@EntityListeners(AuditingEntityListener.class)
-public class Group  {
-
+@Table(name = "groups")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class Group {
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private Long id;
-    @Column(name = "name", nullable = false)
+    
+    @Column(nullable = false, length = 100)
     private String name;
-    @Column(name = "description", nullable = false)
+    
+    @Column(columnDefinition = "TEXT")
     private String description;
-    @Column(name = "rule", nullable = false)
-    private String rule;
-
-    private String image;
-
-    @Transient
-    private MultipartFile file;
-
-    @CreatedDate
-    @Column(name = "created_at",nullable = false,updatable = false)
-    private LocalDateTime createdAt;
-    @UpdateTimestamp
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
-
-    @JsonIgnore
-    @ManyToOne
-    private User groupOwner;
-
-    @Transient
-    private List<Long> user;
-
+    
+    @Column(name = "privacy_type", length = 20)
+    private String privacyType = "public"; // 'public', 'private'
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "owner_id")
+    private User owner;
+    
+    @Column(name = "cover_image_url", columnDefinition = "TEXT")
+    private String coverImageUrl;
+    
+    @Column(name = "created_at", columnDefinition = "TIMESTAMP WITH TIME ZONE")
+    private OffsetDateTime createdAt;
+    
     @OneToMany(mappedBy = "group", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnore
-    private List<GroupMessage> groupMessages;
-
-    @OneToMany(mappedBy = "group",cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnore
-    private List<Post> posts;
-
-
-    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL,orphanRemoval = true)
-    @JsonIgnore
-    private List<UserHasGroup> userHasGroups;
-
-    @Column(name = "deleted")
-    private boolean deleted;
-
-    private boolean isPrivate;
+    @Builder.Default
+    private Set<GroupMember> members = new HashSet<>();
+    
+    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private Set<Post> posts = new HashSet<>();
+    
+    @PrePersist
+    protected void onCreate() {
+        createdAt = OffsetDateTime.now();
+    }
 }

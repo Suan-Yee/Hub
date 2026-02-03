@@ -1,35 +1,34 @@
 package com.example.demo.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import java.util.HashSet;
+import java.util.Set;
 
-import java.util.List;
-
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
-@Table(name = "poll_option")
+@Table(name = "poll_options")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class PollOption {
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private long id;
-
-    @Column(name = "name", nullable = false)
-    private String name;
-
-    @ManyToOne
-    @JoinColumn(name = "poll_id")
-    private Poll poll;
-
-    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    @JoinTable(name = "option_has_user", 
-            joinColumns = {@JoinColumn(name = "poll_option_id")}, 
-            inverseJoinColumns = {@JoinColumn(name = "user_id")})
-    private List<User> user;
-
+    private Long id;
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "post_id", nullable = false)
+    private Post post;
+    
+    @Column(name = "option_text", nullable = false, length = 255)
+    private String optionText;
+    
+    @Column(name = "vote_count")
+    private Integer voteCount = 0;
+    
+    @OneToMany(mappedBy = "pollOption", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private Set<PollVote> votes = new HashSet<>();
 }

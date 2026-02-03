@@ -1,7 +1,7 @@
 package com.example.demo.config;
 
 
-import com.example.demo.application.usecase.OnlineStatusService;
+import com.example.demo.service.OnlineStatusService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -119,10 +119,10 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void configureClientInboundChannel(ChannelRegistration registration) {
         // Register interceptors for session tracking and heartbeat monitoring
-        registration.interceptors(
-                onlineStatusService.sessionChannelInterceptor(),
-                heartbeatHandler
-        );
+        // registration.interceptors(
+        //         onlineStatusService.sessionChannelInterceptor(),
+        //         heartbeatHandler
+        // );
         
         // Configure thread pool for inbound messages
         registration.taskExecutor()

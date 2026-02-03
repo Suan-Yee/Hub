@@ -20,7 +20,7 @@ public class QueryPerformanceConfig {
     /**
      * Monitor repository method execution time.
      */
-    @Around("execution(* com.example.demo.infrastructure.persistence.repository..*(..))")
+    @Around("execution(* com.example.demo.repository..*(..))")
     public Object monitorRepositoryPerformance(ProceedingJoinPoint joinPoint) throws Throwable {
         long start = System.currentTimeMillis();
         String methodName = joinPoint.getSignature().toShortString();
@@ -46,7 +46,7 @@ public class QueryPerformanceConfig {
     /**
      * Monitor service layer performance.
      */
-    @Around("execution(* com.example.demo.application.usecase.impl..*(..))")
+    @Around("execution(* com.example.demo.service.impl..*(..))")
     public Object monitorServicePerformance(ProceedingJoinPoint joinPoint) throws Throwable {
         long start = System.currentTimeMillis();
         String methodName = joinPoint.getSignature().toShortString();
