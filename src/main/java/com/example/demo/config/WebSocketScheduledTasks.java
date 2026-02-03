@@ -1,6 +1,6 @@
 package com.example.demo.config;
 
-import com.example.demo.application.usecase.OnlineStatusService;
+import com.example.demo.service.OnlineStatusService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -30,7 +30,8 @@ public class WebSocketScheduledTasks {
     @Scheduled(fixedDelayString = "${websocket.stale-session-cleanup-interval:300000}")
     public void cleanupStaleSessions() {
         try {
-            int onlineStatusCleanedCount = onlineStatusService.cleanupStaleSessions();
+            // int onlineStatusCleanedCount = onlineStatusService.cleanupStaleSessions();
+            int onlineStatusCleanedCount = 0;
             int sessionManagerCleanedCount = sessionManager.cleanupStaleSessions(
                     properties.getSessionIdleTimeout()
             );
@@ -51,46 +52,46 @@ public class WebSocketScheduledTasks {
      * Log WebSocket statistics periodically for monitoring.
      * Runs every 10 minutes.
      */
-    @Scheduled(fixedRate = 10, timeUnit = TimeUnit.MINUTES)
-    public void logWebSocketStatistics() {
-        try {
-            var stats = onlineStatusService.getStatistics();
-            var sessionStats = sessionManager.getStatistics();
+    // @Scheduled(fixedRate = 10, timeUnit = TimeUnit.MINUTES)
+    // public void logWebSocketStatistics() {
+    //     try {
+    //         var stats = onlineStatusService.getStatistics();
+    //         var sessionStats = sessionManager.getStatistics();
             
-            log.info("WebSocket Statistics - Online users: {}, Total sessions: {}, Healthy sessions: {}, Stale sessions: {}",
-                    stats.get("onlineUsers"),
-                    stats.get("totalSessions"),
-                    stats.get("healthySessions"),
-                    stats.get("staleSessions"));
+    //         log.info("WebSocket Statistics - Online users: {}, Total sessions: {}, Healthy sessions: {}, Stale sessions: {}",
+    //                 stats.get("onlineUsers"),
+    //                 stats.get("totalSessions"),
+    //                 stats.get("healthySessions"),
+    //                 stats.get("staleSessions"));
             
-            log.debug("Session Manager Statistics - {}", sessionStats);
-        } catch (Exception e) {
-            log.error("Error logging WebSocket statistics", e);
-        }
-    }
+    //         log.debug("Session Manager Statistics - {}", sessionStats);
+    //     } catch (Exception e) {
+    //         log.error("Error logging WebSocket statistics", e);
+    //     }
+    // }
 
     /**
      * Perform health check on WebSocket connections.
      * Runs every 30 seconds to detect issues early.
      */
-    @Scheduled(fixedRate = 30, timeUnit = TimeUnit.SECONDS)
-    public void performHealthCheck() {
-        try {
-            var stats = onlineStatusService.getStatistics();
-            int totalSessions = (int) stats.get("totalSessions");
-            int healthySessions = (int) stats.get("healthySessions");
-            int staleSessions = (int) stats.get("staleSessions");
+    // @Scheduled(fixedRate = 30, timeUnit = TimeUnit.SECONDS)
+    // public void performHealthCheck() {
+    //     try {
+    //         var stats = onlineStatusService.getStatistics();
+    //         int totalSessions = (int) stats.get("totalSessions");
+    //         int healthySessions = (int) stats.get("healthySessions");
+    //         int staleSessions = (int) stats.get("staleSessions");
             
-            // Alert if more than 20% of sessions are stale
-            if (totalSessions > 0) {
-                double stalePercentage = (double) staleSessions / totalSessions * 100;
-                if (stalePercentage > 20) {
-                    log.warn("High percentage of stale sessions detected: {:.2f}% ({}/{})",
-                            stalePercentage, staleSessions, totalSessions);
-                }
-            }
-        } catch (Exception e) {
-            log.error("Error during WebSocket health check", e);
-        }
-    }
+    //         // Alert if more than 20% of sessions are stale
+    //         if (totalSessions > 0) {
+    //             double stalePercentage = (double) staleSessions / totalSessions * 100;
+    //             if (stalePercentage > 20) {
+    //                 log.warn("High percentage of stale sessions detected: {:.2f}% ({}/{})",
+    //                         stalePercentage, staleSessions, totalSessions);
+    //             }
+    //         }
+    //     } catch (Exception e) {
+    //         log.error("Error during WebSocket health check", e);
+    //     }
+    // }
 }
