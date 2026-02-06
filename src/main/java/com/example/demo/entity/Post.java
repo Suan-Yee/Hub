@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.ArrayList;
 
 @Entity
 @Table(name = "posts", indexes = {
@@ -39,22 +40,23 @@ public class Post {
     private String type; // 'text', 'image', 'video', 'poll', 'repost'
     
     @Column(columnDefinition = "TEXT")
-    private String caption;
+    private String content;
     
     @JdbcTypeCode(SqlTypes.JSON)
-    @Column(name = "media_urls", columnDefinition = "jsonb")
-    private List<String> mediaUrls;
+    @Column(name = "media_items", columnDefinition = "jsonb")
+    private List<MediaItem> mediaItems;
     
     @JdbcTypeCode(SqlTypes.JSON)
-    @Column(name = "link_metadata", columnDefinition = "jsonb")
-    private Map<String, Object> linkMetadata;
+    @Column(name = "mentions", columnDefinition = "jsonb")
+    private List<String> mentions;
     
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "original_post_id")
     private Post originalPost;
     
-    @Column(columnDefinition = "TEXT[]")
-    private String[] hashtags;
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(name = "tags", columnDefinition = "jsonb")
+    private List<String> tags;
     
     @Column(length = 100)
     private String location;
@@ -76,6 +78,12 @@ public class Post {
     
     @Column(name = "updated_at", columnDefinition = "TIMESTAMP WITH TIME ZONE")
     private OffsetDateTime updatedAt;
+    
+    @Column(name = "edited")
+    private Boolean edited = false;
+    
+    @Column(name = "poll_question", columnDefinition = "TEXT")
+    private String pollQuestion;
     
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
@@ -106,5 +114,17 @@ public class Post {
     @PreUpdate
     protected void onUpdate() {
         updatedAt = OffsetDateTime.now();
+        edited = true;
+    }
+    
+    // Inner class for media items
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class MediaItem {
+        private String id;
+        private String type; // "image" or "video"
+        private String url;
     }
 }

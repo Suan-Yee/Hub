@@ -3,12 +3,21 @@ package com.example.demo.utils;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.Date;
 
 public class TimeFormatter {
 
     public static String formatTimeAgo(LocalDateTime createDate) {
         LocalDateTime now = LocalDateTime.now();
+        Duration duration = Duration.between(createDate, now);
+
+        long seconds = duration.getSeconds();
+        return timeDate(seconds);
+    }
+
+    public static String formatTimeAgo(OffsetDateTime createDate) {
+        OffsetDateTime now = OffsetDateTime.now();
         Duration duration = Duration.between(createDate, now);
 
         long seconds = duration.getSeconds();
