@@ -19,7 +19,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     Page<Post> findByGroupId(Long groupId, Pageable pageable);
     Page<Post> findAllByOrderByCreatedAtDesc(Pageable pageable);
     
-    @Query("SELECT p FROM Post p WHERE :hashtag = ANY(p.hashtags)")
+    @Query("SELECT DISTINCT p FROM Post p JOIN p.postHashtags ph JOIN ph.hashtag h WHERE h.tag = :hashtag")
     List<Post> findByHashtag(@Param("hashtag") String hashtag);
     
     @Query("SELECT p FROM Post p WHERE p.visibility = 'public' ORDER BY p.createdAt DESC")

@@ -22,14 +22,17 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>org.flywaydb</groupId>
-			<artifactId>flyway-core</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.flywaydb</groupId>
-			<artifactId>flyway-database-postgresql</artifactId>
-		</dependency>
+	<dependency>
+		<groupId>org.flywaydb</groupId>
+		<artifactId>flyway-core</artifactId>
+	</dependency>
+	<!-- Flyway PostgreSQL commented out - not needed since Flyway is disabled -->
+	<!--
+	<dependency>
+		<groupId>org.flywaydb</groupId>
+		<artifactId>flyway-database-postgresql</artifactId>
+	</dependency>
+	-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-mail</artifactId>
@@ -102,11 +105,13 @@
 	<!-- Performance & Caching Dependencies           -->
 	<!-- ============================================ -->
 	
-	<!-- Redis for caching -->
+	<!-- Redis for caching - COMMENTED OUT (enable if Redis is running) -->
+	<!--
 	<dependency>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-data-redis</artifactId>
 	</dependency>
+	-->
 	<dependency>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-cache</artifactId>
@@ -139,6 +144,11 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-aop</artifactId>
 	</dependency>
+	<dependency>
+		<groupId>jakarta.persistence</groupId>
+		<artifactId>jakarta.persistence-api</artifactId>
+		<version>3.1.0</version>
+	</dependency>
 	</dependencies>
 
 	<build>
@@ -155,6 +165,15 @@
 					</excludes>
 				</configuration>
 			</plugin>
+			<plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.11.0</version>
+                <configuration>
+                    <source>21</source>
+                    <target>21</target>
+                </configuration>
+            </plugin>
 		</plugins>
 	</build>
 

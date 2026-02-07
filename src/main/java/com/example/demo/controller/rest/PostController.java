@@ -1,9 +1,11 @@
 package com.example.demo.controller.rest;
 
+import com.example.demo.domain.ApiResponse;
 import com.example.demo.dto.request.CreatePostForm;
 import com.example.demo.dto.request.CreatePostRequest;
 import com.example.demo.dto.response.PostResponse;
 import com.example.demo.service.PostService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,76 +36,139 @@ public class PostController {
      * Uses @ModelAttribute for cleaner form binding
      */
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<PostResponse> createPost(
+    public ResponseEntity<ApiResponse> createPost(
             @Valid @ModelAttribute CreatePostForm form,
-            @AuthenticationPrincipal UserDetails userDetails
+            @AuthenticationPrincipal UserDetails userDetails,
+            HttpServletRequest request
     ) throws IOException {
         
         Long userId = extractUserId(userDetails);
-        CreatePostRequest request = form.toRequest();
-        PostResponse response = postService.createPost(request, userId);
+        CreatePostRequest postRequest = form.toRequest();
+        PostResponse response = postService.createPost(postRequest, userId);
         
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        ApiResponse apiResponse = ApiResponse.created(
+            request.getRequestURI(),
+            "Post created successfully",
+            Map.of("post", response)
+        );
+        
+        return ResponseEntity.status(HttpStatus.CREATED).body(apiResponse);
     }
 
     /**
      * Get a post by ID
      */
     @GetMapping("/{postId}")
-    public ResponseEntity<PostResponse> getPostById(
+    public ResponseEntity<ApiResponse> getPostById(
             @PathVariable Long postId,
-            @AuthenticationPrincipal UserDetails userDetails
+            @AuthenticationPrincipal UserDetails userDetails,
+            HttpServletRequest request
     ) {
         Long userId = extractUserId(userDetails);
         PostResponse response = postService.getPostById(postId, userId);
-        return ResponseEntity.ok(response);
+        
+        ApiResponse apiResponse = ApiResponse.success(
+            request.getRequestURI(),
+            "Post retrieved successfully",
+            Map.of("post", response)
+        );
+        
+        return ResponseEntity.ok(apiResponse);
     }
 
     /**
      * Get posts by user ID
      */
     @GetMapping("/user/{userId}")
-    public ResponseEntity<Page<PostResponse>> getPostsByUserId(
+    public ResponseEntity<ApiResponse> getPostsByUserId(
             @PathVariable Long userId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size,
-            @AuthenticationPrincipal UserDetails userDetails
+            @AuthenticationPrincipal UserDetails userDetails,
+            HttpServletRequest request
     ) {
         Long currentUserId = extractUserId(userDetails);
         Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
         Page<PostResponse> posts = postService.getPostsByUserId(userId, currentUserId, pageable);
-        return ResponseEntity.ok(posts);
+        
+        ApiResponse apiResponse = ApiResponse.success(
+            request.getRequestURI(),
+            "User posts retrieved successfully",
+            Map.of(
+                "posts", posts.getContent(),
+                "pagination", Map.of(
+                    "page", posts.getNumber(),
+                    "size", posts.getSize(),
+                    "totalElements", posts.getTotalElements(),
+                    "totalPages", posts.getTotalPages()
+                )
+            )
+        );
+        
+        return ResponseEntity.ok(apiResponse);
     }
 
     /**
      * Get public feed
      */
     @GetMapping("/feed")
-    public ResponseEntity<Page<PostResponse>> getPublicFeed(
+    public ResponseEntity<ApiResponse> getPublicFeed(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size,
-            @AuthenticationPrincipal UserDetails userDetails
+            @AuthenticationPrincipal UserDetails userDetails,
+            HttpServletRequest request
     ) {
         Long currentUserId = extractUserId(userDetails);
         Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
         Page<PostResponse> posts = postService.getPublicFeed(currentUserId, pageable);
-        return ResponseEntity.ok(posts);
+        
+        ApiResponse apiResponse = ApiResponse.success(
+            request.getRequestURI(),
+            "Public feed retrieved successfully",
+            Map.of(
+                "posts", posts.getContent(),
+                "pagination", Map.of(
+                    "page", posts.getNumber(),
+                    "size", posts.getSize(),
+                    "totalElements", posts.getTotalElements(),
+                    "totalPages", posts.getTotalPages()
+                )
+            )
+        );
+        
+        return ResponseEntity.ok(apiResponse);
     }
 
     /**
      * Get posts by group ID
      */
     @GetMapping("/group/{groupId}")
-    public ResponseEntity<Page<PostResponse>> getPostsByGroupId(
+    public ResponseEntity<ApiResponse> getPostsByGroupId(
             @PathVariable Long groupId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size,
-            @AuthenticationPrincipal UserDetails userDetails
+            @AuthenticationPrincipal UserDetails userDetails,
+            HttpServletRequest request
     ) {
         Long currentUserId = extractUserId(userDetails);
         Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
         Page<PostResponse> posts = postService.getPostsByGroupId(groupId, currentUserId, pageable);
-        return ResponseEntity.ok(posts);
+        
+        ApiResponse apiResponse = ApiResponse.success(
+            request.getRequestURI(),
+            "Group posts retrieved successfully",
+            Map.of(
+                "posts", posts.getContent(),
+                "pagination", Map.of(
+                    "page", posts.getNumber(),
+                    "size", posts.getSize(),
+                    "totalElements", posts.getTotalElements(),
+                    "totalPages", posts.getTotalPages()
+                )
+            )
+        );
+        
+        return ResponseEntity.ok(apiResponse);
     }
 
     /**
@@ -111,16 +176,17 @@ public class PostController {
      * Uses @ModelAttribute for cleaner form binding
      */
     @PutMapping(value = "/{postId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<PostResponse> updatePost(
+    public ResponseEntity<ApiResponse> updatePost(
             @PathVariable Long postId,
             @Valid @ModelAttribute CreatePostForm form,
-            @AuthenticationPrincipal UserDetails userDetails
+            @AuthenticationPrincipal UserDetails userDetails,
+            HttpServletRequest request
     ) throws IOException {
         
         Long userId = extractUserId(userDetails);
         
         // Convert form to request, but clear poll and group (cannot be updated)
-        CreatePostRequest request = new CreatePostRequest(
+        CreatePostRequest postRequest = new CreatePostRequest(
             form.getContent(),
             form.getTags(),
             form.getMentions(),
@@ -130,21 +196,35 @@ public class PostController {
             form.getVisibility()
         );
         
-        PostResponse response = postService.updatePost(postId, request, userId);
-        return ResponseEntity.ok(response);
+        PostResponse response = postService.updatePost(postId, postRequest, userId);
+        
+        ApiResponse apiResponse = ApiResponse.success(
+            request.getRequestURI(),
+            "Post updated successfully",
+            Map.of("post", response)
+        );
+        
+        return ResponseEntity.ok(apiResponse);
     }
 
     /**
      * Delete a post
      */
     @DeleteMapping("/{postId}")
-    public ResponseEntity<Map<String, String>> deletePost(
+    public ResponseEntity<ApiResponse> deletePost(
             @PathVariable Long postId,
-            @AuthenticationPrincipal UserDetails userDetails
+            @AuthenticationPrincipal UserDetails userDetails,
+            HttpServletRequest request
     ) {
         Long userId = extractUserId(userDetails);
         postService.deletePost(postId, userId);
-        return ResponseEntity.ok(Map.of("message", "Post deleted successfully"));
+        
+        ApiResponse apiResponse = ApiResponse.success(
+            request.getRequestURI(),
+            "Post deleted successfully"
+        );
+        
+        return ResponseEntity.ok(apiResponse);
     }
 
     /**

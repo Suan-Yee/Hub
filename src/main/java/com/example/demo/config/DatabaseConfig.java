@@ -55,7 +55,7 @@ public class DatabaseConfig {
         config.setJdbcUrl(dbUrl);
         config.setUsername(dbUsername);
         config.setPassword(dbPassword);
-        config.setDriverClassName("com.mysql.cj.jdbc.Driver");
+        config.setDriverClassName("org.postgresql.Driver");  // PostgreSQL driver
         
         // Pool sizing (for typical server with 4-8 cores)
         config.setMinimumIdle(5);                    // Min connections
@@ -113,7 +113,7 @@ public class DatabaseConfig {
         Properties properties = new Properties();
         
         // Basic settings (ddl-auto from config: use 'validate' in prod, 'update' in dev)
-        properties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
+        properties.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");  // PostgreSQL
         properties.setProperty("hibernate.hbm2ddl.auto", ddlAuto);
         properties.setProperty("hibernate.show_sql", "false");
         properties.setProperty("hibernate.format_sql", "false");
@@ -140,14 +140,9 @@ public class DatabaseConfig {
         // Statistics (disable in production for better performance)
         properties.setProperty("hibernate.generate_statistics", "false");
         
-        // Second-level cache (using Caffeine)
-        properties.setProperty("hibernate.cache.use_second_level_cache", "true");
-        properties.setProperty("hibernate.cache.use_query_cache", "true");
-        properties.setProperty("hibernate.cache.region.factory_class", 
-                "org.hibernate.cache.jcache.JCacheRegionFactory");
-        properties.setProperty("hibernate.javax.cache.provider", 
-                "com.github.benmanes.caffeine.jcache.spi.CaffeineCachingProvider");
-        properties.setProperty("hibernate.javax.cache.missing_cache_strategy", "create");
+        // Second-level cache (disabled for now - requires hibernate-jcache dependency)
+        properties.setProperty("hibernate.cache.use_second_level_cache", "false");
+        properties.setProperty("hibernate.cache.use_query_cache", "false");
         
         log.debug("Hibernate properties configured - Batch size: 25, Fetch size: 50");
         return properties;

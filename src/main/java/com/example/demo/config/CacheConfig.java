@@ -2,21 +2,22 @@ package com.example.demo.config;
 
 import com.github.benmanes.caffeine.cache.Caffeine;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+// import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;  // Commented out with Redis
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.caffeine.CaffeineCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
-import org.springframework.data.redis.cache.RedisCacheConfiguration;
-import org.springframework.data.redis.cache.RedisCacheManager;
-import org.springframework.data.redis.connection.RedisConnectionFactory;
-import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
-import org.springframework.data.redis.serializer.RedisSerializationContext;
-import org.springframework.data.redis.serializer.StringRedisSerializer;
+// Redis imports commented out - uncomment if Redis is enabled in pom.xml
+// import org.springframework.data.redis.cache.RedisCacheConfiguration;
+// import org.springframework.data.redis.cache.RedisCacheManager;
+// import org.springframework.data.redis.connection.RedisConnectionFactory;
+// import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
+// import org.springframework.data.redis.serializer.RedisSerializationContext;
+// import org.springframework.data.redis.serializer.StringRedisSerializer;
+// import java.time.Duration;  // Commented out with Redis
 
-import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -47,6 +48,7 @@ public class CacheConfig {
      */
     @Bean
     @Primary
+    @SuppressWarnings("null")
     public CacheManager caffeineCacheManager() {
         CaffeineCacheManager cacheManager = new CaffeineCacheManager(
                 "users", "posts", "topics", "groups", 
@@ -68,7 +70,9 @@ public class CacheConfig {
     /**
      * Redis cache manager - Distributed L2 cache.
      * Only active when Redis is available.
+     * COMMENTED OUT - Uncomment when Redis dependency is enabled in pom.xml
      */
+    /*
     @Bean
     @ConditionalOnProperty(name = "spring.data.redis.host")
     public CacheManager redisCacheManager(RedisConnectionFactory connectionFactory) {
@@ -101,4 +105,5 @@ public class CacheConfig {
         log.info("Redis cache manager initialized with distributed caching");
         return cacheManager;
     }
+    */
 }
