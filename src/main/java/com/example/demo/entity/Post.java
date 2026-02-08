@@ -7,7 +7,6 @@ import org.hibernate.type.SqlTypes;
 import java.time.OffsetDateTime;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.ArrayList;
 
@@ -48,7 +47,7 @@ public class Post {
     
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(name = "mentions", columnDefinition = "jsonb")
-    private List<String> mentions;
+    private List<String> mentions = new ArrayList<>();
     
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "original_post_id")
@@ -56,7 +55,7 @@ public class Post {
     
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(name = "tags", columnDefinition = "jsonb")
-    private List<String> tags;
+    private List<String> tags = new ArrayList<>();
     
     @Column(length = 100)
     private String location;
@@ -86,23 +85,18 @@ public class Post {
     private String pollQuestion;
     
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
-    @Builder.Default
     private Set<PollOption> pollOptions = new HashSet<>();
     
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
-    @Builder.Default
     private Set<Comment> comments = new HashSet<>();
     
     @OneToMany(mappedBy = "originalPost")
-    @Builder.Default
     private Set<Post> reposts = new HashSet<>();
     
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
-    @Builder.Default
     private Set<Bookmark> bookmarks = new HashSet<>();
     
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
-    @Builder.Default
     private Set<PostHashtag> postHashtags = new HashSet<>();
     
     @PrePersist
@@ -117,14 +111,13 @@ public class Post {
         edited = true;
     }
     
-    // Inner class for media items
     @Getter
     @Setter
     @NoArgsConstructor
     @AllArgsConstructor
     public static class MediaItem {
         private String id;
-        private String type; // "image" or "video"
+        private String type; 
         private String url;
     }
 }

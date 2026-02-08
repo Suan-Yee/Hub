@@ -1,0 +1,143 @@
+###
+# Simple Post Test WITHOUT Authentication
+# Security is temporarily disabled for testing
+###
+
+@baseUrl = http://localhost:8080
+
+### ========================================
+### CREATE POST TESTS (NO AUTH REQUIRED)
+### ========================================
+
+### Test 1: Simple Text Post (No Auth)
+POST {{baseUrl}}/api/posts
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="content"
+
+Hello World! This is a test post without authentication. 🚀
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="visibility"
+
+public
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+### Test 2: Post with Tags and Mentions (No Auth)
+POST {{baseUrl}}/api/posts
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="content"
+
+Testing tags and mentions: @john @alice #springboot #java #testing
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="tags[0]"
+
+springboot
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="tags[1]"
+
+java
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="tags[2]"
+
+testing
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="mentions[0]"
+
+john
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="mentions[1]"
+
+alice
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="visibility"
+
+public
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+### Test 3: Poll Post (No Auth)
+POST {{baseUrl}}/api/posts
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="content"
+
+Quick poll: What's your favorite programming language?
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="poll.question"
+
+Which do you prefer?
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="poll.options[0]"
+
+Java
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="poll.options[1]"
+
+Python
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="poll.options[2]"
+
+JavaScript
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="visibility"
+
+public
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+### Test 4: Followers-Only Post (No Auth)
+POST {{baseUrl}}/api/posts
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="content"
+
+This is a followers-only post for testing visibility settings.
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="visibility"
+
+followers
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+### ========================================
+### GET POST TESTS (NO AUTH REQUIRED)
+### ========================================
+
+### Get Post by ID
+GET {{baseUrl}}/api/posts/1
+
+### Get Public Feed
+GET {{baseUrl}}/api/posts/feed?page=0&size=20
+
+### Get Posts by User ID
+GET {{baseUrl}}/api/posts/user/1?page=0&size=20
+
+### Get Posts by Group ID
+GET {{baseUrl}}/api/posts/group/5?page=0&size=20
+
+### ========================================
+### UPDATE POST TEST (NO AUTH REQUIRED)
+### ========================================
+
+### Update Post
+PUT {{baseUrl}}/api/posts/1
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="content"
+
+UPDATED: This post has been modified for testing purposes! ✨
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="visibility"
+
+public
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+### ========================================
+### DELETE POST TEST (NO AUTH REQUIRED)
+### ========================================
+
+### Delete Post
+DELETE {{baseUrl}}/api/posts/999

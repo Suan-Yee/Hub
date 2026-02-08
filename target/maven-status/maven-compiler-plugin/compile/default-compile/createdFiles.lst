@@ -48,6 +48,7 @@ com\example\demo\form\VoteRemoveForm$VoteRemoveFormBuilder.class
 com\example\demo\repository\ReactionRepository.class
 com\example\demo\form\VoteRemoveForm.class
 com\example\demo\dto\response\PostResponse$CommentResponse.class
+com\example\demo\utils\PostUtils.class
 com\example\demo\entity\ConversationParticipant$ConversationParticipantBuilder.class
 com\example\demo\repository\UserRelationRepository.class
 com\example\demo\repository\UserRepository.class
@@ -96,7 +97,6 @@ com\example\demo\service\PostService.class
 com\example\demo\service\impl\BookmarkServiceImpl.class
 com\example\demo\entity\Conversation.class
 com\example\demo\entity\Bookmark$BookmarkBuilder.class
-com\example\demo\dto\request\CreatePostForm.class
 com\example\demo\dto\response\PostResponse$PollResponse.class
 com\example\demo\dto\response\PostResponse$MediaItemResponse.class
 com\example\demo\entity\PostHashtag$PostHashtagBuilder.class
@@ -118,6 +118,7 @@ com\example\demo\controller\rest\BookmarkController.class
 com\example\demo\controller\rest\WebSocketMetricsController.class
 com\example\demo\entity\Comment$CommentBuilder.class
 com\example\demo\entity\ConversationParticipant.class
+com\example\demo\config\DatabaseInitializer.class
 com\example\demo\service\impl\FileUploadServiceImpl.class
 com\example\demo\repository\StoryRepository.class
 com\example\demo\config\CacheConfig.class

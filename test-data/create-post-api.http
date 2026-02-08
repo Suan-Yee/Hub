@@ -1,0 +1,315 @@
+###
+# Social Media API - Create Post Tests
+# Use with VS Code REST Client extension
+###
+
+@baseUrl = http://localhost:8080
+@token = YOUR_JWT_TOKEN_HERE
+
+### ========================================
+### AUTHENTICATION
+### ========================================
+
+### Login to get JWT Token
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "johndoe",
+  "password": "password123"
+}
+
+### ========================================
+### CREATE POST TESTS
+### ========================================
+
+### Test 1: Simple Text Post
+POST {{baseUrl}}/api/posts
+Authorization: Bearer {{token}}
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="content"
+
+Hello World! This is my first post on this social network. 🚀
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="visibility"
+
+public
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+### Test 2: Text Post with Tags and Mentions
+POST {{baseUrl}}/api/posts
+Authorization: Bearer {{token}}
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="content"
+
+Hey @john and @alice! Check out my new project about #springboot #java #webdev
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="tags[0]"
+
+springboot
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="tags[1]"
+
+java
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="tags[2]"
+
+webdev
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="mentions[0]"
+
+john
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="mentions[1]"
+
+alice
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="visibility"
+
+public
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+### Test 3: Text Post with Single Image (replace < ./path/to/image.jpg with actual path)
+POST {{baseUrl}}/api/posts
+Authorization: Bearer {{token}}
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="content"
+
+Beautiful sunset today! 🌅
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="mediaFiles"; filename="sunset.jpg"
+Content-Type: image/jpeg
+
+< ./sunset.jpg
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="tags[0]"
+
+photography
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="tags[1]"
+
+nature
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="visibility"
+
+public
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+### Test 4: Poll Post
+POST {{baseUrl}}/api/posts
+Authorization: Bearer {{token}}
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="content"
+
+What's your favorite programming language? Let me know in the comments!
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="poll.question"
+
+Which programming language do you prefer?
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="poll.options[0]"
+
+Java
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="poll.options[1]"
+
+Python
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="poll.options[2]"
+
+JavaScript
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="poll.options[3]"
+
+Go
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="tags[0]"
+
+programming
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="tags[1]"
+
+poll
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="visibility"
+
+public
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+### Test 5: Group Post
+POST {{baseUrl}}/api/posts
+Authorization: Bearer {{token}}
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="content"
+
+Hey everyone! Don't forget about our team meeting tomorrow at 10 AM 📅
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="groupId"
+
+5
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="tags[0]"
+
+meeting
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="tags[1]"
+
+team
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="visibility"
+
+public
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+### Test 6: Followers-Only Post
+POST {{baseUrl}}/api/posts
+Authorization: Bearer {{token}}
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="content"
+
+This is a private update for my followers only. Thanks for following me! ❤️
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="tags[0]"
+
+update
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="visibility"
+
+followers
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+### Test 7: Private Post (Only Me)
+POST {{baseUrl}}/api/posts
+Authorization: Bearer {{token}}
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="content"
+
+Personal notes: Remember to finish the project documentation by Friday.
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="visibility"
+
+me
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+### Test 8: Long Post with Rich Content
+POST {{baseUrl}}/api/posts
+Authorization: Bearer {{token}}
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="content"
+
+🚀 Excited to share my journey learning Spring Boot!
+
+After 3 months of dedicated learning, I've built a full-featured social media application with:
+✅ RESTful APIs
+✅ Spring Security with JWT
+✅ WebSocket for real-time features
+✅ PostgreSQL database
+✅ File upload handling
+✅ Caching with Caffeine
+✅ Async processing
+
+Special thanks to @mentor and the amazing #java community for all the support! 💪
+
+Check out my GitHub repo (link in bio) 🔗
+
+#SpringBoot #Java #BackendDevelopment #WebDevelopment #Learning #TechJourney
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="tags[0]"
+
+SpringBoot
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="tags[1]"
+
+Java
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="tags[2]"
+
+BackendDevelopment
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="tags[3]"
+
+WebDevelopment
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="tags[4]"
+
+Learning
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="tags[5]"
+
+TechJourney
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="mentions[0]"
+
+mentor
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="visibility"
+
+public
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+### ========================================
+### GET POST TESTS
+### ========================================
+
+### Get Post by ID
+GET {{baseUrl}}/api/posts/1
+Authorization: Bearer {{token}}
+
+### Get Public Feed
+GET {{baseUrl}}/api/posts/feed?page=0&size=20
+Authorization: Bearer {{token}}
+
+### Get Posts by User ID
+GET {{baseUrl}}/api/posts/user/1?page=0&size=20
+Authorization: Bearer {{token}}
+
+### Get Posts by Group ID
+GET {{baseUrl}}/api/posts/group/5?page=0&size=20
+Authorization: Bearer {{token}}
+
+### ========================================
+### UPDATE POST TEST
+### ========================================
+
+### Update Post
+PUT {{baseUrl}}/api/posts/1
+Authorization: Bearer {{token}}
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="content"
+
+Updated: Hello World! This is my UPDATED post with new content. 🚀✨
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="visibility"
+
+public
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="edited"
+
+true
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+### ========================================
+### DELETE POST TEST
+### ========================================
+
+### Delete Post
+DELETE {{baseUrl}}/api/posts/1
+Authorization: Bearer {{token}}

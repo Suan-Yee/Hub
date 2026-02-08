@@ -12,7 +12,6 @@ import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,7 +27,6 @@ import java.util.List;
 public class ExcelUploadServiceImpl implements ExcelUploadService {
 
     private final UserRepository userRepository;
-    private final BCryptPasswordEncoder passwordEncoder;
 
     @Override
     @Transactional
@@ -80,7 +78,7 @@ public class ExcelUploadServiceImpl implements ExcelUploadService {
             return User.builder()
                     .username(username)
                     .email(email)
-                    .passwordHash(passwordEncoder.encode(password))
+//                    .passwordHash(passwordEncoder.encode(password))
                     .bio(bio)
                     .isVerified(false)
                     .createdAt(OffsetDateTime.now())

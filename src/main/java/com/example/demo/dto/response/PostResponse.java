@@ -2,14 +2,12 @@ package com.example.demo.dto.response;
 
 import com.example.demo.enumeration.ReactionType;
 
-import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Map;
 
 public record PostResponse(
     String id,
     String author,
-    String authorId,
     String handle,
     String avatar,
     String time,
@@ -31,7 +29,7 @@ public record PostResponse(
 ) {
     public record MediaItemResponse(
         String id,
-        String type, // "image" or "video"
+        String type,
         String url
     ) {}
     

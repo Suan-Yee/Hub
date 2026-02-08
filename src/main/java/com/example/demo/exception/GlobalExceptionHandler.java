@@ -5,8 +5,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -77,38 +75,38 @@ public class GlobalExceptionHandler {
     /**
      * Handle access denied exceptions
      */
-    @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<ApiResponse> handleAccessDeniedException(
-            AccessDeniedException ex,
-            HttpServletRequest request
-    ) {
-        log.warn("Access denied at {}: {}", request.getRequestURI(), ex.getMessage());
-        
-        ApiResponse response = ApiResponse.forbidden(
-            request.getRequestURI(),
-            "You don't have permission to access this resource"
-        );
-
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
-    }
+//    @ExceptionHandler(AccessDeniedException.class)
+//    public ResponseEntity<ApiResponse> handleAccessDeniedException(
+//            AccessDeniedException ex,
+//            HttpServletRequest request
+//    ) {
+//        log.warn("Access denied at {}: {}", request.getRequestURI(), ex.getMessage());
+//
+//        ApiResponse response = ApiResponse.forbidden(
+//            request.getRequestURI(),
+//            "You don't have permission to access this resource"
+//        );
+//
+//        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
+//    }
 
     /**
      * Handle authentication exceptions
      */
-    @ExceptionHandler(BadCredentialsException.class)
-    public ResponseEntity<ApiResponse> handleBadCredentialsException(
-            BadCredentialsException ex,
-            HttpServletRequest request
-    ) {
-        log.warn("Authentication failed at {}: {}", request.getRequestURI(), ex.getMessage());
-        
-        ApiResponse response = ApiResponse.unauthorized(
-            request.getRequestURI(),
-            "Invalid credentials"
-        );
-
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
-    }
+//    @ExceptionHandler(BadCredentialsException.class)
+//    public ResponseEntity<ApiResponse> handleBadCredentialsException(
+//            BadCredentialsException ex,
+//            HttpServletRequest request
+//    ) {
+//        log.warn("Authentication failed at {}: {}", request.getRequestURI(), ex.getMessage());
+//
+//        ApiResponse response = ApiResponse.unauthorized(
+//            request.getRequestURI(),
+//            "Invalid credentials"
+//        );
+//
+//        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+//    }
 
     /**
      * Handle file upload size exceeded

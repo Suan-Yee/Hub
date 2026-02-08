@@ -11,6 +11,7 @@ C:\SpringBoot\Hub\src\main\java\com\example\demo\config\DatabaseConfig.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\exception\ApiException.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\entity\Reaction.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\controller\rest\BookmarkController.java
+C:\SpringBoot\Hub\src\main\java\com\example\demo\utils\PostUtils.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\entity\Comment.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\controller\rest\PostController.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\config\DatabaseInitializer.java
@@ -45,6 +46,7 @@ C:\SpringBoot\Hub\src\main\java\com\example\demo\exception\CustomAccessDeniedHan
 C:\SpringBoot\Hub\src\main\java\com\example\demo\repository\CommentRepository.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\service\EmailService.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\form\PollCreationForm.java
+C:\SpringBoot\Hub\src\main\java\com\example\demo\mapper\PostMapper.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\entity\ContentReport.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\enumeration\MediaType.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\service\impl\ReactionServiceImpl.java
@@ -87,7 +89,6 @@ C:\SpringBoot\Hub\src\main\java\com\example\demo\entity\Story.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\exception\CustomAuthenticationSuccessHandler.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\form\ChangePasswordInput.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\service\impl\OnlineStatusServiceImpl.java
-C:\SpringBoot\Hub\src\main\java\com\example\demo\dto\request\CreatePostForm.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\service\CachedDataService.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\service\impl\FileUploadServiceImpl.java
 C:\SpringBoot\Hub\src\main\java\com\example\demo\utils\EmailUtils.java

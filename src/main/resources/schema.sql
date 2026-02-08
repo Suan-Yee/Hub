@@ -1,8 +1,5 @@
 -- Create database if not exists (Note: This needs to be run separately or via application properties)
 -- CREATE DATABASE IF NOT EXISTS social_hub;
-SELECT 'CREATE DATABASE socialhub'
-WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = 'socialhub');
-
 -- Users Table
 CREATE TABLE IF NOT EXISTS users (
     id BIGSERIAL PRIMARY KEY,

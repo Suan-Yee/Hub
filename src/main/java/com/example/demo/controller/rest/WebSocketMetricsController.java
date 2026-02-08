@@ -6,7 +6,6 @@ import com.example.demo.config.WebSocketHeartbeatHandler;
 import com.example.demo.config.WebSocketSessionManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,7 +23,7 @@ import java.util.Set;
 @RestController
 @RequestMapping("/api/websocket")
 @RequiredArgsConstructor
-@PreAuthorize("hasRole('ADMIN')")
+//@PreAuthorize("hasRole('ADMIN')")
 public class WebSocketMetricsController {
 
     private final OnlineStatusService onlineStatusService;
@@ -120,7 +119,7 @@ public class WebSocketMetricsController {
      * Trigger cleanup of stale sessions manually (POST; side-effecting).
      */
     @PostMapping("/cleanup")
-    @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Map<String, Object>> cleanupStaleSessions() {
         // int cleanedCount = onlineStatusService.cleanupStaleSessions();
         int cleanedCount = 0;
