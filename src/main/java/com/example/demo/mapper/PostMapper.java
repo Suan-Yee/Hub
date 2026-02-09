@@ -1,10 +1,7 @@
 package com.example.demo.mapper;
 
 import com.example.demo.dto.response.PostResponse;
-import com.example.demo.entity.PollOption;
-import com.example.demo.entity.Post;
-import com.example.demo.entity.Reaction;
-import com.example.demo.entity.User;
+import com.example.demo.entity.*;
 import com.example.demo.enumeration.ReactionType;
 import com.example.demo.repository.BookmarkRepository;
 import com.example.demo.repository.PollOptionRepository;
@@ -26,125 +23,173 @@ public class PostMapper {
     private final BookmarkRepository bookmarkRepository;
 
     public PostResponse mapToPostResponse(Post post, Long currentUserId) {
-        User author = post.getUser();
-
-        Map<ReactionType, Integer> reactionCounts = fetchReactionCounts(post.getId());
-
-        ReactionType userReaction = fetchUserReaction(currentUserId, post.getId());
-        
-        boolean liked = userReaction == ReactionType.LIKE;
-        boolean bookmarked = currentUserId != null && 
-            bookmarkRepository.existsByUserIdAndPostId(currentUserId, post.getId());
-
-        int totalLikes = reactionCounts.values().stream().mapToInt(Integer::intValue).sum();
-
-        List<PostResponse.MediaItemResponse> mediaResponses = mapMediaItems(post.getMediaItems());
-
-        PostResponse.PollResponse pollResponse = mapPoll(post);
-
-        PostResponse resharedFromResponse = post.getOriginalPost() != null 
-            ? mapToPostResponse(post.getOriginalPost(), currentUserId) 
-            : null;
-
-        return new PostResponse(
-            post.getId().toString(),
-            author.getUsername(),
-            "@" + author.getUsername(),
-            author.getAvatarUrl(),
-            TimeFormatter.formatTimeAgo(post.getCreatedAt()),
-            post.getContent(),
-            Objects.requireNonNullElse(post.getTags(), List.of()),
-            Objects.requireNonNullElse(post.getMentions(), List.of()),
-            mediaResponses,
-            pollResponse,
-            List.of(),
-            totalLikes,
-            liked,
-            bookmarked,
-            post.getGroup() != null ? post.getGroup().getName() : null,
-            Boolean.TRUE.equals(post.getEdited()),
-            Boolean.TRUE.equals(post.getEdited()) 
-                ? TimeFormatter.formatTimeAgo(post.getUpdatedAt()) 
-                : null,
-            resharedFromResponse,
-            reactionCounts,
-            userReaction
-        );
-    }
-
-    private Map<ReactionType, Integer> fetchReactionCounts(Long postId) {
-        Map<ReactionType, Integer> reactionCounts = new EnumMap<>(ReactionType.class);
-        Arrays.stream(ReactionType.values()).forEach(type -> reactionCounts.put(type, 0));
-
-        List<Object[]> grouped = reactionRepository.countReactionsGroupedByType("post", postId);
-        grouped.forEach(row -> {
-            String typeStr = (String) row[0];
-            Number count = (Number) row[1];
-            try {
-                ReactionType type = ReactionType.valueOf(typeStr.toUpperCase());
-                reactionCounts.put(type, count.intValue());
-            } catch (IllegalArgumentException e) {
-                log.warn("Unknown reaction type: {}", typeStr);
-            }
-        });
-
-        return reactionCounts;
-    }
-
-    private ReactionType fetchUserReaction(Long currentUserId, Long postId) {
-        if (currentUserId == null) {
+        if (post == null) {
             return null;
         }
 
-        return reactionRepository
-            .findByUserIdAndTargetTypeAndTargetId(currentUserId, "post", postId)
-            .map(Reaction::getReactionType)
-            .map(typeStr -> {
-                try {
-                    return ReactionType.valueOf(typeStr.toUpperCase());
-                } catch (IllegalArgumentException e) {
-                    log.warn("Invalid reaction type: {}", typeStr);
-                    return null;
-                }
-            })
-            .orElse(null);
+        Map<ReactionType, Integer> reactions = mapReactions("post", post.getId());
+        ReactionType userReaction = getUserReaction("post", post.getId(), currentUserId);
+        boolean reacted = userReaction != null;
+        int totalReactions = reactions.values().stream().mapToInt(Integer::intValue).sum();
+        boolean bookmarked = currentUserId != null
+                && bookmarkRepository.existsByUserIdAndPostId(currentUserId, post.getId());
+
+        return PostResponse
+                .builder()
+                .id(post.getId().toString())
+                .author(post.getUser().getUsername())
+                .handle("@" + post.getUser().getUsername())
+                .avatar(post.getUser().getAvatarUrl())
+                .time(formatTime(post))
+                .content(post.getContent())
+                .tags(post.getTags())
+                .mentions(post.getMentions())
+                .media(mapToMediaItemResponse(post.getMediaItems()))
+                .poll(mapToPollResponse(post, currentUserId))
+                .comments(mapToCommentResponse(post.getComments(), currentUserId))
+                .totalReactions(totalReactions)
+                .reacted(reacted)
+                .bookmarked(bookmarked)
+                .group(post.getGroup() != null ? post.getGroup().getName() : null)
+                .edited(Boolean.TRUE.equals(post.getEdited()))
+                .editedAt(Boolean.TRUE.equals(post.getEdited()) && post.getUpdatedAt() != null
+                        ? post.getUpdatedAt().toString()
+                        : null)
+                .reactions(reactions)
+                .userReaction(userReaction)
+                .build();
     }
 
-    private List<PostResponse.MediaItemResponse> mapMediaItems(List<Post.MediaItem> mediaItems) {
+    private List<PostResponse.MediaItemResponse> mapToMediaItemResponse(List<Post.MediaItem> mediaItems) {
         if (mediaItems == null || mediaItems.isEmpty()) {
             return List.of();
         }
-
         return mediaItems.stream()
-            .map(item -> new PostResponse.MediaItemResponse(
-                item.getId(),
-                item.getType(),
-                item.getUrl()
-            ))
-            .toList();
+                .map(media ->
+                        new PostResponse.MediaItemResponse(media.getId(), media.getType(), media.getUrl()))
+                .toList();
     }
 
-    private PostResponse.PollResponse mapPoll(Post post) {
-        if (post.getPollQuestion() == null) {
+    private PostResponse.PollResponse mapToPollResponse(Post post, Long currentUserId) {
+        if (!Objects.equals(post.getType(), "poll")) {
             return null;
         }
 
-        List<PollOption> pollOptions = pollOptionRepository.findByPostId(post.getId());
-        int totalVotes = pollOptions.stream().mapToInt(PollOption::getVoteCount).sum();
-        
-        List<PostResponse.PollOptionResponse> optionResponses = pollOptions.stream()
-            .map(option -> new PostResponse.PollOptionResponse(
-                option.getId().toString(),
-                option.getOptionText(),
-                option.getVoteCount(),
-                false
-            ))
-            .toList();
-        
+        List<PollOption> options = pollOptionRepository.findByPostId(post.getId());
+        int totalVotes = options.stream()
+                .mapToInt(option -> option.getVoteCount() != null ? option.getVoteCount() : 0)
+                .sum();
+
+        List<PostResponse.PollOptionResponse> optionResponses = options.stream()
+                .map(option -> new PostResponse.PollOptionResponse(
+                        option.getId().toString(),
+                        option.getOptionText(),
+                        option.getVoteCount() != null ? option.getVoteCount() : 0,
+                        false
+                ))
+                .toList();
+
         return new PostResponse.PollResponse(
-            post.getPollQuestion(),
-            optionResponses,
-            totalVotes
+                post.getPollQuestion(),
+                optionResponses,
+                totalVotes
         );
+    }
+
+    private List<PostResponse.CommentResponse> mapToCommentResponse(Set<Comment> comments, Long currentUserId) {
+        if (comments == null || comments.isEmpty()) {
+            return List.of();
+        }
+
+        return comments.stream()
+                .filter(comment -> comment.getParentComment() == null)
+                .sorted(Comparator.comparing(Comment::getCreatedAt))
+                .map(comment -> mapSingleCommentResponse(comment, currentUserId))
+                .toList();
+    }
+
+    private PostResponse.CommentResponse mapSingleCommentResponse(Comment comment, Long currentUserId) {
+        Map<ReactionType, Integer> reactions = mapReactions("comment", comment.getId());
+        ReactionType userReaction = getUserReaction("comment", comment.getId(), currentUserId);
+        boolean liked = userReaction == ReactionType.LIKE;
+        boolean reacted = userReaction != null;
+        int likes = reactions.getOrDefault(ReactionType.LIKE, 0);
+        int totalReactions = reactions.values().stream().mapToInt(Integer::intValue).sum();
+
+        return new PostResponse.CommentResponse(
+                comment.getId().toString(),
+                comment.getUser().getUsername(),
+                "@" + comment.getUser().getUsername(),
+                comment.getUser().getAvatarUrl(),
+                TimeFormatter.formatTimeAgo(comment.getCreatedAt()),
+                comment.getContent(),
+                mapReplies(comment.getReplies(), currentUserId),
+                likes,
+                liked,
+                totalReactions,
+                reacted,
+                reactions,
+                userReaction
+        );
+    }
+
+    private List<PostResponse.CommentResponse> mapReplies(Set<Comment> replies, Long currentUserId) {
+        if (replies == null || replies.isEmpty()) {
+            return List.of();
+        }
+
+        return replies.stream()
+                .sorted(Comparator.comparing(Comment::getCreatedAt))
+                .map(reply -> mapSingleCommentResponse(reply, currentUserId))
+                .toList();
+    }
+
+    private Map<ReactionType, Integer> mapReactions(String targetType, Long targetId) {
+        List<Object[]> counts = reactionRepository.countReactionsGroupedByType(targetType, targetId);
+        Map<ReactionType, Integer> reactionCounts = new EnumMap<>(ReactionType.class);
+        for (Object[] row : counts) {
+            if (row == null || row.length < 2) {
+                continue;
+            }
+            String type = String.valueOf(row[0]);
+            ReactionType reactionType = parseReactionType(type);
+            if (reactionType == null) {
+                continue;
+            }
+            int count = ((Number) row[1]).intValue();
+            reactionCounts.put(reactionType, count);
+        }
+        return reactionCounts;
+    }
+
+    private ReactionType getUserReaction(String targetType, Long targetId, Long currentUserId) {
+        if (currentUserId == null) {
+            return null;
+        }
+        return reactionRepository.findByUserIdAndTargetTypeAndTargetId(currentUserId, targetType, targetId)
+                .map(reaction -> parseReactionType(reaction.getReactionType()))
+                .orElse(null);
+    }
+
+    private ReactionType parseReactionType(String type) {
+        if (type == null) {
+            return null;
+        }
+        try {
+            return ReactionType.valueOf(type.trim().toUpperCase());
+        } catch (IllegalArgumentException ex) {
+            log.debug("Unknown reaction type: {}", type);
+            return null;
+        }
+    }
+
+    private String formatTime(Post post) {
+        if (post.getUpdatedAt() != null) {
+            return TimeFormatter.formatTimeAgo(post.getUpdatedAt());
+        }
+        if (post.getCreatedAt() != null) {
+            return TimeFormatter.formatTimeAgo(post.getCreatedAt());
+        }
+        return null;
     }
 }

@@ -1,10 +1,12 @@
 package com.example.demo.dto.response;
 
 import com.example.demo.enumeration.ReactionType;
+import lombok.Builder;
 
 import java.util.List;
 import java.util.Map;
 
+@Builder
 public record PostResponse(
     String id,
     String author,
@@ -17,8 +19,8 @@ public record PostResponse(
     List<MediaItemResponse> media,
     PollResponse poll,
     List<CommentResponse> comments,
-    int likes,
-    boolean liked,
+    int totalReactions,
+    boolean reacted,
     boolean bookmarked,
     String group,
     boolean edited,
@@ -55,6 +57,10 @@ public record PostResponse(
         String text,
         List<CommentResponse> replies,
         int likes,
-        boolean liked
+        boolean liked,
+        int totalReactions,
+        boolean reacted,
+        Map<ReactionType, Integer> reactions,
+        ReactionType userReaction
     ) {}
 }
