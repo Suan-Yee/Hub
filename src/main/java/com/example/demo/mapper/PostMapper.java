@@ -42,8 +42,8 @@ public class PostMapper {
                 .avatar(post.getUser().getAvatarUrl())
                 .time(formatTime(post))
                 .content(post.getContent())
-                .tags(post.getTags())
-                .mentions(post.getMentions())
+                .tags(mapTags(post.getTags()))
+                .mentions(mapMentions(post.getMentions()))
                 .media(mapToMediaItemResponse(post.getMediaItems()))
                 .poll(mapToPollResponse(post, currentUserId))
                 .comments(mapToCommentResponse(post.getComments(), currentUserId))
@@ -60,13 +60,33 @@ public class PostMapper {
                 .build();
     }
 
-    private List<PostResponse.MediaItemResponse> mapToMediaItemResponse(List<Post.MediaItem> mediaItems) {
+    private List<PostResponse.MediaItemResponse> mapToMediaItemResponse(List<PostMediaItem> mediaItems) {
         if (mediaItems == null || mediaItems.isEmpty()) {
             return List.of();
         }
         return mediaItems.stream()
                 .map(media ->
-                        new PostResponse.MediaItemResponse(media.getId(), media.getType(), media.getUrl()))
+                        new PostResponse.MediaItemResponse(media.getMediaId(), media.getType(), media.getUrl()))
+                .toList();
+    }
+
+    private List<String> mapTags(List<PostTag> tags) {
+        if (tags == null || tags.isEmpty()) {
+            return List.of();
+        }
+        return tags.stream()
+                .map(PostTag::getTag)
+                .filter(Objects::nonNull)
+                .toList();
+    }
+
+    private List<String> mapMentions(List<PostMention> mentions) {
+        if (mentions == null || mentions.isEmpty()) {
+            return List.of();
+        }
+        return mentions.stream()
+                .map(PostMention::getUsername)
+                .filter(Objects::nonNull)
                 .toList();
     }
 

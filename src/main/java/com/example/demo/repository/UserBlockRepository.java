@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface UserBlockRepository extends JpaRepository<UserBlock, UserBlock.UserBlockId> {
+public interface UserBlockRepository extends JpaRepository<UserBlock, Long> {
     List<UserBlock> findByBlockerId(Long blockerId);
     Optional<UserBlock> findByBlockerIdAndBlockedId(Long blockerId, Long blockedId);
     boolean existsByBlockerIdAndBlockedId(Long blockerId, Long blockedId);

@@ -2,11 +2,13 @@ package com.example.demo.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import java.io.Serializable;
 import java.time.OffsetDateTime;
 
 @Entity
-@Table(name = "group_members")
+@Table(
+    name = "group_members",
+    uniqueConstraints = @UniqueConstraint(columnNames = {"group_id", "user_id"})
+)
 @Getter
 @Setter
 @NoArgsConstructor
@@ -14,16 +16,15 @@ import java.time.OffsetDateTime;
 @Builder
 public class GroupMember {
     
-    @EmbeddedId
-    private GroupMemberId id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     
     @ManyToOne(fetch = FetchType.LAZY)
-    @MapsId("groupId")
     @JoinColumn(name = "group_id")
     private Group group;
     
     @ManyToOne(fetch = FetchType.LAZY)
-    @MapsId("userId")
     @JoinColumn(name = "user_id")
     private User user;
     
@@ -38,17 +39,4 @@ public class GroupMember {
         joinedAt = OffsetDateTime.now();
     }
     
-    @Embeddable
-    @Getter
-    @Setter
-    @NoArgsConstructor
-    @AllArgsConstructor
-    @EqualsAndHashCode
-    public static class GroupMemberId implements Serializable {
-        @Column(name = "group_id")
-        private Long groupId;
-        
-        @Column(name = "user_id")
-        private Long userId;
-    }
 }

@@ -18,18 +18,4 @@ public record CreatePostRequest(
     String visibility ,// 'public', 'followers', 'me'
     Boolean edited
 ) {
-    public record MediaItemRequest(
-        @NotBlank(message = "Media type is required")
-        String type, // 'image' or 'video'
-        @NotBlank(message = "Media url is required")
-        String url
-    ) {}
-
-    public record PollRequest(
-        @NotBlank(message = "Poll question is required")
-        String question,
-        
-        @Size(min = 2, max = 10, message = "Poll must have between 2 and 10 options")
-        List<String> options
-    ) {}
 }

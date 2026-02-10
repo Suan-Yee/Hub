@@ -1,0 +1,230 @@
+@startuml
+hide circle
+skinparam linetype ortho
+
+entity "User" as User {
+  *id : Long
+  username : String
+  email : String
+  password_hash : String
+  bio : Text
+  avatar_url : Text
+  is_verified : Boolean
+  is_private_account : Boolean
+  allow_messages_from : String
+  created_at : Timestamp
+  last_active_at : Timestamp
+}
+
+entity "Post" as Post {
+  *id : Long
+  user_id : Long
+  group_id : Long
+  type : String
+  content : Text
+  location : String
+  visibility : String
+  likes_count : Int
+  comments_count : Int
+  shares_count : Int
+  created_at : Timestamp
+  updated_at : Timestamp
+  edited : Boolean
+  poll_question : Text
+  original_post_id : Long
+}
+
+entity "PostMediaItem" as PostMediaItem {
+  *id : Long
+  post_id : Long
+  media_id : String
+  type : String
+  url : Text
+}
+
+entity "PostMention" as PostMention {
+  *id : Long
+  post_id : Long
+  username : String
+}
+
+entity "PostTag" as PostTag {
+  *id : Long
+  post_id : Long
+  tag : String
+}
+
+entity "PollOption" as PollOption {
+  *id : Long
+  post_id : Long
+  option_text : String
+  vote_count : Int
+}
+
+entity "PollVote" as PollVote {
+  *poll_option_id : Long
+  *user_id : Long
+}
+
+entity "Comment" as Comment {
+  *id : Long
+  post_id : Long
+  user_id : Long
+  content : Text
+  parent_comment_id : Long
+  depth : Int
+  created_at : Timestamp
+}
+
+entity "Bookmark" as Bookmark {
+  *user_id : Long
+  *post_id : Long
+  created_at : Timestamp
+}
+
+entity "Hashtag" as Hashtag {
+  *id : Long
+  tag : String
+  usage_count : Int
+}
+
+entity "PostHashtag" as PostHashtag {
+  *post_id : Long
+  *hashtag_id : Long
+}
+
+entity "Group" as Group {
+  *id : Long
+  name : String
+  description : Text
+  privacy_type : String
+  owner_id : Long
+  cover_image_url : Text
+  created_at : Timestamp
+}
+
+entity "GroupMember" as GroupMember {
+  *group_id : Long
+  *user_id : Long
+  role : String
+  joined_at : Timestamp
+}
+
+entity "Conversation" as Conversation {
+  *id : Long
+  type : String
+  name : String
+  last_message_at : Timestamp
+}
+
+entity "ConversationParticipant" as ConversationParticipant {
+  *conversation_id : Long
+  *user_id : Long
+  joined_at : Timestamp
+}
+
+entity "Message" as Message {
+  *id : Long
+  conversation_id : Long
+  sender_id : Long
+  content : Text
+  media_url : Text
+  is_read : Boolean
+  created_at : Timestamp
+}
+
+entity "Reaction" as Reaction {
+  *id : Long
+  user_id : Long
+  target_type : String
+  target_id : Long
+  reaction_type : String
+  created_at : Timestamp
+}
+
+entity "Story" as Story {
+  *id : Long
+  user_id : Long
+  media_url : Text
+  type : String
+  expires_at : Timestamp
+  created_at : Timestamp
+}
+
+entity "UserRelation" as UserRelation {
+  *follower_id : Long
+  *following_id : Long
+  status : String
+  created_at : Timestamp
+}
+
+entity "UserBlock" as UserBlock {
+  *blocker_id : Long
+  *blocked_id : Long
+  created_at : Timestamp
+}
+
+entity "ContentReport" as ContentReport {
+  *id : Long
+  reporter_id : Long
+  target_type : String
+  target_id : Long
+  reason : String
+  status : String
+  admin_notes : Text
+  created_at : Timestamp
+}
+
+' Relationships
+User ||--o{ Post : posts
+Group ||--o{ Post : posts
+Post }o--|| Post : originalPost
+
+Post ||--o{ PostMediaItem
+Post ||--o{ PostMention
+Post ||--o{ PostTag
+
+Post ||--o{ PollOption
+PollOption ||--o{ PollVote
+User ||--o{ PollVote
+
+Post ||--o{ Comment
+User ||--o{ Comment
+Comment }o--|| Comment : parent
+
+User ||--o{ Bookmark
+Post ||--o{ Bookmark
+
+Hashtag ||--o{ PostHashtag
+Post ||--o{ PostHashtag
+
+User ||--o{ Reaction
+note right of Reaction
+  Polymorphic target:
+  target_type + target_id
+  -> Post or Comment
+end note
+
+User ||--o{ Story
+
+Group ||--o{ GroupMember
+User ||--o{ GroupMember
+Group }o--|| User : owner
+
+Conversation ||--o{ ConversationParticipant
+User ||--o{ ConversationParticipant
+Conversation ||--o{ Message
+User ||--o{ Message : sender
+
+User ||--o{ UserRelation : follower
+User ||--o{ UserRelation : following
+User ||--o{ UserBlock : blocker
+User ||--o{ UserBlock : blocked
+
+User ||--o{ ContentReport : reporter
+note right of ContentReport
+  Polymorphic target:
+  target_type + target_id
+  -> Post/Comment/User
+end note
+@enduml

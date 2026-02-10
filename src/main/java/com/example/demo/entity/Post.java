@@ -2,8 +2,6 @@ package com.example.demo.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
 import java.time.OffsetDateTime;
 import java.util.HashSet;
 import java.util.List;
@@ -41,21 +39,24 @@ public class Post {
     @Column(columnDefinition = "TEXT")
     private String content;
     
-    @JdbcTypeCode(SqlTypes.JSON)
-    @Column(name = "media_items", columnDefinition = "jsonb")
-    private List<MediaItem> mediaItems;
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderColumn(name = "position")
+    @Builder.Default
+    private List<PostMediaItem> mediaItems = new ArrayList<>();
     
-    @JdbcTypeCode(SqlTypes.JSON)
-    @Column(name = "mentions", columnDefinition = "jsonb")
-    private List<String> mentions = new ArrayList<>();
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderColumn(name = "position")
+    @Builder.Default
+    private List<PostMention> mentions = new ArrayList<>();
     
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "original_post_id")
     private Post originalPost;
     
-    @JdbcTypeCode(SqlTypes.JSON)
-    @Column(name = "tags", columnDefinition = "jsonb")
-    private List<String> tags = new ArrayList<>();
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderColumn(name = "position")
+    @Builder.Default
+    private List<PostTag> tags = new ArrayList<>();
     
     @Column(length = 100)
     private String location;
@@ -85,19 +86,29 @@ public class Post {
     private String pollQuestion;
     
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private Set<PollOption> pollOptions = new HashSet<>();
     
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private Set<Comment> comments = new HashSet<>();
     
     @OneToMany(mappedBy = "originalPost")
+    @Builder.Default
     private Set<Post> reposts = new HashSet<>();
     
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private Set<Bookmark> bookmarks = new HashSet<>();
     
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<PostHashtag> postHashtags = new HashSet<>();
+    @ManyToMany
+    @JoinTable(
+        name = "post_hashtags",
+        joinColumns = @JoinColumn(name = "post_id"),
+        inverseJoinColumns = @JoinColumn(name = "hashtag_id")
+    )
+    @Builder.Default
+    private Set<Hashtag> hashtags = new HashSet<>();
     
     @PrePersist
     protected void onCreate() {
@@ -111,13 +122,4 @@ public class Post {
         edited = true;
     }
     
-    @Getter
-    @Setter
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class MediaItem {
-        private String id;
-        private String type; 
-        private String url;
-    }
 }

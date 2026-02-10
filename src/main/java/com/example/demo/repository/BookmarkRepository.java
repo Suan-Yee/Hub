@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface BookmarkRepository extends JpaRepository<Bookmark, Bookmark.BookmarkId> {
+public interface BookmarkRepository extends JpaRepository<Bookmark, Long> {
     List<Bookmark> findByUserId(Long userId);
     Optional<Bookmark> findByUserIdAndPostId(Long userId, Long postId);
     boolean existsByUserIdAndPostId(Long userId, Long postId);

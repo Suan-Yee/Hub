@@ -1,6 +1,7 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.dto.request.CreatePostRequest;
+import com.example.demo.dto.request.MediaItemRequest;
 import com.example.demo.dto.response.PostResponse;
 import com.example.demo.entity.*;
 import com.example.demo.exception.ApiException;
@@ -96,11 +97,9 @@ public class PostServiceImpl implements PostService {
         validatePostOwnership(post, userId);
 
         // Update post fields
-        post.setContent(request.content());
-        post.setTags(request.tags() != null ? request.tags() : new ArrayList<>());
-        post.setMentions(request.mentions() != null ? request.mentions() : new ArrayList<>());
+        PostUtils.updatePost(request, post);
 
-        // Handle media updates (JSON-only: media items are already uploaded elsewhere)
+        // Handle media updates (media files are already uploaded elsewhere)
         if (request.media() != null) {
             deleteOldMedia(post);
         }
@@ -131,23 +130,24 @@ public class PostServiceImpl implements PostService {
         }
     }
 
-    private List<Post.MediaItem> mapMediaItemsFromRequest(List<CreatePostRequest.MediaItemRequest> media) {
+    private List<PostMediaItem> mapMediaItemsFromRequest(List<MediaItemRequest> media, Post post) {
         if (media == null || media.isEmpty()) {
             return new ArrayList<>();
         }
 
-        List<Post.MediaItem> mediaItems = new ArrayList<>();
-        for (CreatePostRequest.MediaItemRequest item : media) {
-            mediaItems.add(new Post.MediaItem(
-                UUID.randomUUID().toString(),
-                item.type(),
-                item.url()
-            ));
+        List<PostMediaItem> mediaItems = new ArrayList<>();
+        for (MediaItemRequest item : media) {
+            mediaItems.add(PostMediaItem.builder()
+                .post(post)
+                .mediaId(UUID.randomUUID().toString())
+                .type(item.type())
+                .url(item.url())
+                .build());
         }
         return mediaItems;
     }
 
-    private boolean hasVideo(List<CreatePostRequest.MediaItemRequest> media) {
+    private boolean hasVideo(List<MediaItemRequest> media) {
         return media.stream().anyMatch(item -> "video".equalsIgnoreCase(item.type()));
     }
 
@@ -179,12 +179,17 @@ public class PostServiceImpl implements PostService {
             post.setPollQuestion(request.poll().question());
         } else if (request.media() != null) {
             postType = hasVideo(request.media()) ? "video" : (request.media().isEmpty() ? "text" : "image");
-            post.setMediaItems(mapMediaItemsFromRequest(request.media()));
+            replaceMediaItems(post, request.media());
         } else if (existingType != null && !existingType.isBlank()) {
             postType = existingType;
         }
         
         post.setType(postType);
+    }
+
+    private void replaceMediaItems(Post post, List<MediaItemRequest> media) {
+        post.getMediaItems().clear();
+        post.getMediaItems().addAll(mapMediaItemsFromRequest(media, post));
     }
 
 }

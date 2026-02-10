@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface UserRelationRepository extends JpaRepository<UserRelation, UserRelation.UserRelationId> {
+public interface UserRelationRepository extends JpaRepository<UserRelation, Long> {
     List<UserRelation> findByFollowerId(Long followerId);
     List<UserRelation> findByFollowingId(Long followingId);
     Optional<UserRelation> findByFollowerIdAndFollowingId(Long followerId, Long followingId);

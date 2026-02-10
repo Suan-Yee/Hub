@@ -2,10 +2,11 @@ package com.example.demo.utils;
 
 import com.example.demo.dto.request.CreatePostRequest;
 import com.example.demo.entity.Post;
+import com.example.demo.entity.PostMention;
+import com.example.demo.entity.PostTag;
 import com.example.demo.entity.User;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 
@@ -29,33 +30,28 @@ public final class PostUtils {
 
         if (existingPost == null) {
             // Create new post
-            return Post.builder()
+            Post post = Post.builder()
                 .user(user)
                 .content(request.content())
-                .tags(new ArrayList<>(tags))
-                .mentions(new ArrayList<>(mentions))
                 .visibility(visibility)
                 .edited(edited)
                 .likesCount(0)
                 .commentsCount(0)
                 .sharesCount(0)
-                .mediaItems(new ArrayList<>())
-                .pollOptions(new HashSet<>())
-                .comments(new HashSet<>())
-                .reposts(new HashSet<>())
-                .bookmarks(new HashSet<>())
-                .postHashtags(new HashSet<>())
                 .build();
+            replaceTags(post, tags);
+            replaceMentions(post, mentions);
+            return post;
         } else {
             // Update existing post
             if (request.content() != null) {
                 existingPost.setContent(request.content());
             }
             if (request.tags() != null) {
-                existingPost.setTags(new ArrayList<>(tags));
+                replaceTags(existingPost, tags);
             }
             if (request.mentions() != null) {
-                existingPost.setMentions(new ArrayList<>(mentions));
+                replaceMentions(existingPost, mentions);
             }
             if (request.visibility() != null && !request.visibility().isBlank()) {
                 existingPost.setVisibility(visibility);
@@ -64,6 +60,32 @@ public final class PostUtils {
                 existingPost.setEdited(edited);
             }
             return existingPost;
+        }
+    }
+
+    private static void replaceTags(Post post, List<String> tags) {
+        post.getTags().clear();
+        for (String tag : tags) {
+            if (tag == null || tag.isBlank()) {
+                continue;
+            }
+            post.getTags().add(PostTag.builder()
+                .post(post)
+                .tag(tag)
+                .build());
+        }
+    }
+
+    private static void replaceMentions(Post post, List<String> mentions) {
+        post.getMentions().clear();
+        for (String mention : mentions) {
+            if (mention == null || mention.isBlank()) {
+                continue;
+            }
+            post.getMentions().add(PostMention.builder()
+                .post(post)
+                .username(mention)
+                .build());
         }
     }
 }

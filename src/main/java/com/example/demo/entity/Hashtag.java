@@ -26,7 +26,7 @@ public class Hashtag {
     @Column(name = "usage_count")
     private Integer usageCount = 0;
     
-    @OneToMany(mappedBy = "hashtag", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ManyToMany(mappedBy = "hashtags")
     @Builder.Default
-    private Set<PostHashtag> postHashtags = new HashSet<>();
+    private Set<Post> posts = new HashSet<>();
 }

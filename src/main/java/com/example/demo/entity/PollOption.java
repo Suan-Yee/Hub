@@ -28,7 +28,12 @@ public class PollOption {
     @Column(name = "vote_count")
     private Integer voteCount = 0;
     
-    @OneToMany(mappedBy = "pollOption", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ManyToMany
+    @JoinTable(
+        name = "poll_votes",
+        joinColumns = @JoinColumn(name = "poll_option_id"),
+        inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
     @Builder.Default
-    private Set<PollVote> votes = new HashSet<>();
+    private Set<User> voters = new HashSet<>();
 }
