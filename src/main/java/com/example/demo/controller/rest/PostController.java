@@ -8,10 +8,16 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import java.util.Map;
+import com.example.demo.security.UserPrincipal;
 
 @RestController
 @RequestMapping("/api/posts")
@@ -24,12 +30,10 @@ public class PostController {
     @PostMapping("/create")
     public ResponseEntity<ApiResponse> createPost(
             @Valid @RequestBody CreatePostRequest postRequest,
-//            @AuthenticationPrincipal UserDetails userDetails,
+            Authentication authentication,
             HttpServletRequest request
     ) {
-        
-//        Long userId = extractUserId(userDetails);
-        Long userId = 1L;
+        Long userId = extractUserId(authentication);
         PostResponse response = postService.createPost(postRequest, userId);
         
         ApiResponse apiResponse = ApiResponse.created(
@@ -44,10 +48,10 @@ public class PostController {
     @GetMapping("/{postId}")
     public ResponseEntity<ApiResponse> getPostById(
             @PathVariable Long postId,
-//            @AuthenticationPrincipal UserDetails userDetails,
+            Authentication authentication,
             HttpServletRequest request
     ) {
-        Long userId = 1L;
+        Long userId = extractUserId(authentication);
         PostResponse response = postService.getPostById(postId, userId);
         
         ApiResponse apiResponse = ApiResponse.success(
@@ -57,5 +61,44 @@ public class PostController {
         );
         
         return ResponseEntity.ok(apiResponse);
+    }
+
+    @GetMapping("/feed")
+    public ResponseEntity<ApiResponse> getHomeFeed(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size,
+            Authentication authentication,
+            HttpServletRequest request
+    ) {
+        Long userId = extractUserId(authentication);
+        Pageable pageable = PageRequest.of(
+            Math.max(page, 0),
+            Math.min(Math.max(size, 1), 50),
+            Sort.by(Sort.Direction.DESC, "createdAt")
+        );
+
+        Page<PostResponse> feed = postService.getHomeFeed(userId, pageable);
+
+        ApiResponse apiResponse = ApiResponse.success(
+            request.getRequestURI(),
+            "Feed retrieved successfully",
+            Map.of(
+                "items", feed.getContent(),
+                "page", feed.getNumber(),
+                "size", feed.getSize(),
+                "totalItems", feed.getTotalElements(),
+                "totalPages", feed.getTotalPages(),
+                "hasNext", feed.hasNext()
+            )
+        );
+
+        return ResponseEntity.ok(apiResponse);
+    }
+
+    private Long extractUserId(Authentication authentication) {
+        if (authentication == null || !(authentication.getPrincipal() instanceof UserPrincipal principal)) {
+            throw new org.springframework.security.authentication.AuthenticationCredentialsNotFoundException("Authentication required");
+        }
+        return principal.getId();
     }
 }

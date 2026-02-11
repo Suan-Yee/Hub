@@ -1,61 +1,117 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.entity.User;
+import com.example.demo.security.UserPrincipal;
 import com.example.demo.service.JwtService;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
-import lombok.RequiredArgsConstructor;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
+import java.nio.charset.StandardCharsets;
+import java.time.Duration;
 import java.time.Instant;
-import java.util.Base64;
+import java.util.Arrays;
 import java.util.Date;
-import java.util.Map;
 import java.util.UUID;
-import java.util.function.BiFunction;
-import java.util.function.Function;
-import java.util.function.Supplier;
 
 @Service
-@RequiredArgsConstructor
 public class JwtServiceImpl implements JwtService {
 
-    private final String secret = "fjakfheuivnslWH232rfjnlet4209rfdf";
+    private static final String ACCESS_TOKEN_COOKIE = "ACCESS_TOKEN";
 
-    private final Supplier<SecretKey> key = () -> Keys.hmacShaKeyFor(Base64.getDecoder().decode(secret));
+    @Value("${security.jwt.secret:01234567890123456789012345678901}")
+    private String secret;
 
-    private final Function<String, Claims> extractClaims = token ->
-            Jwts.parser()
-                    .verifyWith(key.get())
-                    .build()
-                    .parseSignedClaims(token)
-                    .getPayload();
+    @Value("${security.jwt.expiration-seconds:86400}")
+    private long expirationSeconds;
 
-    private final Function<String, String> extractSubject = token -> getClaimsValue(token,Claims::getSubject);
+    @Value("${security.jwt.cookie.secure:false}")
+    private boolean secureCookie;
 
-    private final <T> T getClaimsValue(String token, Function<Claims, T> claimsResolver) {
-        Claims claim = extractClaims.apply(token);
-        return claimsResolver.apply(claim);
+    private SecretKey key() {
+        return Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
     }
 
-    private final Supplier<JwtBuilder> builder = () ->
-            Jwts.builder()
-                    .header().add(Map.of("TYPE", "JWT_TYPE"))
-                    .and()
-                    .audience().add("SUAN")
-                    .and()
-                    .id(UUID.randomUUID().toString())
-                    .issuedAt(Date.from(Instant.now()))
-                    .notBefore(new Date())
-                    .signWith(key.get());
+    @Override
+    public String generateToken(UserPrincipal userPrincipal) {
+        Instant now = Instant.now();
+        return Jwts.builder()
+            .id(UUID.randomUUID().toString())
+            .subject(userPrincipal.getUsername())
+            .claim("uid", userPrincipal.getId())
+            .issuedAt(Date.from(now))
+            .expiration(Date.from(now.plusSeconds(expirationSeconds)))
+            .signWith(key())
+            .compact();
+    }
 
-    private final Function<User, String> buildToken = user ->
-            builder.get()
-                    .subject(user.getEmail())
-                    .claim("role","admin")
-                    .expiration(Date.from(Instant.now().plusSeconds(343434)))
-                    .compact();
+    @Override
+    public String extractSubject(String token) {
+        return parseClaims(token).getSubject();
+    }
+
+    @Override
+    public boolean isTokenValid(String token, UserDetails userDetails) {
+        Claims claims = parseClaims(token);
+        String subject = claims.getSubject();
+        Date expiration = claims.getExpiration();
+        return subject != null
+            && subject.equals(userDetails.getUsername())
+            && expiration != null
+            && expiration.after(new Date());
+    }
+
+    @Override
+    public void addAccessTokenCookie(HttpServletResponse response, String token) {
+        ResponseCookie cookie = ResponseCookie.from(ACCESS_TOKEN_COOKIE, token)
+            .httpOnly(true)
+            .secure(secureCookie)
+            .sameSite("Lax")
+            .path("/")
+            .maxAge(Duration.ofSeconds(expirationSeconds))
+            .build();
+        response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
+    }
+
+    @Override
+    public void clearAccessTokenCookie(HttpServletResponse response) {
+        ResponseCookie cookie = ResponseCookie.from(ACCESS_TOKEN_COOKIE, "")
+            .httpOnly(true)
+            .secure(secureCookie)
+            .sameSite("Lax")
+            .path("/")
+            .maxAge(Duration.ZERO)
+            .build();
+        response.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
+    }
+
+    @Override
+    public String resolveTokenFromCookies(HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+        if (cookies == null || cookies.length == 0) {
+            return null;
+        }
+
+        return Arrays.stream(cookies)
+            .filter(cookie -> ACCESS_TOKEN_COOKIE.equals(cookie.getName()))
+            .map(Cookie::getValue)
+            .findFirst()
+            .orElse(null);
+    }
+
+    private Claims parseClaims(String token) {
+        return Jwts.parser()
+            .verifyWith(key())
+            .build()
+            .parseSignedClaims(token)
+            .getPayload();
+    }
 }

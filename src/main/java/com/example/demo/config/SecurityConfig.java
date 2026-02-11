@@ -1,71 +1,73 @@
 package com.example.demo.config;
 
+import com.example.demo.handler.ApiAccessDeniedHandler;
+import com.example.demo.handler.ApiAuthenticationEntryPoint;
+import com.example.demo.security.ApiAuthenticationFilter;
+import com.example.demo.security.ApiAuthenticationProvider;
+import com.example.demo.security.JwtCookieAuthenticationFilter;
+import com.example.demo.service.JwtService;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.ProviderManager;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-//import com.example.demo.exception.CustomAccessDeniedHandler;
-//import lombok.RequiredArgsConstructor;
-//import org.springframework.context.annotation.Bean;
-//import org.springframework.context.annotation.Configuration;
-//import org.springframework.http.MediaType;
-//import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
-//import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-//import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-//import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-//import org.springframework.security.config.http.SessionCreationPolicy;
-//import org.springframework.security.core.AuthenticationException;
-//import org.springframework.security.web.SecurityFilterChain;
-//import org.springframework.security.authentication.AuthenticationManager;
-//import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
-//
-//@EnableWebSecurity
-//@EnableMethodSecurity
-//@Configuration
-//@RequiredArgsConstructor
-//public class SecurityConfig {
-//
-//    private static final String[] PUBLIC_URLS = {
-//            "/error/**",
-//            "/sendCode",
-//            "/verify/**",
-//            "/resetpassword",
-//            "/api/auth/login",
-//            "/api/posts/**"
-//    };
-//    private static final String[] ADMIN_ONLY_URLS = {
-//            "/api/websocket/**"
-//    };
-//    @Bean
-//    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-//
-//        // TEMPORARY: Security disabled for testing
-//        http.csrf(AbstractHttpConfigurer::disable)
-//                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
-//                .authorizeHttpRequests(auth -> auth
-//                        .anyRequest().permitAll()); // Allow all requests without authentication
-//
-//        // COMMENTED OUT: Original security configuration
-//        // http.csrf(AbstractHttpConfigurer::disable)
-//        //         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
-//        //         .authorizeHttpRequests(auth -> auth
-//        //                 .requestMatchers(PUBLIC_URLS).permitAll()
-//        //                 .requestMatchers(ADMIN_ONLY_URLS).hasRole("ADMIN")
-//        //                 .anyRequest().authenticated())
-//        //         .exceptionHandling(access -> access
-//        //                 .accessDeniedHandler(new CustomAccessDeniedHandler())
-//        //                 .authenticationEntryPoint(this::unauthorizedResponse));
-//
-//        return http.build();
-//    }
-//
-//    @Bean
-//    AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
-//        return configuration.getAuthenticationManager();
-//    }
-//
-//    private void unauthorizedResponse(jakarta.servlet.http.HttpServletRequest request,
-//                                      jakarta.servlet.http.HttpServletResponse response,
-//                                      AuthenticationException exception) throws java.io.IOException {
-//        response.setStatus(401);
-//        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-//        response.getWriter().write("{\"status\":401,\"error\":\"Unauthorized\",\"message\":\"Authentication required\"}");
-//    }
-//}
+@Configuration
+@EnableWebSecurity
+@EnableMethodSecurity
+@RequiredArgsConstructor
+public class SecurityConfig {
+
+    private final ApiAuthenticationProvider apiAuthenticationProvider;
+    private final JwtCookieAuthenticationFilter jwtCookieAuthenticationFilter;
+    private final JwtService jwtService;
+    private final ObjectMapper objectMapper;
+    private final ApiAuthenticationEntryPoint apiAuthenticationEntryPoint;
+    private final ApiAccessDeniedHandler apiAccessDeniedHandler;
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager() {
+        return new ProviderManager(apiAuthenticationProvider);
+    }
+
+    @Bean
+    public ApiAuthenticationFilter apiAuthenticationFilter(AuthenticationManager authenticationManager) {
+        ApiAuthenticationFilter filter = new ApiAuthenticationFilter(jwtService, objectMapper);
+        filter.setAuthenticationManager(authenticationManager);
+        return filter;
+    }
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, ApiAuthenticationFilter apiAuthenticationFilter) throws Exception {
+        http
+            .csrf(csrf -> csrf.disable())
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers("/api/auth/login", "/api/auth/logout", "/error/**").permitAll()
+                .anyRequest().authenticated()
+            )
+            .exceptionHandling(ex -> ex
+                .authenticationEntryPoint(apiAuthenticationEntryPoint)
+                .accessDeniedHandler(apiAccessDeniedHandler)
+            )
+            .authenticationProvider(apiAuthenticationProvider)
+            .addFilterBefore(jwtCookieAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+            .addFilterAt(apiAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+
+        return http.build();
+    }
+}

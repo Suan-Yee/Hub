@@ -1,5 +1,6 @@
 package com.example.demo.entity;
 
+import com.example.demo.enumeration.Role;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.OffsetDateTime;
@@ -45,6 +46,11 @@ public class User {
     
     @Column(name = "allow_messages_from", length = 20)
     private String allowMessagesFrom = "everyone"; // 'everyone', 'followers'
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role", nullable = false, length = 20)
+    @Builder.Default
+    private Role role = Role.USER;
     
     @Column(name = "created_at", columnDefinition = "TIMESTAMP WITH TIME ZONE")
     private OffsetDateTime createdAt;

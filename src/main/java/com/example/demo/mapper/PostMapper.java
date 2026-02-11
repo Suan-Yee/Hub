@@ -97,15 +97,15 @@ public class PostMapper {
 
         List<PollOption> options = pollOptionRepository.findByPostId(post.getId());
         int totalVotes = options.stream()
-                .mapToInt(option -> option.getVoteCount() != null ? option.getVoteCount() : 0)
+                .mapToInt(option -> option.getVoters() != null ? option.getVoters().size() : 0)
                 .sum();
 
         List<PostResponse.PollOptionResponse> optionResponses = options.stream()
                 .map(option -> new PostResponse.PollOptionResponse(
                         option.getId().toString(),
                         option.getOptionText(),
-                        option.getVoteCount() != null ? option.getVoteCount() : 0,
-                        false
+                        option.getVoters() != null ? option.getVoters().size() : 0,
+                        hasVoted(option, currentUserId)
                 ))
                 .toList();
 
@@ -114,6 +114,14 @@ public class PostMapper {
                 optionResponses,
                 totalVotes
         );
+    }
+
+    private boolean hasVoted(PollOption option, Long currentUserId) {
+        if (currentUserId == null || option.getVoters() == null || option.getVoters().isEmpty()) {
+            return false;
+        }
+        return option.getVoters().stream()
+                .anyMatch(user -> user != null && Objects.equals(user.getId(), currentUserId));
     }
 
     private List<PostResponse.CommentResponse> mapToCommentResponse(Set<Comment> comments, Long currentUserId) {

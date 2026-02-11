@@ -67,6 +67,13 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional(readOnly = true)
+    public Page<PostResponse> getHomeFeed(Long currentUserId, Pageable pageable) {
+        Page<Post> posts = postRepository.findHomeFeed(currentUserId, pageable);
+        return posts.map(post -> postMapper.mapToPostResponse(post, currentUserId));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public Page<PostResponse> getPublicFeed(Long currentUserId, Pageable pageable) {
         Page<Post> posts = postRepository.findPublicPosts(pageable);
         return posts.map(post -> postMapper.mapToPostResponse(post, currentUserId));
